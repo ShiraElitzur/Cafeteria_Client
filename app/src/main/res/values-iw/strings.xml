@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">קרנף</string>
+    <string name="drawer_header_text">כותרת</string>
+    <string name="nav_item_menu">תפריט</string>
+    <string name="nav_item_history">היסטוריית הזמנות</string>
+    <string name="nav_item_personal">פרטים אישיים</string>
+    <string name="nav_item_points">הנקודות שלי</string>
+    <string name="nav_item_settings">הגדרות</string>
+    <string name="nav_item_about">על האפליקציה</string>
+    <string name="categories_tab_title">קטגוריות</string>
+    <string name="specials_tab_title">מבצעים</string>
+    <string name="favorites_tab_title">מומלצים עבורך</string>
+</resources>
