@@ -1,12 +1,13 @@
 package com.cafeteria.cafeteria_client.data;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Shira Elitzur on 08/09/2016.
  * This class represent a food category in the cafeteria menu.
  */
-public class Category {
+public class Category implements Serializable{
 
     private String description;
     public void setDescription(String description) {
@@ -28,12 +29,12 @@ public class Category {
     /**
      * The items of this category
      */
-    private ArrayList<Item> items;
+    private List<Item> items;
 
     /**
      * The meals of this category
      */
-    private ArrayList<Meal> meals;
+    private List<Meal> meals;
 
     /**
      * The constructor of Category object sets its title as the given parameter
@@ -86,7 +87,7 @@ public class Category {
      * Returns the items of this category
      * @return the items of this category
      */
-    public ArrayList<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
@@ -94,7 +95,7 @@ public class Category {
      * Sets items list to this category
      * @param items
      */
-    public void setItems(ArrayList<Item> items) {
+    public void setItems(List<Item> items) {
         this.items = items;
     }
 
@@ -102,7 +103,7 @@ public class Category {
      * Returns the meals of this category
      * @return
      */
-    public ArrayList<Meal> getMeals() {
+    public List<Meal> getMeals() {
         return meals;
     }
 
@@ -110,7 +111,7 @@ public class Category {
      * Sets meals list to this category
      * @param meals
      */
-    public void setMeals(ArrayList<Meal> meals) {
+    public void setMeals(List<Meal> meals) {
         this.meals = meals;
     }
 
