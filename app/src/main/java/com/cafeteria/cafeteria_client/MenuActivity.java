@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,16 +38,17 @@ public class MenuActivity extends DrawerActivity {
         setContentView(R.layout.activity_categories); // The layout with the tabs
         super.onCreateDrawer();
         getSupportActionBar().setTitle("");
-        // Sets the title as empty string because the default behavior is to display as title the app name.
-        // Right now we have a background image on the action bar that contains the app name -
-        // Need to think about that point
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.logo));
+
+        // I changed the way we set the background because the method getDrawable is deprecated
+        //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.logo));
+        getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
+
 
         CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
         // Adding to the adapter the three fragments and their titles
-        adapter.addFragment(new FavoritesFragment(), getResources().getString(R.string.favorites_tab_title));
         adapter.addFragment(new CategoriesFragment(), getResources().getString(R.string.categories_tab_title));
+        adapter.addFragment(new FavoritesFragment(), getResources().getString(R.string.favorites_tab_title));
         adapter.addFragment(new SpecialsFragment(), getResources().getString(R.string.specials_tab_title));
         viewPager.setAdapter(adapter);
 

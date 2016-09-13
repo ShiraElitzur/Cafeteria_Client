@@ -27,6 +27,11 @@
         <activity android:name=".SignUpActivity">
 
         </activity>
+        <activity android:name=".CategoryItemsActivity"
+            android:parentActivityName=".MenuActivity" >
+
+
+        </activity>
     </application>
 
 </manifest>

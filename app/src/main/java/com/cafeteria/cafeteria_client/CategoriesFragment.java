@@ -1,8 +1,10 @@
 package com.cafeteria.cafeteria_client;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +12,14 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.data.Category;
+import com.cafeteria.cafeteria_client.data.Item;
+import com.cafeteria.cafeteria_client.data.Meal;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Shira Elitzur on 08/09/2016.
@@ -42,10 +48,75 @@ public class CategoriesFragment extends Fragment {
 
         // Temporary creation of categories list
         // The real list should come from the data base of course
-        categories = new ArrayList<Category>();
+        initCategories();
+
+
+        grid.setAdapter(new GridViewAdapter(getActivity(),categories,R.layout.category_grid_cell));
+
+        return v;
+    }
+
+    private void initCategories(){
+        categories = new ArrayList<>();
         Category cat = new Category();
         cat.setTitle("בשרי");
         cat.setDescription("ארוחות בשריות מושקעות");
+        // init items in category
+        List<Item> items = new ArrayList<>();
+        Item item = new Item();
+        item.setItemName("שניצל");
+        item.setMeal(true);
+        // init meals related to this item
+        Meal meal = new Meal();
+        meal.setMealName("שניצל בצלחת");
+        item.addMeal(meal);
+        meal = new Meal();
+        meal.setMealName("שניצל בבאגט");
+        item.addMeal(meal);
+        meal = new Meal();
+        meal.setMealName("שניצל בפיתה");
+        item.addMeal(meal);
+        items.add(item);
+
+        item = new Item();
+        item.setItemName("המבורגר");
+        item.setMeal(true);
+        // init meals related to this item
+        meal = new Meal();
+        meal.setMealName("המבורגר בצלחת");
+        item.addMeal(meal);
+        meal = new Meal();
+        meal.setMealName("המבורגר בבאגט");
+        item.addMeal(meal);
+        meal = new Meal();
+        meal.setMealName("המבורגר בפיתה");
+        item.addMeal(meal);
+        items.add(item);
+
+        item = new Item();
+        item.setItemName("פרגית");
+        item.setMeal(true);
+        // init meals related to this item
+        meal = new Meal();
+        meal.setMealName("פרגית בצלחת");
+        item.addMeal(meal);
+        meal = new Meal();
+        meal.setMealName("פרגית בבאגט");
+        item.addMeal(meal);
+        meal = new Meal();
+        meal.setMealName("פרגית בפיתה");
+        item.addMeal(meal);
+        items.add(item);
+
+        item = new Item();
+        item.setItemName("לאפה שווארמה");
+        item.setMeal(false);
+        items.add(item);
+
+        // add items to category
+        cat.setItems(items);
+
+
         categories.add(cat);
         cat = new Category();
         cat.setTitle("חלבי");
@@ -71,10 +142,6 @@ public class CategoriesFragment extends Fragment {
         cat.setTitle("חטיפים");
         cat.setDescription("במבה,ביסלי,פסק זמן...");
         categories.add(cat);
-
-        grid.setAdapter(new GridViewAdapter(getActivity(),categories,R.layout.category_grid_cell));
-
-        return v;
     }
 
     /**
@@ -116,9 +183,9 @@ public class CategoriesFragment extends Fragment {
          * @return
          */
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            Category item;
+        public View getView(int position, View convertView, final ViewGroup parent) {
+            final ViewHolder holder;
+            final Category item;
 
             if(convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -143,7 +210,24 @@ public class CategoriesFragment extends Fragment {
             holder.description.setText(item.getDescription());
             // The image currently is from a fictive list pic0...pic5 will be from the database
             int imageResource = getResources().getIdentifier( "@drawable/pic"+position, null, getActivity().getPackageName());
-            holder.image.setImageDrawable(getResources().getDrawable(imageResource));
+            //holder.image.setImageDrawable(getResources().getDrawable(imageResource));
+            holder.image.setImageResource(imageResource);
+
+
+            // Setting imageButton onCLick function, will pass the clicked category to the next
+            // activity
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent categoryItemsIntent = new Intent(context,CategoryItemsActivity.class);
+                    categoryItemsIntent.putExtra("category",item);
+                    startActivity(categoryItemsIntent);
+
+
+
+
+                }
+            });
 
             return convertView;
         }
