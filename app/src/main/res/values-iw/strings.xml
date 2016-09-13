@@ -10,4 +10,15 @@
     <string name="categories_tab_title">קטגוריות</string>
     <string name="specials_tab_title">מבצעים</string>
     <string name="favorites_tab_title">מומלצים עבורך</string>
+    <string name="hint_email">דוא"ל</string>
+    <string name="hint_password">סיסמה</string>
+    <string name="loginBtnText">הכנס</string>
+    <string name="signup_text">אין לך חשבון עדיין? הירשם</string>
+    <string name="signup_title">הרשמה</string>
+    <string name="login_text">משתמש רשום? התחבר</string>
+    <string name="signUpBtnText">הירשם</string>
+    <string name="hint_confirm_password">אמת סיסמה</string>
+    <string name="email_address_error">הזן כתובת אימייל חוקית</string>
+    <string name="new_password_error">הסיסמה חייבת להכיל בין 6-10 תווים</string>
+    <string name="passwords_no_match_error">הסיסמאות אינן זהות</string>
 </resources>
