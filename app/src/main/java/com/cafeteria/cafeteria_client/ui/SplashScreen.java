@@ -1,4 +1,4 @@
-package com.cafeteria.cafeteria_client;
+package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
 
+import com.cafeteria.cafeteria_client.R;
 
 public class SplashScreen extends AppCompatActivity {
 
