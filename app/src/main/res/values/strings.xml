@@ -42,5 +42,8 @@
 
     <!--Splash Screen End-->
 
+    <!-- OrderActivity-->
+    <string name="btn_move_to_payment">Pay</string>
+
 
 </resources>

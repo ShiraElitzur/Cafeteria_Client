@@ -1,24 +1,13 @@
-package com.cafeteria.cafeteria_client;
+package com.cafeteria.cafeteria_client.ui;
 
-import android.content.Context;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
-import com.cafeteria.cafeteria_client.data.Category;
+import com.cafeteria.cafeteria_client.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +26,6 @@ public class MenuActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories); // The layout with the tabs
         super.onCreateDrawer();
-        getSupportActionBar().setTitle("");
-
-        // I changed the way we set the background because the method getDrawable is deprecated
-        //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.logo));
-        getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
-
 
         CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);

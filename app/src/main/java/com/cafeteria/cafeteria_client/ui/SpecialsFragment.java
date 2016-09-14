@@ -1,4 +1,4 @@
-package com.cafeteria.cafeteria_client;
+package com.cafeteria.cafeteria_client.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cafeteria.cafeteria_client.R;
+
 /**
  * Created by Shira Elitzur on 08/09/2016.
  */
-public class FavoritesFragment extends Fragment {
+public class SpecialsFragment  extends Fragment {
 
-    public FavoritesFragment () {
+    public SpecialsFragment () {
 
     }
 
@@ -24,6 +26,6 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.favorites_fragment, container, false);
+        return inflater.inflate(R.layout.specials_fragment, container, false);
     }
 }

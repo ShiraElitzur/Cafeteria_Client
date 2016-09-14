@@ -1,10 +1,9 @@
-package com.cafeteria.cafeteria_client;
+package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
@@ -64,53 +63,53 @@ public class CategoriesFragment extends Fragment {
         // init items in category
         List<Item> items = new ArrayList<>();
         Item item = new Item();
-        item.setItemName("שניצל");
-        item.setMeal(true);
+        item.setTitle("שניצל");
+        //item.setMeal(true);
         // init meals related to this item
         Meal meal = new Meal();
-        meal.setMealName("שניצל בצלחת");
-        item.addMeal(meal);
+        meal.setTitle("שניצל בצלחת");
+        //item.addMeal(meal);
         meal = new Meal();
-        meal.setMealName("שניצל בבאגט");
-        item.addMeal(meal);
+        meal.setTitle("שניצל בבאגט");
+        //item.addMeal(meal);
         meal = new Meal();
-        meal.setMealName("שניצל בפיתה");
-        item.addMeal(meal);
+        meal.setTitle("שניצל בפיתה");
+        //item.addMeal(meal);
         items.add(item);
 
         item = new Item();
-        item.setItemName("המבורגר");
-        item.setMeal(true);
+        item.setTitle("המבורגר");
+        //item.setMeal(true);
         // init meals related to this item
         meal = new Meal();
-        meal.setMealName("המבורגר בצלחת");
-        item.addMeal(meal);
+        meal.setTitle("המבורגר בצלחת");
+        //item.addMeal(meal);
         meal = new Meal();
-        meal.setMealName("המבורגר בבאגט");
-        item.addMeal(meal);
+        meal.setTitle("המבורגר בבאגט");
+        //item.addMeal(meal);
         meal = new Meal();
-        meal.setMealName("המבורגר בפיתה");
-        item.addMeal(meal);
+        meal.setTitle("המבורגר בפיתה");
+        //item.addMeal(meal);
         items.add(item);
 
         item = new Item();
-        item.setItemName("פרגית");
-        item.setMeal(true);
+        item.setTitle("פרגית");
+        //item.setMeal(true);
         // init meals related to this item
         meal = new Meal();
-        meal.setMealName("פרגית בצלחת");
-        item.addMeal(meal);
+        meal.setTitle("פרגית בצלחת");
+        //item.addMeal(meal);
         meal = new Meal();
-        meal.setMealName("פרגית בבאגט");
-        item.addMeal(meal);
+        meal.setTitle("פרגית בבאגט");
+        //item.addMeal(meal);
         meal = new Meal();
-        meal.setMealName("פרגית בפיתה");
-        item.addMeal(meal);
+        meal.setTitle("פרגית בפיתה");
+        //item.addMeal(meal);
         items.add(item);
 
         item = new Item();
-        item.setItemName("לאפה שווארמה");
-        item.setMeal(false);
+        item.setTitle("לאפה שווארמה");
+        //item.setMeal(false);
         items.add(item);
 
         // add items to category
@@ -222,9 +221,6 @@ public class CategoriesFragment extends Fragment {
                     Intent categoryItemsIntent = new Intent(context,CategoryItemsActivity.class);
                     categoryItemsIntent.putExtra("category",item);
                     startActivity(categoryItemsIntent);
-
-
-
 
                 }
             });

@@ -39,6 +39,7 @@
     <string name="alert_dialog_title">אין גישה לאינטרנט</string>
     <string name="alert_dialog_positive_button">נסה שוב</string>
     <string name="alert_dialog_negative_button">גלוש במצב לא מקוון</string>
+    <string name="btn_move_to_payment">Pay</string>
     <!--Alert Dialog End-->
 
     <!--Splash Screen End-->

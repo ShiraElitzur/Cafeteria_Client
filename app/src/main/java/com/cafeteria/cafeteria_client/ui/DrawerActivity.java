@@ -1,14 +1,16 @@
-package com.cafeteria.cafeteria_client;
+package com.cafeteria.cafeteria_client.ui;
 
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.cafeteria.cafeteria_client.R;
 
 /**
  * An activity with Navigation Drawer
@@ -17,7 +19,7 @@ import android.widget.Toast;
  * 2. ToolBar - toolbar
  * 3. NavigationView - navigation_view
  */
-public class DrawerActivity extends AppCompatActivity {
+public abstract class DrawerActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
@@ -28,6 +30,11 @@ public class DrawerActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        // Sets the title as empty string because the default behavior is to display as title the app name.
+        // Right now we have a background image on the action bar that contains the app name -
+        // Need to think about that point.
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 

@@ -1,4 +1,4 @@
-package com.cafeteria.cafeteria_client;
+package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
@@ -123,13 +124,13 @@ public class CategoryItemsActivity extends AppCompatActivity {
 
             for (Item item : category.getItems()) {
 
-                title = item.getItemName();
+                title = item.getTitle();
                 meals = new ArrayList<>();
-                if (item.isMeal()) {
-                    for (Meal meal : item.getMeals()) {
-                        meals.add(meal.getMealName());
-                    }
-                }
+//                if (item.isMeal()) {
+//                    for (Meal meal : item.getMeals()) {
+//                        meals.add(meal.getMealName());
+//                    }
+//                }
 
                 itemsDetails.put(title, meals);
             }
