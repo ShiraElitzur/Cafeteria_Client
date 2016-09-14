@@ -10,10 +10,5 @@ package com.cafeteria.cafeteria_client.data;
  */
 public class Main extends Item {
 
-    /**
-     * Item can stand alone or not but Main can not so i hide the super class field
-     */
-    private boolean isStandAlone = false;
-
 
 }

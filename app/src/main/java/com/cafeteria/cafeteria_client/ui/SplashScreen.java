@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cafeteria.cafeteria_client.R;
 import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
 

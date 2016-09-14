@@ -2,15 +2,32 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
+import com.cafeteria.cafeteria_client.data.Category;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -46,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
                 editor.putString("email",etMail.getText().toString());
                 editor.commit();
 
+                new MyWebServiceTask().execute();
+
                 Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                 startActivity(intent);
                 LoginActivity.this.finish();
@@ -61,4 +80,48 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+    class MyWebServiceTask extends AsyncTask<String, Void, String>
+    {
+        @Override
+        protected void onPostExecute(String response) {
+            Type listType = new TypeToken<ArrayList<Category>>(){}.getType();
+
+            List<Category> categoryList = new Gson().fromJson(response,listType);
+            Toast.makeText(LoginActivity.this, categoryList.get(0).getTitle(),Toast.LENGTH_SHORT).show();
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder response;
+            try {
+
+                URL url = new URL("http://192.168.43.91:8080/CafeteriaServer/rest/data/getCategories");
+                response = new StringBuilder();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return null;
+                }
+
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn .getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            return response.toString();
+        }
+    }
 }
+
