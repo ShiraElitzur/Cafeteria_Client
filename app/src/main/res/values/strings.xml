@@ -28,6 +28,12 @@
     <string name="progressBar_post_execute_success">Loading Complete</string>
     <string name="progressBar_progress_update">Loading Components..</string>
 
+    <string-array name="titleAnimation">
+        <item>Our Amazing Application</item>
+        <item>Now with</item>
+        <item>Karnaf</item>
+    </string-array>
+
     <!--Alert Dialog-->
     <string name="alert_dialog_title">No Internet Access</string>
     <string name="alert_dialog_positive_button">Try Again</string>

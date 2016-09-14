@@ -40,7 +40,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/input_email"
+                android:id="@+id/etMail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_email" />
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/input_password"
+                android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_password" />
@@ -76,7 +76,7 @@
         android:layout_marginBottom="24dp"/>
 
     <TextView
-        android:id="@+id/signUpLinkTv"
+        android:id="@+id/tvSignUpLink"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"

@@ -28,6 +28,12 @@
     <string name="progressBar_post_execute_error">אנא בדוק את חיבור האינטרנט שלך</string>
     <string name="progressBar_post_execute_success">טוען רכיבים..</string>
 
+    <string-array name="titleAnimation">
+        <item>האפליקציה המדהימה שלנו</item>
+        <item>עכשיו עם</item>
+        <item>קרנף</item>
+    </string-array>
+
 
     <!--Alert Dialog-->
     <string name="alert_dialog_title">אין גישה לאינטרנט</string>

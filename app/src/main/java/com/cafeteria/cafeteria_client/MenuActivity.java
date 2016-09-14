@@ -46,7 +46,7 @@ public class MenuActivity extends DrawerActivity {
 
         CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
-        // Adding to the adapter the three fragments and their titles
+        // Adding to the adapter the three fragments and their titlesAnimation
         adapter.addFragment(new CategoriesFragment(), getResources().getString(R.string.categories_tab_title));
         adapter.addFragment(new FavoritesFragment(), getResources().getString(R.string.favorites_tab_title));
         adapter.addFragment(new SpecialsFragment(), getResources().getString(R.string.specials_tab_title));
@@ -67,7 +67,7 @@ public class MenuActivity extends DrawerActivity {
         private final List<Fragment> fragmentList = new ArrayList<>();
 
         /**
-         * List of titles to display at the head of each fragment tab
+         * List of titlesAnimation to display at the head of each fragment tab
          */
         private final List<String> fragmentTitleList = new ArrayList<>();
 

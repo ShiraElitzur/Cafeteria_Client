@@ -14,7 +14,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
     <ExpandableListView
-        android:id="@+id/explv_CategoryItems"
+        android:id="@+id/explvCategoryItems"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"

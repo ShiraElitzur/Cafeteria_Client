@@ -20,27 +20,29 @@ import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CategoryItemsActivity extends AppCompatActivity {
 
-    ExpandableListView explvCategoryItems;
-    CategoryItemsAdapter categoryItemsAdapter;
+    private ExpandableListView explvCategoryItems;
+    private CategoryItemsAdapter categoryItemsAdapter;
     /**
      * Holds the name of the item and a list of the meal names
      * Format: Title, child title
      */
-    HashMap<String, List<String>> itemsDetails;
+    private HashMap<String, List<String>> itemsDetails;
     /**
      * Holds the list of the meal names (same as the hash map)
      */
-    List<String> itemsTitle;
+    private List<String> itemsTitle;
     /**
      * The selected category
      */
-    Category category;
+    private Category category;
 
 
     @Override
@@ -69,7 +71,7 @@ public class CategoryItemsActivity extends AppCompatActivity {
         // Temporary creation of categories items according to the chosen category
         initCategoryItems();
 
-        explvCategoryItems = (ExpandableListView) findViewById(R.id.explv_CategoryItems);
+        explvCategoryItems = (ExpandableListView) findViewById(R.id.explvCategoryItems);
 
         itemsTitle = new ArrayList<>(itemsDetails.keySet());
 
@@ -189,13 +191,18 @@ public class CategoryItemsActivity extends AppCompatActivity {
         @Override
         public View getGroupView(int parentPosition, boolean isExpanded, View convertView,
                                  ViewGroup parentView) {
+            TextView tvItemName;
             String parentString = (String) getGroup(parentPosition);
             if (convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.category_items_parent,parentView,false);
+                tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
+                convertView.setTag(tvItemName);
+
+            } else{
+                tvItemName = (TextView) convertView.getTag();
             }
 
-            TextView tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
             tvItemName.setTypeface(null, Typeface.BOLD);
             tvItemName.setText(parentString);
 

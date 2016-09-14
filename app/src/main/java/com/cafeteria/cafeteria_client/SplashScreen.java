@@ -1,13 +1,11 @@
 package com.cafeteria.cafeteria_client;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
@@ -16,17 +14,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.net.InetAddress;
+import com.hanks.htextview.HTextView;
+import com.hanks.htextview.HTextViewType;
+
 
 public class SplashScreen extends AppCompatActivity {
 
-    private static final int SPLASH_TIME = 3000;
-    ProgressBar progressBar;
-    TextView tvStatus;
-    AlertDialog alertDialog;
-    Intent intent;
+    String[] titlesAnimation;
+
+    private int mCounter = 0;
+
+    private static final int SPLASH_TIME = 1500;
+    private ProgressBar progressBar;
+    private TextView tvStatus;
+    private AlertDialog alertDialog;
+    private Intent intent;
+    private HTextView htvTitle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,15 @@ public class SplashScreen extends AppCompatActivity {
         progressBar.setProgress(0);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
         intent = new Intent(SplashScreen.this,LoginActivity.class);
+        htvTitle = (HTextView) findViewById(R.id.tvTitle);
+
+        titlesAnimation = getResources().getStringArray(R.array.titleAnimation);
+
+        htvTitle.setTextColor(Color.BLACK);
+        //htvTitle.setBackgroundColor(Color.WHITE);
+        Typeface type = Typeface.DEFAULT.createFromAsset(getAssets(),"fonts/PoiretOne-Regular.ttf");
+        htvTitle.setTypeface(type);
+        htvTitle.setAnimateType(HTextViewType.FALL);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle(R.string.alert_dialog_title)
@@ -77,7 +91,8 @@ public class SplashScreen extends AppCompatActivity {
     /**
      * THE 3 ARGUMENTS REPRESNT:
      * VOID = the arguments sent to doingBackground (when we exceute)
-     * Integer
+     * Integer - on progress update
+     * Boolean - doing backgroung
      */
     private class BackgroundTask extends AsyncTask<Void, Integer, Boolean>{
 
@@ -89,8 +104,8 @@ public class SplashScreen extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             while (i < 100){
                 try {
-                    Thread.sleep(1500);
-                    i+=20;
+                    Thread.sleep(SPLASH_TIME);
+                    i+=25;
                     publishProgress(i);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -106,6 +121,7 @@ public class SplashScreen extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             tvStatus.setText(R.string.progressBar_pre_execute);
+
         }
 
 
@@ -121,7 +137,7 @@ public class SplashScreen extends AppCompatActivity {
                 tvStatus.setText(R.string.progressBar_post_execute_success);
                 progressBar.setVisibility(View.GONE);
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(SPLASH_TIME-500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -134,6 +150,8 @@ public class SplashScreen extends AppCompatActivity {
         protected void onProgressUpdate(Integer... values) {
             int progress = values[0];
             progressBar.setProgress(progress);
+            mCounter = mCounter >= titlesAnimation.length - 1 ? 0 : mCounter + 1;
+            htvTitle.animateText(titlesAnimation[mCounter]);
             if (progress > 70){
                 tvStatus.setText(R.string.progressBar_progress_update);
             }
@@ -145,4 +163,5 @@ public class SplashScreen extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
+
 }

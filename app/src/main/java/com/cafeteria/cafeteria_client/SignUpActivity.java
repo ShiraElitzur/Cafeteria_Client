@@ -1,8 +1,11 @@
 package com.cafeteria.cafeteria_client;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,20 +14,24 @@ import android.widget.Toast;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText emailEditText;
-    private EditText passwordEditText;
-    private EditText confirmPasswordET;
+    private SharedPreferences sharedPreferences;
+    private EditText etMail;
+    private EditText etPassword;
+    private EditText etConfirmMail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+
         /* Get the components from the UI and set listeners to them */
         // The Email EditText - handle events of changes in the focus, validation check
 
-        emailEditText = (EditText)findViewById(R.id.input_email);
-        emailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etMail = (EditText)findViewById(R.id.etMail);
+        etMail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
@@ -41,8 +48,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         // The Password EditText - handle events of changes in the focus, validation check
 
-        passwordEditText = (EditText)findViewById(R.id.input_password);
-        passwordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etPassword = (EditText)findViewById(R.id.etPassword);
+        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
@@ -57,13 +64,13 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        confirmPasswordET = (EditText)findViewById(R.id.input_confirm_password);
-        confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etConfirmMail = (EditText)findViewById(R.id.etConfirmPassword);
+        etConfirmMail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 EditText inputEdit = (EditText)v;
                 String inputString = inputEdit.getText().toString();
-                String passwordString = passwordEditText.getText().toString();
+                String passwordString = etPassword.getText().toString();
 
                 if(!inputString.equals(passwordString)) {
                     inputEdit.setError(getResources().getString(R.string.passwords_no_match_error));
@@ -79,15 +86,21 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // if all the one of the input fields is not valid so the sign up is not authorized
-                if( emailEditText.getError() != null || passwordEditText.getError() != null ||
-                        emailEditText.getText().toString().isEmpty() ||
-                        passwordEditText.getText().toString().isEmpty()) {
+                if( etMail.getError() != null || etPassword.getError() != null ||
+                        etMail.getText().toString().isEmpty() ||
+                        etPassword.getText().toString().isEmpty()) {
                     return;
                 }
 
                 // TODO: 13/09/2016  Add a real signUp logic (save details in db) and think about and fix the validation logic
 
-                Intent intent = new Intent(SignUpActivity.this, MenuActivity.class);
+                etMail = (EditText)findViewById(R.id.etMail);
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("email",etMail.getText().toString());
+                editor.apply();
+
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
                 SignUpActivity.this.finish();
             }
