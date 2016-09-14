@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // if the username found - it's not the first time opening this app
+        // if the email found - it's not the first time opening this app
         // automatically redirect to home screen
         if (email != null && !email.equals("")){
             finish();
