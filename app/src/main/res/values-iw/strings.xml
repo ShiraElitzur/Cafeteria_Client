@@ -21,4 +21,19 @@
     <string name="email_address_error">הזן כתובת אימייל חוקית</string>
     <string name="new_password_error">הסיסמה חייבת להכיל בין 6-10 תווים</string>
     <string name="passwords_no_match_error">הסיסמאות אינן זהות</string>
+
+    <!--Splash Screen-->
+    <string name="progressBar_pre_execute">הטעינה הושלמה..</string>
+    <string name="progressBar_progress_update">כמעט סיימנו</string>
+    <string name="progressBar_post_execute_error">אנא בדוק את חיבור האינטרנט שלך</string>
+    <string name="progressBar_post_execute_success">טוען רכיבים..</string>
+
+
+    <!--Alert Dialog-->
+    <string name="alert_dialog_title">אין גישה לאינטרנט</string>
+    <string name="alert_dialog_positive_button">נסה שוב</string>
+    <string name="alert_dialog_negative_button">גלוש במצב לא מקוון</string>
+    <!--Alert Dialog End-->
+
+    <!--Splash Screen End-->
 </resources>

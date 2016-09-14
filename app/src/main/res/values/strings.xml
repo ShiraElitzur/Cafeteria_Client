@@ -21,4 +21,20 @@
     <string name="email_address_error">Enter a valid email address</string>
     <string name="new_password_error">Must be 6-10 characters</string>
     <string name="passwords_no_match_error">Passwords are not equal</string>
+
+    <!--Splash Screen-->
+    <string name="progressBar_pre_execute">Please Wait..</string>
+    <string name="progressBar_post_execute_error">Please check your internet connection</string>
+    <string name="progressBar_post_execute_success">Loading Complete</string>
+    <string name="progressBar_progress_update">Loading Components..</string>
+
+    <!--Alert Dialog-->
+    <string name="alert_dialog_title">No Internet Access</string>
+    <string name="alert_dialog_positive_button">Try Again</string>
+    <string name="alert_dialog_negative_button">Go Offline</string>
+    <!--Alert Dialog End-->
+
+    <!--Splash Screen End-->
+
+
 </resources>
