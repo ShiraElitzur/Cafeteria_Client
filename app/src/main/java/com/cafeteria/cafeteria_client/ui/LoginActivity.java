@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private EditText etMail;
+    private final static String SERVER_IP = "172.16.26.12";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             StringBuilder response;
             try {
 
-                URL url = new URL("http://192.168.43.91:8080/CafeteriaServer/rest/data/getCategories");
+                URL url = new URL("http://"+SERVER_IP+":8080/CafeteriaServer/rest/data/getCategories");
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {

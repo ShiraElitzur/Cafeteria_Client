@@ -3,14 +3,14 @@
 
     <group android:id="@+id/main_menu" android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_item_attachment"
+            android:id="@+id/navigation_item_cafeteria_menu"
             android:checked="true"
             android:icon="@drawable/cafeteria_menu"
             android:title="@string/nav_item_menu" />
         <item
-            android:id="@+id/navigation_item_images"
+            android:id="@+id/navigation_item_cart"
             android:icon="@drawable/orderd_history"
-            android:title="@string/nav_item_history" />
+            android:title="@string/nav_item_cart" />
         <item
             android:id="@+id/navigation_item_location"
             android:icon="@drawable/personal_details"

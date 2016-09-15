@@ -207,10 +207,10 @@ public class CategoriesFragment extends Fragment {
             // Title, description and image
             holder.title.setText(item.getTitle());
             holder.description.setText(item.getDescription());
-            // The image currently is from a fictive list pic0...pic5 will be from the database
-            int imageResource = getResources().getIdentifier( "@drawable/pic"+position, null, getActivity().getPackageName());
-            //holder.image.setImageDrawable(getResources().getDrawable(imageResource));
-            holder.image.setImageResource(imageResource);
+//            // The image currently is from a fictive list pic0...pic5 will be from the database
+//            int imageResource = getResources().getIdentifier( "@drawable/pic"+position, null, getActivity().getPackageName());
+//            //holder.image.setImageDrawable(getResources().getDrawable(imageResource));
+//            holder.image.setImageResource(imageResource);
 
 
             // Setting imageButton onCLick function, will pass the clicked category to the next

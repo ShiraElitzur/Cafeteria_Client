@@ -2,6 +2,7 @@ package com.cafeteria.cafeteria_client.data;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -25,12 +26,12 @@ public class Order {
     /**
      * The meals that this order contains
      */
-    private ArrayList<OrderedMeal> meals;
+    private List<OrderedMeal> meals;
 
     /**
      * The items that this order contains
      */
-    private ArrayList<Item> items;
+    private List<Item> items;
 
     /**
      * The date and time when this order created
@@ -100,7 +101,7 @@ public class Order {
      * Returns the meals that this order contains
      * @return the meals that this order contains
      */
-    public ArrayList<OrderedMeal> getMeals() {
+    public List<OrderedMeal> getMeals() {
         return meals;
     }
 
@@ -108,7 +109,7 @@ public class Order {
      * Sets list of meals for this order
      * @param meals
      */
-    public void setMeals(ArrayList<OrderedMeal> meals) {
+    public void setMeals(List<OrderedMeal> meals) {
         this.meals = meals;
     }
 
@@ -116,7 +117,7 @@ public class Order {
      * Returns the items that this order contains
      * @return the items that this order contains
      */
-    public ArrayList<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
@@ -124,7 +125,7 @@ public class Order {
      * Sets list of items for this order
      * @param items
      */
-    public void setItems(ArrayList<Item> items) {
+    public void setItems(List<Item> items) {
         this.items = items;
     }
 
@@ -138,7 +139,7 @@ public class Order {
 
     /**
      * Sets the Date and Time for this order ( when it was created )
-     * @param dateTime
+     * @param
      */
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
@@ -149,6 +150,15 @@ public class Order {
      * @return the amount to pay for this order
      */
     public double getPayment() {
+        payment = 0;
+        for( OrderedMeal meal : getMeals() ) {
+            payment += meal.getPrice();
+        }
+
+        for( Item item : getItems() ) {
+            payment += item.getPrice();
+        }
+
         return payment;
     }
 

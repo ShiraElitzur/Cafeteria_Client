@@ -2,25 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/order_item_background"
     android:weightSum="10"
-    android:gravity="end">
+    android:padding="10dp">
 
     <ImageButton
         android:id="@+id/imgBtnRemoveItem"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:src="@drawable/delete"
+        android:src="@drawable/remove"
         android:background="@null"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:weightSum="10">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nis"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/tvOrderItemPrice"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text="Price"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"/>
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/tvOrderItemTitle"
         android:layout_width="0dp"
-        android:layout_weight="9"
+        android:layout_weight="6"
         android:textSize="@dimen/headLines3"
         android:layout_height="wrap_content"
-        android:text="ItemTitle"/>
+        android:text="ItemTitle"
+        android:gravity="right"
+        android:layout_gravity="right"/>
 
 
 </LinearLayout>

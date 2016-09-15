@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/itemBill"
+        android:title="0.0"
+        app:showAsAction="always|withText">
+    </item>
+    <item
+        android:title=""
+        android:icon="@drawable/nis"
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:id="@+id/itemPayAction"
+        android:title="@string/btn_move_to_payment"
+        app:showAsAction="always|withText">
+    </item>
+</menu>

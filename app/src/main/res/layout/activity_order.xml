@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/llOrderLayout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -22,21 +23,8 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/lvOrderMeals"
-            android:layout_gravity="center_horizontal" />
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/lvOrderItems"
             android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/btn_move_to_payment"
-            android:id="@+id/btnMoveToPayment"
-            android:background="@color/colorPrimaryDark"/>
 
     </LinearLayout>
 

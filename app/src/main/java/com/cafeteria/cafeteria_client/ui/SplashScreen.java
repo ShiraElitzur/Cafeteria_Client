@@ -55,9 +55,9 @@ public class SplashScreen extends AppCompatActivity {
         htvTitle.setAnimateType(HTextViewType.FALL);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle(R.string.alert_dialog_title)
+        alertDialogBuilder.setTitle(R.string.alert_dialog_no_internet_title)
                 .setCancelable(false)
-                .setPositiveButton(R.string.alert_dialog_positive_button,
+                .setPositiveButton(R.string.alert_dialog_no_internet_positive_button,
                         new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -66,7 +66,7 @@ public class SplashScreen extends AppCompatActivity {
 
                     }
                 })
-                .setNegativeButton(R.string.alert_dialog_negative_button,
+                .setNegativeButton(R.string.alert_dialog_no_internet_negative_button,
                         new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

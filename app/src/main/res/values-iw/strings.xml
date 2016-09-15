@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">קרנף</string>
+
+    <!--Drawer and Navigation-->
     <string name="drawer_header_text">כותרת</string>
     <string name="nav_item_menu">תפריט</string>
     <string name="nav_item_history">היסטוריית הזמנות</string>
@@ -7,20 +9,30 @@
     <string name="nav_item_points">הנקודות שלי</string>
     <string name="nav_item_settings">הגדרות</string>
     <string name="nav_item_about">על האפליקציה</string>
+    <!--Drawer and Navigation End-->
+
+    <!--Tabs Titles-->
     <string name="categories_tab_title">קטגוריות</string>
     <string name="specials_tab_title">מבצעים</string>
     <string name="favorites_tab_title">מומלצים עבורך</string>
+    <!--Tabs Titles End-->
+
+    <!--Login Activity-->
     <string name="hint_email">דוא"ל</string>
     <string name="hint_password">סיסמה</string>
     <string name="loginBtnText">הכנס</string>
     <string name="signup_text">אין לך חשבון עדיין? הירשם</string>
     <string name="signup_title">הרשמה</string>
     <string name="login_text">משתמש רשום? התחבר</string>
+    <!--Login Activity End-->
+
+    <!--SignUp Activity-->
     <string name="signUpBtnText">הירשם</string>
     <string name="hint_confirm_password">אמת סיסמה</string>
     <string name="email_address_error">הזן כתובת אימייל חוקית</string>
     <string name="new_password_error">הסיסמה חייבת להכיל בין 6-10 תווים</string>
     <string name="passwords_no_match_error">הסיסמאות אינן זהות</string>
+    <!--SignUp Activity End-->
 
     <!--Splash Screen-->
     <string name="progressBar_pre_execute">הטעינה הושלמה..</string>
@@ -36,11 +48,20 @@
 
 
     <!--Alert Dialog-->
-    <string name="alert_dialog_title">אין גישה לאינטרנט</string>
-    <string name="alert_dialog_positive_button">נסה שוב</string>
-    <string name="alert_dialog_negative_button">גלוש במצב לא מקוון</string>
-    <string name="btn_move_to_payment">Pay</string>
+    <string name="alert_dialog_no_internet_title">אין גישה לאינטרנט</string>
+    <string name="alert_dialog_no_internet_positive_button">נסה שוב</string>
+    <string name="alert_dialog_no_internet_negative_button">גלוש במצב לא מקוון</string>
     <!--Alert Dialog End-->
 
     <!--Splash Screen End-->
+
+    <!-- OrderActivity-->
+    <string name="btn_move_to_payment">שלם</string>
+    <string name="pay_amount">לתשלום</string>
+    <string name="nav_item_cart">לעגלת הקניות</string>
+
+    <!-- Delete item alert dialog -->
+    <string name="alert_dialog_delete_item_title">אתה בטוח שברצונך למחוק את הפריט?</string>
+    <string name="alert_dialog_delete_item_positive_button">מחק</string>
+    <string name="alert_dialog_delete_item_negative_button">בטל</string>
 </resources>

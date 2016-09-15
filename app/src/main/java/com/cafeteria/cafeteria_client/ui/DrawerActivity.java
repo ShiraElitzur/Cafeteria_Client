@@ -1,5 +1,6 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +23,7 @@ import com.cafeteria.cafeteria_client.R;
 public abstract class DrawerActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private Intent intent;
 
     protected void onCreateDrawer() {
 
@@ -34,7 +36,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
         // Right now we have a background image on the action bar that contains the app name -
         // Need to think about that point.
         getSupportActionBar().setTitle("");
-        getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
+        //getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -44,7 +46,25 @@ public abstract class DrawerActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
-                Toast.makeText(DrawerActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_item_cafeteria_menu:
+                        if( DrawerActivity.this instanceof MenuActivity){
+                            return false;
+                        }
+                        intent = new Intent(DrawerActivity.this,MenuActivity.class);
+                        startActivity(intent);
+                        DrawerActivity.this.finish();
+                        break;
+                    case R.id.navigation_item_cart:
+                        if( DrawerActivity.this instanceof OrderActivity){
+                            return false;
+                        }
+                        intent = new Intent(DrawerActivity.this,OrderActivity.class);
+                        startActivity(intent);
+                        DrawerActivity.this.finish();
+                        break;
+
+                }
                 return true;
             }
         });
@@ -61,8 +81,8 @@ public abstract class DrawerActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
-//            case R.id.action_settings:
-//                return true;
+            case R.id.navigation_item_cafeteria_menu:
+
         }
 
         return super.onOptionsItemSelected(item);
