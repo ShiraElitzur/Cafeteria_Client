@@ -1,6 +1,6 @@
 package com.cafeteria.cafeteria_client.data;
 
-import com.cafeteria.cafeteria_client.OrderItem;
+import com.cafeteria.cafeteria_client.interfaces.OrderItem;
 
 import java.io.Serializable;
 

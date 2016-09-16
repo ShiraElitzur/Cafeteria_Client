@@ -1,10 +1,7 @@
 package com.cafeteria.cafeteria_client.ui;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
@@ -18,19 +15,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cafeteria.cafeteria_client.OnDialogResultListener;
+import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
-import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;

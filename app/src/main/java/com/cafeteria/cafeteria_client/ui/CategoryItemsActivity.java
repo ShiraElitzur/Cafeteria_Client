@@ -1,7 +1,6 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +17,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cafeteria.cafeteria_client.OnDialogResultListener;
+import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Item;

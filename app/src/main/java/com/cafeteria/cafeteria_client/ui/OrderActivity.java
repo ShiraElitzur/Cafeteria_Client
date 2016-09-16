@@ -2,10 +2,8 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.cafeteria.cafeteria_client.OrderItem;
+import com.cafeteria.cafeteria_client.interfaces.OrderItem;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
@@ -24,7 +22,6 @@ import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * This activity displays the order items and meals ( both referred as item in this file ) and the amount for payment.
