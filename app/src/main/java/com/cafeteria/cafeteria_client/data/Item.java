@@ -120,4 +120,14 @@ public class Item implements Serializable,OrderItem {
         this.category = category;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", isStandAlone=" + isStandAlone +
+                ", price=" + price +
+                ", category=" + category +
+                '}';
+    }
 }

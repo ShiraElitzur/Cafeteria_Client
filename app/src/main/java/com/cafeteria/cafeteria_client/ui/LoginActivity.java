@@ -89,8 +89,9 @@ public class LoginActivity extends AppCompatActivity {
             Type listType = new TypeToken<ArrayList<Category>>(){}.getType();
 
             List<Category> categoryList = new Gson().fromJson(response,listType);
-            Toast.makeText(LoginActivity.this, categoryList.get(0).getTitle(),Toast.LENGTH_SHORT).show();
-
+            if (categoryList!= null) {
+                Toast.makeText(LoginActivity.this, categoryList.get(0).getTitle(), Toast.LENGTH_SHORT).show();
+            }
 
         }
 

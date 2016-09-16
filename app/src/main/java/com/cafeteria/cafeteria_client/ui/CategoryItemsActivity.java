@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +22,6 @@ import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,11 +34,11 @@ public class CategoryItemsActivity extends AppCompatActivity {
      * Holds the name of the item and a list of the meal names
      * Format: Title, child title
      */
-    private HashMap<String, List<String>> itemsDetails;
+    private HashMap<Item, List<Meal>> itemsDetails;
     /**
      * Holds the list of the meal names (same as the hash map)
      */
-    private List<String> itemsTitle;
+    private List<Item> itemsTitle;
     /**
      * The selected category
      */
@@ -87,9 +86,16 @@ public class CategoryItemsActivity extends AppCompatActivity {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
+                Item item = itemsTitle.get(groupPosition);
                  Toast.makeText(getApplicationContext(),
-                 "Group Clicked " + itemsTitle.get(groupPosition),
+                 "Group Clicked " + item,
                  Toast.LENGTH_SHORT).show();
+
+                if (itemsTitle.get(groupPosition).isStandAlone()){
+//                    Intent mealDetailsActivity = new Intent(CategoryItemsActivity.this, MealDetailsActivity.class);
+//                    mealDetailsActivity.putExtra("meal",item);
+//                    startActivity(mealDetailsActivity);
+                }
                 return false;
             }
         });
@@ -100,39 +106,53 @@ public class CategoryItemsActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
+                Meal meal = itemsDetails.get(itemsTitle.get(groupPosition)).get(childPosition);
+                Item item = itemsTitle.get(groupPosition);
                 Toast.makeText(
                         getApplicationContext(),
-                        itemsTitle.get(groupPosition)
-                                + " : "
-                                + itemsDetails.get(
-                                itemsTitle.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
+                        item + " : " + meal, Toast.LENGTH_SHORT)
                         .show();
+
+//                Intent mealDetailsActivity = new Intent(CategoryItemsActivity.this, MealDetailsActivity.class);
+//                mealDetailsActivity.putExtra("meal",meal);
+//                startActivity(mealDetailsActivity);
+//                return false;
+
+
+                FragmentManager fm = getSupportFragmentManager();
+                MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
+                Bundle args = new Bundle();
+                args.putSerializable("meal",meal);
+                mealDetailsDialog.setArguments(args);
+                mealDetailsDialog.show(fm, "Some Title");
                 return false;
+
             }
         });
-
     }
+
 
     private void initCategoryItems() {
         itemsDetails = new HashMap<>();
         String title;
-        List<String> meals;
+        List<Meal> meals;
 
         // I filled only the "meat" category in the previous screen
         if (category.getItems() != null) {
 
             for (Item item : category.getItems()) {
 
-                title = item.getTitle();
+                title = item.getTitle(); //i.e. schnizel in zalacht
                 meals = new ArrayList<>();
-//                if (item.isMeal()) {
-//                    for (Meal meal : item.getMeals()) {
-//                        meals.add(meal.getMealName());
-//                    }
-//                }
 
-                itemsDetails.put(title, meals);
+                for (Meal meal : category.getMeals()){
+
+                    if (title.equals(meal.getMain().getTitle())) {
+                            meals.add(meal);
+                        }
+                }
+
+                itemsDetails.put(item, meals);
             }
         }else{
 
@@ -144,11 +164,11 @@ public class CategoryItemsActivity extends AppCompatActivity {
     private class CategoryItemsAdapter extends BaseExpandableListAdapter{
 
         private Context context;
-        private HashMap<String,List<String>> itemsDetails;
-        private List<String> itemsTitle;
+        private HashMap<Item,List<Meal>> itemsDetails;
+        private List<Item> itemsTitle;
 
-        public CategoryItemsAdapter(Context context, HashMap<String ,List<String>> itemsDetails,
-                                    List<String> itemsTitle){
+        public CategoryItemsAdapter(Context context, HashMap<Item ,List<Meal>> itemsDetails,
+                                    List<Item> itemsTitle){
             this.context = context;
             this.itemsDetails = itemsDetails;
             this.itemsTitle = itemsTitle;
@@ -193,7 +213,7 @@ public class CategoryItemsActivity extends AppCompatActivity {
         public View getGroupView(int parentPosition, boolean isExpanded, View convertView,
                                  ViewGroup parentView) {
             TextView tvItemName;
-            String parentString = (String) getGroup(parentPosition);
+            final Item item = (Item) getGroup(parentPosition);
             if (convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.category_items_parent,parentView,false);
@@ -205,7 +225,7 @@ public class CategoryItemsActivity extends AppCompatActivity {
             }
 
             tvItemName.setTypeface(null, Typeface.BOLD);
-            tvItemName.setText(parentString);
+            tvItemName.setText(item.getTitle());
 
             return  convertView;
         }
@@ -213,14 +233,22 @@ public class CategoryItemsActivity extends AppCompatActivity {
         @Override
         public View getChildView(int parentPosition, int childPosition, boolean isLastChild,
                                  View convertView, ViewGroup parentView) {
-            final String child = (String) getChild(parentPosition,childPosition);
+            TextView tvMealName;
+            Meal meal = (Meal) getChild(parentPosition,childPosition);
 
             if (convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.category_items_child,parentView,false);
+                tvMealName = (TextView) convertView.findViewById(R.id.tvMealName);
+                convertView.setTag(tvMealName);
+
+            }else{
+                tvMealName = (TextView) convertView.getTag();
             }
-            TextView tvMealName = (TextView) convertView.findViewById(R.id.tvMealName);
-            tvMealName.setText(child);
+
+            tvMealName.setTypeface(null, Typeface.BOLD);
+            tvMealName.setText(meal.getTitle());
+
 
             return convertView;
         }

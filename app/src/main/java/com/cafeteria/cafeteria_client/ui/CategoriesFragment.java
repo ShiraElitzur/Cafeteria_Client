@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
+import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Item;
+import com.cafeteria.cafeteria_client.data.Main;
 import com.cafeteria.cafeteria_client.data.Meal;
 
 import java.util.ArrayList;
@@ -62,58 +64,113 @@ public class CategoriesFragment extends Fragment {
         cat.setDescription("ארוחות בשריות מושקעות");
         // init items in category
         List<Item> items = new ArrayList<>();
-        Item item = new Item();
-        item.setTitle("שניצל");
-        //item.setMeal(true);
-        // init meals related to this item
+        List<Meal> meals = new ArrayList<>();
         Meal meal = new Meal();
+        Main main = new Main();
+        Item item = new Item();
+        List<Drink> drinks = new ArrayList<>();
+        Drink drink = new Drink();
+        drink.setTitle("קוקה קולה");
+        drinks.add(drink);
+        drink = new Drink();
+        drink.setTitle("פאנטה");
+        drinks.add(drink);
+        drink = new Drink();
+        drink.setTitle("ענבים");
+        drinks.add(drink);
+        drink = new Drink();
+        drink.setTitle("ספרייט");
+        drinks.add(drink);
+
+        List<Item> extras = new ArrayList<Item>();
+        Item extra = new Item();
+        extra.setTitle("אורז");
+        extras.add(extra);
+        extra = new Item();
+        extra.setTitle("צ'יפס");
+        extras.add(extra);
+        extra = new Item();
+        extra.setTitle("ירקות");
+        extras.add(extra);
+
+        item.setTitle("שניצל");
+        item.setStandAlone(false);
         meal.setTitle("שניצל בצלחת");
-        //item.addMeal(meal);
+        meal.setExtraAmount(2);
+        meal.setExtras(extras);
+        meal.setDrinkOptions(drinks);
+        meal.setPrice(35);
+        main.setTitle("שניצל");
+        meal.setMain(main);
+        meals.add(meal);
         meal = new Meal();
         meal.setTitle("שניצל בבאגט");
-        //item.addMeal(meal);
+        main = new Main();
+        main.setTitle("שניצל");
+        meal.setMain(main);
+        meals.add(meal);
         meal = new Meal();
         meal.setTitle("שניצל בפיתה");
-        //item.addMeal(meal);
+        main = new Main();
+        main.setTitle("שניצל");
+        meal.setMain(main);
+        meals.add(meal);
         items.add(item);
 
         item = new Item();
         item.setTitle("המבורגר");
-        //item.setMeal(true);
-        // init meals related to this item
+        item.setStandAlone(false);
         meal = new Meal();
         meal.setTitle("המבורגר בצלחת");
-        //item.addMeal(meal);
+        main = new Main();
+        main.setTitle("המבורגר");
+        meal.setMain(main);
+        meals.add(meal);
         meal = new Meal();
         meal.setTitle("המבורגר בבאגט");
-        //item.addMeal(meal);
+        main = new Main();
+        main.setTitle("המבורגר");
+        meal.setMain(main);
+        meals.add(meal);
         meal = new Meal();
         meal.setTitle("המבורגר בפיתה");
-        //item.addMeal(meal);
+        main = new Main();
+        main.setTitle("המבורגר");
+        meal.setMain(main);
+        meals.add(meal);
         items.add(item);
 
         item = new Item();
         item.setTitle("פרגית");
-        //item.setMeal(true);
-        // init meals related to this item
+        item.setStandAlone(false);
         meal = new Meal();
         meal.setTitle("פרגית בצלחת");
-        //item.addMeal(meal);
+        main = new Main();
+        main.setTitle("פרגית");
+        meal.setMain(main);
+        meals.add(meal);
         meal = new Meal();
         meal.setTitle("פרגית בבאגט");
-        //item.addMeal(meal);
+        main = new Main();
+        main.setTitle("פרגית");
+        meal.setMain(main);
+        meals.add(meal);
         meal = new Meal();
         meal.setTitle("פרגית בפיתה");
-        //item.addMeal(meal);
+        main = new Main();
+        main.setTitle("פרגית");
+        meal.setMain(main);
+        meals.add(meal);
         items.add(item);
 
         item = new Item();
         item.setTitle("לאפה שווארמה");
-        //item.setMeal(false);
+        item.setStandAlone(true);
         items.add(item);
 
-        // add items to category
+        // set items and meals to category
         cat.setItems(items);
+        cat.setMeals(meals);
 
 
         categories.add(cat);
@@ -184,7 +241,7 @@ public class CategoriesFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, final ViewGroup parent) {
             final ViewHolder holder;
-            final Category item;
+            final Category category;
 
             if(convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -203,10 +260,10 @@ public class CategoriesFragment extends Fragment {
             }
 
             // change the components to fit the current item that the cell should display
-            item = items.get(position);
+            category = items.get(position);
             // Title, description and image
-            holder.title.setText(item.getTitle());
-            holder.description.setText(item.getDescription());
+            holder.title.setText(category.getTitle());
+            holder.description.setText(category.getDescription());
 //            // The image currently is from a fictive list pic0...pic5 will be from the database
 //            int imageResource = getResources().getIdentifier( "@drawable/pic"+position, null, getActivity().getPackageName());
 //            //holder.image.setImageDrawable(getResources().getDrawable(imageResource));
@@ -219,7 +276,7 @@ public class CategoriesFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent categoryItemsIntent = new Intent(context,CategoryItemsActivity.class);
-                    categoryItemsIntent.putExtra("category",item);
+                    categoryItemsIntent.putExtra("category",category);
                     startActivity(categoryItemsIntent);
 
                 }
