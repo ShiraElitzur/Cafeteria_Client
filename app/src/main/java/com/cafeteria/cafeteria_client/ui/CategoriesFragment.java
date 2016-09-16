@@ -99,7 +99,7 @@ public class CategoriesFragment extends Fragment {
         meal.setExtraAmount(2);
         meal.setExtras(extras);
         meal.setDrinkOptions(drinks);
-        meal.setPrice(35);
+        meal.setPrice(35.66657);
         main.setTitle("שניצל");
         meal.setMain(main);
         meals.add(meal);

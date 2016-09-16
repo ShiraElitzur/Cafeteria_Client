@@ -158,4 +158,16 @@ public class OrderedMeal implements OrderItem {
     public double getPrice() {
         return getParentMeal().getPrice();
     }
+
+    @Override
+    public String toString() {
+        return "OrderedMeal{" +
+                "id=" + id +
+                ", parentMeal=" + parentMeal +
+                ", chosenExtras=" + chosenExtras +
+                ", chosenDrink=" + chosenDrink +
+                ", comment='" + comment + '\'' +
+                ", order=" + order +
+                '}';
+    }
 }

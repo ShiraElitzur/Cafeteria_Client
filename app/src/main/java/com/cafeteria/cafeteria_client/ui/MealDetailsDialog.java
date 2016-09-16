@@ -1,7 +1,10 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
@@ -15,18 +18,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
+import com.cafeteria.cafeteria_client.data.Order;
+import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-public class MealDetailsDialog extends DialogFragment {
+public class MealDetailsDialog extends DialogFragment{
 
     private Spinner spinnerExtras;
     private Spinner spinnerDrink;
@@ -34,24 +44,38 @@ public class MealDetailsDialog extends DialogFragment {
     private Button btnExtras;
     private TextView tvMealName;
     private TextView tvExtrasAmount;
-    private EditText etNote;
+    private EditText etComment;
     private TextView tvTotal;
-    private Button btnPay;
+    private Button btnOrder;
     private Button btnKeepShopping;
     private Dialog dialog;
     private Item item;
     private Meal meal;
-    Currency nis;
+    private Currency nis;
+    private View view;
+    private OrderedMeal orderedMeal;
+    private OnDialogResultListener mListener;
+
 
     public MealDetailsDialog(){
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            this.mListener = (OnDialogResultListener) context;
+        }
+        catch (final ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnCompleteListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_meal_details, container);
+        view = inflater.inflate(R.layout.dialog_meal_details, container);
 
         meal = (Meal) getArguments().getSerializable("meal");
 
@@ -75,6 +99,7 @@ public class MealDetailsDialog extends DialogFragment {
         List<Item> drinks = (List)new ArrayList<Drink>(meal.getDrinkOptions());
 
 
+
         spinnerExtras.setAdapter(new MyAdapter(getActivity(),R.layout.dialog_spinner_item,meal.getExtras()));
 
         spinnerDrink.setAdapter(new MyAdapter(getActivity(),meal.getDrinkOptions(), R.layout.dialog_spinner_item));
@@ -90,6 +115,7 @@ public class MealDetailsDialog extends DialogFragment {
             }
         });
 
+
         btnExtras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,28 +127,65 @@ public class MealDetailsDialog extends DialogFragment {
             }
         });
 
+
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveOrder();
+                mListener.onPositiveResult(orderedMeal);
+                dialog.dismiss();
+
+            }
+        });
+
+        btnKeepShopping.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveOrder();
+                mListener.onNegativeResult(orderedMeal);
+                dialog.dismiss();
+            }
+        });
+
         return view;
     }
 
-        private void initComponents() {
-        spinnerExtras = (Spinner)dialog.findViewById(R.id.spinnerExtras);
-        spinnerDrink = (Spinner)dialog.findViewById(R.id.spinnerDrink);
-        btnDrink = (Button) dialog.findViewById(R.id.btnDrink);
-        btnExtras = (Button) dialog.findViewById(R.id.btnExtras);
-        tvMealName = (TextView)dialog.findViewById(R.id.tvMealName);
-        tvExtrasAmount = (TextView)dialog.findViewById(R.id.tvExtrasAmount);
-        etNote = (EditText) dialog.findViewById(R.id.etNote);
-        tvTotal = (TextView)dialog.findViewById(R.id.tvTotal);
-        btnPay = (Button) dialog.findViewById(R.id.btnPay);
-        btnKeepShopping = (Button) dialog.findViewById(R.id.btnKeepShopping);
-
-        tvMealName.setText(meal.getTitle());
-        tvExtrasAmount.setText("Extras Available: " + meal.getExtraAmount());
-            tvTotal.setText("Total: " + Double.toString(meal.getPrice())  + " " + nis.getSymbol());
-
+    private void saveOrder(){
+        orderedMeal = new OrderedMeal();
+        orderedMeal.setComment(etComment.getText().toString());
+        orderedMeal.setChosenDrink(new Drink());
+        orderedMeal.setChosenExtras(new ArrayList<Item>());
+        orderedMeal.setParentMeal(meal);
     }
 
-        public class MyAdapter extends BaseAdapter{
+
+    private void initComponents() {
+        spinnerExtras = (Spinner)view.findViewById(R.id.spinnerExtras);
+        spinnerDrink = (Spinner)view.findViewById(R.id.spinnerDrink);
+        btnDrink = (Button) view.findViewById(R.id.btnDrink);
+        btnExtras = (Button) view.findViewById(R.id.btnExtras);
+        tvMealName = (TextView)view.findViewById(R.id.tvMealName);
+        tvExtrasAmount = (TextView)view.findViewById(R.id.tvExtrasAmount);
+        etComment = (EditText) view.findViewById(R.id.etComment);
+        tvTotal = (TextView)view.findViewById(R.id.tvTotal);
+        btnOrder = (Button) view.findViewById(R.id.btnOrder);
+        btnKeepShopping = (Button) view.findViewById(R.id.btnKeepShopping);
+
+        BigDecimal bd = new BigDecimal(meal.getPrice());
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+
+        String total = String.format(getResources().getString(R.string.dialog_tv_total)
+            ,bd.doubleValue(), nis.getSymbol());
+
+        String extrasAmount = String.format(getResources().getString(R.string.dialog_tv_extras_amount)
+                ,meal.getExtraAmount());
+
+        tvMealName.setText(meal.getTitle());
+        tvExtrasAmount.setText(extrasAmount);
+        tvTotal.setText(total);
+    }
+
+    public class MyAdapter extends BaseAdapter{
 
         Context context;
         int resource;

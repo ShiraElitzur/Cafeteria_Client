@@ -35,17 +35,18 @@
     <!--SignUp Activity End-->
 
     <!--Splash Screen-->
-    <string name="progressBar_pre_execute">הטעינה הושלמה..</string>
-    <string name="progressBar_progress_update">כמעט סיימנו</string>
+    <string name="progressBar_pre_execute">אנא המתן..</string>
     <string name="progressBar_post_execute_error">אנא בדוק את חיבור האינטרנט שלך</string>
-    <string name="progressBar_post_execute_success">טוען רכיבים..</string>
+    <string name="progressBar_post_execute_success">הטעינה הושלמה</string>
+    <string name="progressBar_progress_update">טוען רכיבים..</string>
 
-    <string-array name="titleAnimation">
-        <item>האפליקציה המדהימה שלנו</item>
-        <item>עכשיו עם</item>
-        <item>קרנף</item>
-    </string-array>
 
+    <!--Hebrew in animation isn't good, backwards-->
+    <!--<string-array name="titleAnimation">-->
+        <!--<item>האפליקציה המדהימה שלנו</item>-->
+        <!--<item>עכשיו עם</item>-->
+        <!--<item>קרנף</item>-->
+    <!--</string-array>-->
 
     <!--Alert MealDetailsDialog-->
     <string name="alert_dialog_no_internet_title">אין גישה לאינטרנט</string>
@@ -64,4 +65,16 @@
     <string name="alert_dialog_delete_item_title">אתה בטוח שברצונך למחוק את הפריט?</string>
     <string name="alert_dialog_delete_item_positive_button">מחק</string>
     <string name="alert_dialog_delete_item_negative_button">בטל</string>
+    <!-- Delete item alert dialog End-->
+
+    <!--MealDetails Dialog-->
+    <string name="dialog_tv_extras_amount">מספר תוספות: %1$d</string>
+    <string name="dialog_btn_extras">בחר תוספות</string>
+    <string name="dialog_btn_drink">הוסף שתייה</string>
+    <string name="dialog_et_comment_hint">פרטים נוספים להזמנה זו</string>
+    <string name="dialog_tv_total">לתשלום: %1$.2f %2$s</string>
+    <string name="dialog_btn_keep_shopping">המשך לקנות</string>
+    <string name="dialog_btn_order">הזמן</string>
+    <!--MealDetails Dialog End-->
+
 </resources>

@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -20,6 +21,8 @@ import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
 
 import com.cafeteria.cafeteria_client.R;
+
+import java.util.Locale;
 
 public class SplashScreen extends AppCompatActivity {
 

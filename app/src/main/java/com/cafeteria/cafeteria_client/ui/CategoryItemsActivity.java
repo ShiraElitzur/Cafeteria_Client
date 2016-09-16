@@ -1,6 +1,7 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentManager;
@@ -17,16 +18,18 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
+import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CategoryItemsActivity extends AppCompatActivity {
+public class CategoryItemsActivity extends AppCompatActivity implements OnDialogResultListener{
 
     private ExpandableListView explvCategoryItems;
     private CategoryItemsAdapter categoryItemsAdapter;
@@ -92,9 +95,15 @@ public class CategoryItemsActivity extends AppCompatActivity {
                  Toast.LENGTH_SHORT).show();
 
                 if (itemsTitle.get(groupPosition).isStandAlone()){
-//                    Intent mealDetailsActivity = new Intent(CategoryItemsActivity.this, MealDetailsActivity.class);
-//                    mealDetailsActivity.putExtra("meal",item);
-//                    startActivity(mealDetailsActivity);
+
+                    //nedd to be another dialog or be added straight to order activity "sal"
+
+//                    FragmentManager fm = getSupportFragmentManager();
+//                    MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
+//                    Bundle args = new Bundle();
+//                    args.putSerializable("meal",item);
+//                    mealDetailsDialog.setArguments(args);
+//                    mealDetailsDialog.show(fm, "");
                 }
                 return false;
             }
@@ -113,18 +122,13 @@ public class CategoryItemsActivity extends AppCompatActivity {
                         item + " : " + meal, Toast.LENGTH_SHORT)
                         .show();
 
-//                Intent mealDetailsActivity = new Intent(CategoryItemsActivity.this, MealDetailsActivity.class);
-//                mealDetailsActivity.putExtra("meal",meal);
-//                startActivity(mealDetailsActivity);
-//                return false;
-
-
                 FragmentManager fm = getSupportFragmentManager();
                 MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
                 Bundle args = new Bundle();
                 args.putSerializable("meal",meal);
                 mealDetailsDialog.setArguments(args);
-                mealDetailsDialog.show(fm, "Some Title");
+                mealDetailsDialog.show(fm, "");
+
                 return false;
 
             }
@@ -157,6 +161,17 @@ public class CategoryItemsActivity extends AppCompatActivity {
         }else{
 
         }
+
+    }
+
+    @Override
+    public void onPositiveResult(OrderedMeal orderedMeal) {
+        Toast.makeText(this,orderedMeal.toString(),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNegativeResult(OrderedMeal orderedMeal) {
+        Toast.makeText(this,orderedMeal.toString(),Toast.LENGTH_LONG).show();
 
     }
 

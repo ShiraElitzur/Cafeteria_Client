@@ -44,6 +44,7 @@
         <item>Our Amazing Application</item>
         <item>Now with</item>
         <item>Karnaf</item>
+
     </string-array>
 
     <!--Alert Dialog-->
@@ -68,5 +69,17 @@
     <!-- Delete item alert dialog End-->
 
     <!-- OrderActivity End-->
+
+    <!--MealDetails Dialog-->
+
+    <string name="dialog_tv_extras_amount">Extras Amount: %1$d</string>
+    <string name="dialog_btn_extras">Choose Extras</string>
+    <string name="dialog_btn_drink">Add Drink</string>
+    <string name="dialog_et_comment_hint">Additional details for this order</string>
+    <string name="dialog_tv_total">Total: %1$.2f %2$s</string>
+    <string name="dialog_btn_keep_shopping">Keep Shopping</string>
+    <string name="dialog_btn_order">Order</string>
+
+    <!--MealDetails Dialog End-->
 
 </resources>

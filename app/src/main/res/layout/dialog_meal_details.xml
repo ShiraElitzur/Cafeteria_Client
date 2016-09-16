@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="100"
     android:background="@color/colorHeadlines"
     >
-
-<Space
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_weight="10"
-    />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="90"
+    android:orientation="vertical"
+    >
+    <View
+        android:layout_width="match_parent"
+        android:layout_weight="10"
+        android:background="@color/colorPrimaryLight"
+        android:layout_height="0dp"
+        />
 
     <TextView
         android:layout_width="match_parent"
@@ -27,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Extras Available: 2"
+        android:text="@string/dialog_tv_extras_amount"
         android:gravity="center_horizontal"
         android:id="@+id/tvExtrasAmount"
         android:layout_gravity="end"
@@ -39,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
-        android:text="Add Extras"
+        android:text="@string/dialog_btn_extras"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/btnExtras"
         android:clickable="true"
@@ -62,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
-        android:text="Drink Something?"
+        android:text="@string/dialog_btn_drink"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/btnDrink"
         android:clickable="true"
@@ -88,32 +93,29 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/etNote"
+        android:id="@+id/etComment"
         android:layout_gravity="center_horizontal"
         android:layout_weight="10"
-        android:hint="You can leave us a note"
+        android:hint="@string/dialog_et_comment_hint"
         />
 
-        <TextView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Total: 25 ₪"
-            android:gravity="end"
+        android:text="@string/dialog_tv_total"
         android:padding="10dp"
         android:id="@+id/tvTotal"
+        android:gravity="end"
         android:layout_weight="10"
-            />
-
-
+        />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="10"
-        android:layout_weight="10"
-        >
+        android:layout_weight="10">
 
         <Button
             style="?android:attr/borderlessButtonStyle"
@@ -121,7 +123,7 @@
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:text="Keep Shopping"
+            android:text="@string/dialog_btn_keep_shopping"
             android:id="@+id/btnKeepShopping"
             android:layout_gravity="bottom"
             />
@@ -132,11 +134,14 @@
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:text="Pay"
-            android:id="@+id/btnPay"
+            android:text="@string/dialog_btn_order"
+            android:id="@+id/btnOrder"
             android:layout_gravity="bottom"
             />
 
     </LinearLayout>
 
+
 </LinearLayout>
+
+</RelativeLayout>
