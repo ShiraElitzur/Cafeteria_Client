@@ -1,6 +1,8 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +38,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
         // Right now we have a background image on the action bar that contains the app name -
         // Need to think about that point.
         getSupportActionBar().setTitle("");
+        getSupportActionBar().setLogo(ContextCompat.getDrawable(this,R.drawable.logo));
         //getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -60,6 +63,16 @@ public abstract class DrawerActivity extends AppCompatActivity {
                             return false;
                         }
                         intent = new Intent(DrawerActivity.this,OrderActivity.class);
+                        startActivity(intent);
+                        DrawerActivity.this.finish();
+                        break;
+                    case R.id.navigation_item_log_out:
+                        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = mySPrefs.edit();
+                        editor.remove("email");
+                        editor.apply();
+
+                        intent = new Intent(DrawerActivity.this,LoginActivity.class);
                         startActivity(intent);
                         DrawerActivity.this.finish();
                         break;

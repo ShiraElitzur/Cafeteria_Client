@@ -1,5 +1,6 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -10,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -17,6 +20,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.data.DataHolder;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
@@ -60,14 +64,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setLogo(ContextCompat.getDrawable(this,R.drawable.logo));
         getSupportActionBar().setTitle("");
-        // Sets the title as empty string because the default behavior is to display as title the app name.
-        // Right now we have a background image on the action bar that contains the app name -
-        // Need to think about that point.
-
-        //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.logo));
-        //getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
-
 
 
         // Temporary creation of categories items according to the chosen category
@@ -88,10 +86,10 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-                Item item = itemsTitle.get(groupPosition);
-                 Toast.makeText(getApplicationContext(),
-                 "Group Clicked " + item,
-                 Toast.LENGTH_SHORT).show();
+//                Item item = itemsTitle.get(groupPosition);
+//                 Toast.makeText(getApplicationContext(),
+//                 "Group Clicked " + item,
+//                 Toast.LENGTH_SHORT).show();
 
                 if (itemsTitle.get(groupPosition).isStandAlone()){
 
@@ -116,10 +114,10 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                                         int groupPosition, int childPosition, long id) {
                 Meal meal = itemsDetails.get(itemsTitle.get(groupPosition)).get(childPosition);
                 Item item = itemsTitle.get(groupPosition);
-                Toast.makeText(
-                        getApplicationContext(),
-                        item + " : " + meal, Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(
+//                        getApplicationContext(),
+//                        item + " : " + meal, Toast.LENGTH_SHORT)
+//                        .show();
 
                 FragmentManager fm = getSupportFragmentManager();
                 MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
@@ -163,17 +161,22 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
     }
 
+    // btn order clicked, add the chosen meal and go to order activity
     @Override
     public void onPositiveResult(OrderedMeal orderedMeal) {
-        Toast.makeText(this,orderedMeal.toString(),Toast.LENGTH_LONG).show();
+        DataHolder dataHolder = DataHolder.getInstance();
+        dataHolder.addOrderdMeal(orderedMeal);
+        Intent orderActivityIntent = new Intent(CategoryItemsActivity.this,OrderActivity.class);
+        startActivity(orderActivityIntent);
     }
 
+    // btn keep shopping clicked, add the chosen meal
     @Override
     public void onNegativeResult(OrderedMeal orderedMeal) {
-        Toast.makeText(this,orderedMeal.toString(),Toast.LENGTH_LONG).show();
-
+        Toast.makeText(this,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
+        DataHolder dataHolder = DataHolder.getInstance();
+        dataHolder.addOrderdMeal(orderedMeal);
     }
-
 
     private class CategoryItemsAdapter extends BaseExpandableListAdapter{
 

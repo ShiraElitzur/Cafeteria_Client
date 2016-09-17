@@ -27,6 +27,11 @@
         <item
             android:title="@string/nav_item_settings"
             android:icon="@drawable/ic_settings_black_48dp"/>
+
+        <item
+            android:id="@+id/navigation_item_log_out"
+            android:title="@string/nav_item_log_out"
+            android:icon="@drawable/ic_exit_to_app"/>
         <item
             android:icon="@drawable/about"
             android:title="@string/nav_item_about" />

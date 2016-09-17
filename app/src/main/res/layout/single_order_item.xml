@@ -42,12 +42,21 @@
     <TextView
         android:id="@+id/tvOrderItemTitle"
         android:layout_width="0dp"
-        android:layout_weight="6"
+        android:layout_weight="5"
         android:textSize="@dimen/headLines3"
         android:layout_height="wrap_content"
         android:text="ItemTitle"
         android:gravity="right"
         android:layout_gravity="right"/>
+
+    <ImageButton
+        android:id="@+id/imgBtnEditItem"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:src="@drawable/ic_edit"
+        android:background="@null"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"/>
 
 
 </LinearLayout>

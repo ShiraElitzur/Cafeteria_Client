@@ -3,7 +3,6 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -20,11 +19,7 @@ import com.cafeteria.cafeteria_client.R;
 import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
 
-import com.cafeteria.cafeteria_client.R;
-
-import java.util.Locale;
-
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     String[] titlesAnimation;
 
@@ -46,7 +41,7 @@ public class SplashScreen extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setProgress(0);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
-        intent = new Intent(SplashScreen.this,LoginActivity.class);
+        intent = new Intent(SplashScreenActivity.this,LoginActivity.class);
         htvTitle = (HTextView) findViewById(R.id.tvTitle);
 
         titlesAnimation = getResources().getStringArray(R.array.titleAnimation);

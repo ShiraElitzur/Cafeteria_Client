@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
+import com.cafeteria.cafeteria_client.data.DataHolder;
 import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Main;
@@ -29,7 +31,7 @@ public class CategoriesFragment extends Fragment {
 
 
     private GridView grid;
-    private ArrayList<Category> categories;
+    private List<Category> categories;
 
     public CategoriesFragment () {
 
@@ -58,153 +60,8 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void initCategories(){
-        categories = new ArrayList<>();
-        Category cat = new Category();
-        cat.setTitle("בשרי");
-        cat.setDescription("ארוחות בשריות מושקעות");
-        // init items in category
-        List<Item> items = new ArrayList<>();
-        List<Meal> meals = new ArrayList<>();
-        Meal meal = new Meal();
-        Main main = new Main();
-        Item item = new Item();
-        List<Drink> drinks = new ArrayList<>();
-        Drink drink = new Drink();
-        drink.setTitle("קוקה קולה");
-        drink.setPrice(7.5);
-        drinks.add(drink);
-        drink = new Drink();
-        drink.setTitle("פאנטה");
-        drink.setPrice(7.5);
-        drinks.add(drink);
-        drink = new Drink();
-        drink.setTitle("ענבים");
-        drink.setPrice(6.5);
-        drinks.add(drink);
-        drink = new Drink();
-        drink.setTitle("ספרייט");
-        drink.setPrice(7.5);
-        drinks.add(drink);
-
-        List<Item> extras = new ArrayList<Item>();
-        Item extra = new Item();
-        extra.setTitle("אורז");
-        extra.setPrice(5);
-        extras.add(extra);
-        extra = new Item();
-        extra.setTitle("צ'יפס");
-        extra.setPrice(5);
-        extras.add(extra);
-        extra = new Item();
-        extra.setTitle("ירקות");
-        extra.setPrice(5);
-        extras.add(extra);
-
-        item.setTitle("שניצל");
-        item.setStandAlone(false);
-        meal.setTitle("שניצל בצלחת");
-        meal.setExtraAmount(2);
-        meal.setExtras(extras);
-        meal.setDrinkOptions(drinks);
-        meal.setPrice(35.66657);
-        main.setTitle("שניצל");
-        meal.setMain(main);
-        meals.add(meal);
-        meal = new Meal();
-        meal.setTitle("שניצל בבאגט");
-        main = new Main();
-        main.setTitle("שניצל");
-        meal.setMain(main);
-        meals.add(meal);
-        meal = new Meal();
-        meal.setTitle("שניצל בפיתה");
-        main = new Main();
-        main.setTitle("שניצל");
-        meal.setMain(main);
-        meals.add(meal);
-        items.add(item);
-
-        item = new Item();
-        item.setTitle("המבורגר");
-        item.setStandAlone(false);
-        meal = new Meal();
-        meal.setTitle("המבורגר בצלחת");
-        main = new Main();
-        main.setTitle("המבורגר");
-        meal.setMain(main);
-        meals.add(meal);
-        meal = new Meal();
-        meal.setTitle("המבורגר בבאגט");
-        main = new Main();
-        main.setTitle("המבורגר");
-        meal.setMain(main);
-        meals.add(meal);
-        meal = new Meal();
-        meal.setTitle("המבורגר בפיתה");
-        main = new Main();
-        main.setTitle("המבורגר");
-        meal.setMain(main);
-        meals.add(meal);
-        items.add(item);
-
-        item = new Item();
-        item.setTitle("פרגית");
-        item.setStandAlone(false);
-        meal = new Meal();
-        meal.setTitle("פרגית בצלחת");
-        main = new Main();
-        main.setTitle("פרגית");
-        meal.setMain(main);
-        meals.add(meal);
-        meal = new Meal();
-        meal.setTitle("פרגית בבאגט");
-        main = new Main();
-        main.setTitle("פרגית");
-        meal.setMain(main);
-        meals.add(meal);
-        meal = new Meal();
-        meal.setTitle("פרגית בפיתה");
-        main = new Main();
-        main.setTitle("פרגית");
-        meal.setMain(main);
-        meals.add(meal);
-        items.add(item);
-
-        item = new Item();
-        item.setTitle("לאפה שווארמה");
-        item.setStandAlone(true);
-        items.add(item);
-
-        // set items and meals to category
-        cat.setItems(items);
-        cat.setMeals(meals);
-
-
-        categories.add(cat);
-        cat = new Category();
-        cat.setTitle("חלבי");
-        cat.setDescription("ארוחות חלביות מדהימות");
-        categories.add(cat);
-        cat = new Category();
-        cat.setTitle("סלטים");
-        cat.setDescription("מבחר סלטים בהרכבה");
-        categories.add(cat);
-        cat = new Category();
-        cat.setTitle("שתיה חמה");
-        cat.setDescription("כל סוגי השתייה החמה");
-        categories.add(cat);
-        cat = new Category();
-        cat.setTitle("מאפים");
-        cat.setDescription("כל סוגי המאפים");
-        categories.add(cat);
-        cat = new Category();
-        cat.setTitle("שתיה קרה");
-        cat.setDescription("כל סוגי השתיה הקרה");
-        categories.add(cat);
-        cat = new Category();
-        cat.setTitle("חטיפים");
-        cat.setDescription("במבה,ביסלי,פסק זמן...");
-        categories.add(cat);
+        DataHolder dataHolder = DataHolder.getInstance();
+        categories = dataHolder.getCategories();
     }
 
     /**
@@ -213,10 +70,10 @@ public class CategoriesFragment extends Fragment {
     private class GridViewAdapter extends BaseAdapter {
 
         private Context context;
-        ArrayList<Category> items;
+        List<Category> items;
         int layout;
 
-        public GridViewAdapter(Context context, ArrayList<Category> items, int layout){
+        public GridViewAdapter(Context context, List<Category> items, int layout){
             this.context = context;
             this.items = items;
             this.layout = layout;

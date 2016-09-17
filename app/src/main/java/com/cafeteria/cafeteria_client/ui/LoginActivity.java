@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("email",etMail.getText().toString());
-                editor.commit();
+                editor.apply();
 
                 new MyWebServiceTask().execute();
 
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // get email strign from shared prefrence
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String email = sharedPreferences.getString("email","");
 
         // if the email found - it's not the first time opening this app

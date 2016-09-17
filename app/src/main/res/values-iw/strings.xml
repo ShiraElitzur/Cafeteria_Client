@@ -8,6 +8,7 @@
     <string name="nav_item_personal">פרטים אישיים</string>
     <string name="nav_item_points">הנקודות שלי</string>
     <string name="nav_item_settings">הגדרות</string>
+    <string name="nav_item_log_out">התנתק</string>
     <string name="nav_item_about">על האפליקציה</string>
     <!--Drawer and Navigation End-->
 
@@ -77,8 +78,8 @@
     <string name="dialog_btn_order">הזמן</string>
     <string name="dialog_multi_spinner_default_text">בחר את התוספות</string>
     <string name="dialog_spinner_default_text">בחר משקה</string>
-    <string name="dialog_no_extra_left">תוספת %1$d הוספה לסה"כ לתשלום</string>
-
+    <string name="dialog_no_extra_left">תוספת %1$d נוספה לתשלום</string>
+    <string name="dialog_btn_keep_shopping_pressed">ההזמנה נוספה לסל הקניות</string>
     <!--MealDetails Dialog End-->
 
 </resources>

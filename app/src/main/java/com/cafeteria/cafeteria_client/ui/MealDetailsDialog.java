@@ -211,7 +211,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
 
 
         BigDecimal bd = new BigDecimal(meal.getPrice());
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        bd = bd.setScale(1, RoundingMode.HALF_DOWN);
 
         String total = String.format(getResources().getString(R.string.dialog_tv_total)
                 , bd.doubleValue(), nis.getSymbol());
