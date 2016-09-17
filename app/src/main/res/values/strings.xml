@@ -79,7 +79,9 @@
     <string name="dialog_tv_total">Total: %1$.2f %2$s</string>
     <string name="dialog_btn_keep_shopping">Keep Shopping</string>
     <string name="dialog_btn_order">Order</string>
-
+    <string name="dialog_multi_spinner_default_text">Choose Your Extras</string>
+    <string name="dialog_spinner_default_text">Select Drink</string>
+    <string name="dialog_no_extra_left">Addition of %1$d extra added to total</string>
     <!--MealDetails Dialog End-->
 
 </resources>

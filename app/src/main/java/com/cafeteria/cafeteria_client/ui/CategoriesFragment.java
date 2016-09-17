@@ -71,26 +71,33 @@ public class CategoriesFragment extends Fragment {
         List<Drink> drinks = new ArrayList<>();
         Drink drink = new Drink();
         drink.setTitle("קוקה קולה");
+        drink.setPrice(7.5);
         drinks.add(drink);
         drink = new Drink();
         drink.setTitle("פאנטה");
+        drink.setPrice(7.5);
         drinks.add(drink);
         drink = new Drink();
         drink.setTitle("ענבים");
+        drink.setPrice(6.5);
         drinks.add(drink);
         drink = new Drink();
         drink.setTitle("ספרייט");
+        drink.setPrice(7.5);
         drinks.add(drink);
 
         List<Item> extras = new ArrayList<Item>();
         Item extra = new Item();
         extra.setTitle("אורז");
+        extra.setPrice(5);
         extras.add(extra);
         extra = new Item();
         extra.setTitle("צ'יפס");
+        extra.setPrice(5);
         extras.add(extra);
         extra = new Item();
         extra.setTitle("ירקות");
+        extra.setPrice(5);
         extras.add(extra);
 
         item.setTitle("שניצל");

@@ -51,9 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String email = sharedPreferences.getString("email","");
-
         TextView signUpLinkTv = (TextView)findViewById(R.id.tvSignUpLink);
         signUpLinkTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +78,10 @@ public class LoginActivity extends AppCompatActivity {
                 LoginActivity.this.finish();
             }
         });
+
+        // get email strign from shared prefrence
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String email = sharedPreferences.getString("email","");
 
         // if the email found - it's not the first time opening this app
         // automatically redirect to home screen

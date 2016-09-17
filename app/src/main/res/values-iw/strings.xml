@@ -75,6 +75,10 @@
     <string name="dialog_tv_total">לתשלום: %1$.2f %2$s</string>
     <string name="dialog_btn_keep_shopping">המשך לקנות</string>
     <string name="dialog_btn_order">הזמן</string>
+    <string name="dialog_multi_spinner_default_text">בחר את התוספות</string>
+    <string name="dialog_spinner_default_text">בחר משקה</string>
+    <string name="dialog_no_extra_left">תוספת %1$d הוספה לסה"כ לתשלום</string>
+
     <!--MealDetails Dialog End-->
 
 </resources>

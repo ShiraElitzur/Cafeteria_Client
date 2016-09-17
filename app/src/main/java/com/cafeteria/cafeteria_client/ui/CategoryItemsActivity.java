@@ -66,7 +66,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         // Need to think about that point.
 
         //getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.logo));
-        getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
+        //getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
 
 
 
