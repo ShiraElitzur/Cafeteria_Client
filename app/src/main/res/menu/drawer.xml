@@ -16,17 +16,17 @@
             android:icon="@drawable/personal_details"
             android:title="@string/nav_item_personal" />
 
-        <item
-            android:id="@+id/navigation_item_points"
-            android:icon="@drawable/star"
-            android:title="@string/nav_item_points" />
+        <!--<item-->
+            <!--android:id="@+id/navigation_item_points"-->
+            <!--android:icon="@drawable/star"-->
+            <!--android:title="@string/nav_item_points" />-->
     </group>
 
     <group android:id="@+id/sub_menu" android:checkableBehavior="single">
 
-        <item
-            android:title="@string/nav_item_settings"
-            android:icon="@drawable/ic_settings_black_48dp"/>
+        <!--<item-->
+            <!--android:title="@string/nav_item_settings"-->
+            <!--android:icon="@drawable/ic_settings_black_48dp"/>-->
 
         <item
             android:id="@+id/navigation_item_log_out"
