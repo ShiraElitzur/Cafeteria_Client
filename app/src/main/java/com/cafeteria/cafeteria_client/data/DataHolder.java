@@ -197,9 +197,11 @@ public class DataHolder{
         // set items and meals to category
         cat.setItems(items);
         cat.setMeals(meals);
-
-
         categories.add(cat);
+
+        items = new ArrayList<Item>(drinks);
+
+
         cat = new Category();
         cat.setTitle("חלבי");
         cat.setDescription("ארוחות חלביות מדהימות");
@@ -213,17 +215,19 @@ public class DataHolder{
         cat.setDescription("כל סוגי השתייה החמה");
         categories.add(cat);
         cat = new Category();
-        cat.setTitle("מאפים");
-        cat.setDescription("כל סוגי המאפים");
-        categories.add(cat);
-        cat = new Category();
         cat.setTitle("שתיה קרה");
         cat.setDescription("כל סוגי השתיה הקרה");
+        cat.setItems(items);
+        categories.add(cat);
+        cat = new Category();
+        cat.setTitle("מאפים");
+        cat.setDescription("כל סוגי המאפים");
         categories.add(cat);
         cat = new Category();
         cat.setTitle("חטיפים");
         cat.setDescription("במבה,ביסלי,פסק זמן...");
         categories.add(cat);
+
     }
 
     public void addOrderdMeal(OrderedMeal meal){
@@ -232,6 +236,10 @@ public class DataHolder{
 
     public void addOrderdItem(Item item){
         orderedItems.add(item);
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     public List<OrderItem> getItems(){

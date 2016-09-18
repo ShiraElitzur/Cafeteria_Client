@@ -60,6 +60,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void initCategories(){
+        // will bring the real list if set or the fake one
         DataHolder dataHolder = DataHolder.getInstance();
         categories = dataHolder.getCategories();
     }

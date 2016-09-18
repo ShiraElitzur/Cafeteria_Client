@@ -1,25 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="10"
+    android:descendantFocusability="blocksDescendants"
+
     >
 
+    <ImageButton
+        android:id="@+id/imgBtnAdd"
+        android:layout_width="0dp"
+        android:paddingBottom="12dp"
+        android:paddingTop="12dp"
+        android:paddingStart="?attr/listPreferredItemPaddingRight"
+        android:paddingEnd="?attr/listPreferredItemPaddingLeft"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:src="@drawable/ic_add_circle_outline"
+        android:background="@null"
+        android:layout_gravity="left"
+        android:focusableInTouchMode="true"
+
+        />
 
     <TextView
         android:id="@+id/tvMealName"
-        android:layout_width="fill_parent"
-        android:layout_height="48dp"
-        android:paddingStart="72dp"
-        android:paddingLeft="72dp"
-        android:paddingEnd="16dp"
-        android:paddingRight="16dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="?attr/listPreferredItemPaddingRight"
+        android:paddingEnd="?attr/listPreferredItemPaddingLeft"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:textSize="15sp"
+        android:layout_weight="4"
         android:text="*Meal Name*"
         android:textColor="@color/colorPrimaryDark"
+
         />
 
+    <TextView
+        android:padding="10dp"
+        android:id="@+id/tvTotal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:text="5.5"
+        android:gravity="end"
+        android:paddingStart="?attr/listPreferredItemPaddingRight"
+        android:paddingEnd="?attr/listPreferredItemPaddingLeft"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+
+        />
 
 
 </LinearLayout>

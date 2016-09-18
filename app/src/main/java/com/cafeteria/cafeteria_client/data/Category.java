@@ -115,4 +115,14 @@ public class Category implements Serializable{
         this.meals = meals;
     }
 
+    @Override
+    public String toString() {
+        return "Category{" +
+                "description='" + description + '\'' +
+                ", id=" + id +
+                ", title='" + title + '\'' +
+                ", items=" + items +
+                ", meals=" + meals +
+                '}';
+    }
 }

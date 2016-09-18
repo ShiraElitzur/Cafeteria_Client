@@ -1,11 +1,13 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.content.DialogInterface;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 
 import com.cafeteria.cafeteria_client.R;
 
@@ -37,6 +39,24 @@ public class MenuActivity extends DrawerActivity {
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(getString(R.string.exit_dialog_title))
+                .setMessage(getString(R.string.exit_dialog_message))
+                .setPositiveButton(getString(R.string.exit_dialog_postive), new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.exit_dialog_negavtive), null)
+                .show();
     }
 
     /**

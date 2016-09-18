@@ -42,12 +42,12 @@
     <string name="progressBar_progress_update">טוען רכיבים..</string>
 
 
-    <!--Hebrew in animation isn't good, backwards-->
-    <!--<string-array name="titleAnimation">-->
-        <!--<item>האפליקציה המדהימה שלנו</item>-->
-        <!--<item>עכשיו עם</item>-->
-        <!--<item>קרנף</item>-->
-    <!--</string-array>-->
+    <!--Exit Alert Dialog-->
+    <string name="exit_dialog_title">יציאה מהאפליקציה</string>
+    <string name="exit_dialog_message">האם אתה בטוח שאתה רוצה לצאת ?</string>
+    <string name="exit_dialog_postive">אישור</string>
+    <string name="exit_dialog_negavtive">בטל</string>
+    <!--Exit ALert Dialog End-->
 
     <!--Alert MealDetailsDialog-->
     <string name="alert_dialog_no_internet_title">אין גישה לאינטרנט</string>

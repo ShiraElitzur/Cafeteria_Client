@@ -15,7 +15,6 @@
 
         </activity>
         <activity android:name=".ui.LoginActivity">
-
         </activity>
         <activity android:name=".ui.SignUpActivity" />
         <activity
@@ -29,6 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.OrderActivity" />
+
+
     </application>
 
 </manifest>

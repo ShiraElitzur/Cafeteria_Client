@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
+import com.cafeteria.cafeteria_client.data.DataHolder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,19 +39,13 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private EditText etMail;
     private final static String SERVER_IP = "172.16.26.12";
+    private final static String ANAEL_SERVER_IP = "192.168.1.11";
+    List<Category> categoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        //set default language to hebrew
-        Locale locale = new Locale("iw");
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
 
         TextView signUpLinkTv = (TextView)findViewById(R.id.tvSignUpLink);
         signUpLinkTv.setOnClickListener(new View.OnClickListener() {
@@ -99,11 +95,16 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             Type listType = new TypeToken<ArrayList<Category>>(){}.getType();
 
-            List<Category> categoryList = new Gson().fromJson(response,listType);
+            categoryList = new Gson().fromJson(response,listType);
             if (categoryList!= null) {
                 Toast.makeText(LoginActivity.this, categoryList.get(0).getTitle(), Toast.LENGTH_SHORT).show();
-            }
+                DataHolder.getInstance().setCategories(categoryList);
 
+                for (Category c : categoryList){
+                    Log.d("cat",c.toString());
+                    Log.d("meal",c.getMeals().toString());
+                }
+            }
         }
 
         @Override
@@ -111,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             StringBuilder response;
             try {
 
-                URL url = new URL("http://"+SERVER_IP+":8080/CafeteriaServer/rest/data/getCategories");
+                URL url = new URL("http://"+ANAEL_SERVER_IP+":8080/CafeteriaServer/rest/data/getCategories");
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {

@@ -15,8 +15,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,14 +33,22 @@ import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class CategoryItemsActivity extends AppCompatActivity implements OnDialogResultListener{
 
     private ExpandableListView explvCategoryItems;
+    private ListView lvCategoryItems;
     private CategoryItemsAdapter categoryItemsAdapter;
+    private CategoryStandAloneItemsAdapter categoryStandAloneItemsAdapter;
+    private Currency nis;
+
     /**
      * Holds the name of the item and a list of the meal names
      * Format: Title, child title
@@ -60,6 +73,10 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         Intent previousIntent = getIntent();
         category = (Category) previousIntent.getSerializableExtra("category");
 
+        //nis symbol
+        Locale israel = new Locale("iw", "IL");
+        nis = Currency.getInstance(israel);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -67,13 +84,41 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         getSupportActionBar().setLogo(ContextCompat.getDrawable(this,R.drawable.logo));
         getSupportActionBar().setTitle("");
 
-
         // Temporary creation of categories items according to the chosen category
         initCategoryItems();
+        itemsTitle = new ArrayList<>(itemsDetails.keySet());
+
+        if (category.getMeals() != null) {
+            initExpandableList();
+        } else {
+            initList();
+        }
+
+    }
+
+    private void initList() {
+        lvCategoryItems = (ListView) findViewById(R.id.lvCategoryItems);
+        lvCategoryItems.setVisibility(View.VISIBLE);
+
+        categoryStandAloneItemsAdapter = new CategoryStandAloneItemsAdapter(this, R.layout.category_items_child,itemsTitle);
+        lvCategoryItems.setAdapter(categoryStandAloneItemsAdapter);
+
+        lvCategoryItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+                Item selectedItem = (Item) parent.getItemAtPosition(position);
+
+                Toast.makeText(CategoryItemsActivity.this
+                        ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
+                DataHolder dataHolder = DataHolder.getInstance();
+                dataHolder.addOrderdItem(selectedItem);
+            }
+        });
+    }
+
+    private void initExpandableList() {
 
         explvCategoryItems = (ExpandableListView) findViewById(R.id.explvCategoryItems);
-
-        itemsTitle = new ArrayList<>(itemsDetails.keySet());
+        explvCategoryItems.setVisibility(View.VISIBLE);
 
         categoryItemsAdapter = new CategoryItemsAdapter(this, itemsDetails,itemsTitle);
 
@@ -86,21 +131,10 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-//                Item item = itemsTitle.get(groupPosition);
-//                 Toast.makeText(getApplicationContext(),
-//                 "Group Clicked " + item,
-//                 Toast.LENGTH_SHORT).show();
-
                 if (itemsTitle.get(groupPosition).isStandAlone()){
 
                     //nedd to be another dialog or be added straight to order activity "sal"
 
-//                    FragmentManager fm = getSupportFragmentManager();
-//                    MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
-//                    Bundle args = new Bundle();
-//                    args.putSerializable("meal",item);
-//                    mealDetailsDialog.setArguments(args);
-//                    mealDetailsDialog.show(fm, "");
                 }
                 return false;
             }
@@ -114,24 +148,25 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                                         int groupPosition, int childPosition, long id) {
                 Meal meal = itemsDetails.get(itemsTitle.get(groupPosition)).get(childPosition);
                 Item item = itemsTitle.get(groupPosition);
-//                Toast.makeText(
-//                        getApplicationContext(),
-//                        item + " : " + meal, Toast.LENGTH_SHORT)
-//                        .show();
 
-                FragmentManager fm = getSupportFragmentManager();
-                MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
-                Bundle args = new Bundle();
-                args.putSerializable("meal",meal);
-                mealDetailsDialog.setArguments(args);
-                mealDetailsDialog.show(fm, "");
+                initMealDetailsDialog(meal);
 
                 return false;
 
             }
         });
+
     }
 
+    private void initMealDetailsDialog(Meal meal) {
+        FragmentManager fm = getSupportFragmentManager();
+        MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
+        Bundle args = new Bundle();
+        args.putBoolean("isMeal",true);
+        args.putSerializable("meal",meal);
+        mealDetailsDialog.setArguments(args);
+        mealDetailsDialog.show(fm, "");
+    }
 
     private void initCategoryItems() {
         itemsDetails = new HashMap<>();
@@ -146,11 +181,13 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                 title = item.getTitle(); //i.e. schnizel in zalacht
                 meals = new ArrayList<>();
 
-                for (Meal meal : category.getMeals()){
+                if (category.getMeals() != null) {
+                    for (Meal meal : category.getMeals()) {
 
-                    if (title.equals(meal.getMain().getTitle())) {
+                        if (title.equals(meal.getMain().getTitle())) {
                             meals.add(meal);
                         }
+                    }
                 }
 
                 itemsDetails.put(item, meals);
@@ -235,6 +272,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.category_items_parent,parentView,false);
                 tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
+
                 convertView.setTag(tvItemName);
 
             } else{
@@ -248,24 +286,38 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         }
 
         @Override
-        public View getChildView(int parentPosition, int childPosition, boolean isLastChild,
+        public View getChildView(final int parentPosition, final int childPosition, boolean isLastChild,
                                  View convertView, ViewGroup parentView) {
-            TextView tvMealName;
+            ViewHolder holder;
             Meal meal = (Meal) getChild(parentPosition,childPosition);
 
-            if (convertView == null){
+            if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.category_items_child,parentView,false);
-                tvMealName = (TextView) convertView.findViewById(R.id.tvMealName);
-                convertView.setTag(tvMealName);
+                convertView = inflater.inflate(R.layout.category_items_child, parentView, false);
+                holder = new ViewHolder();
+                holder.tvMealName = (TextView) convertView.findViewById(R.id.tvMealName);
+                holder.tvTotal = (TextView) convertView.findViewById(R.id.tvTotal);
+                holder.imgBtnAdd = (ImageButton) convertView.findViewById(R.id.imgBtnAdd);
+                holder.imgBtnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Meal meal = (Meal) getChild(parentPosition,childPosition);
+                        initMealDetailsDialog(meal);
+                    }
+                });
 
-            }else{
-                tvMealName = (TextView) convertView.getTag();
+                convertView.setTag(holder);
+
+            } else {
+                holder = (ViewHolder) convertView.getTag();
             }
 
-            tvMealName.setTypeface(null, Typeface.BOLD);
-            tvMealName.setText(meal.getTitle());
+            holder.tvMealName.setTypeface(null, Typeface.BOLD);
+            holder.tvMealName.setText(meal.getTitle());
 
+            BigDecimal bd = new BigDecimal(meal.getPrice());
+            bd = bd.setScale(1, RoundingMode.HALF_DOWN);
+            holder.tvTotal.setText(bd + " " + nis.getSymbol());
 
             return convertView;
         }
@@ -274,5 +326,79 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         public boolean isChildSelectable(int i, int i1) {
             return true;
         }
+    }
+
+    public class CategoryStandAloneItemsAdapter extends BaseAdapter {
+        private List<Item> items;
+        private Context context;
+        private int layout;
+
+        public CategoryStandAloneItemsAdapter(Context context, int layout, List<Item> items) {
+            this.context = context;
+            this.layout = layout;
+            this.items = items;
+        }
+
+        @Override
+        public int getCount() {
+            return items.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return items.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            Item item = (Item) getItem(position);
+
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.category_items_child, parent, false);
+                holder = new ViewHolder();
+                holder.tvMealName = (TextView) convertView.findViewById(R.id.tvMealName);
+                holder.tvTotal = (TextView) convertView.findViewById(R.id.tvTotal);
+                holder.imgBtnAdd = (ImageButton) convertView.findViewById(R.id.imgBtnAdd);
+                holder.imgBtnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Item selectedItem = (Item) getItem(position);
+
+                        Toast.makeText(CategoryItemsActivity.this
+                                ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
+                        DataHolder dataHolder = DataHolder.getInstance();
+                        dataHolder.addOrderdItem(selectedItem);
+                    }
+                });
+
+                convertView.setTag(holder);
+
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            holder.tvMealName.setTypeface(null, Typeface.BOLD);
+            holder.tvMealName.setText(item.getTitle());
+
+            BigDecimal bd = new BigDecimal(item.getPrice());
+            bd = bd.setScale(1, RoundingMode.HALF_DOWN);
+            holder.tvTotal.setText(bd + " " + nis.getSymbol());
+
+            return convertView;
+        }
+
+    }
+
+    private class ViewHolder {
+        TextView tvMealName;
+        TextView tvTotal;
+        ImageButton imgBtnAdd;
     }
 }

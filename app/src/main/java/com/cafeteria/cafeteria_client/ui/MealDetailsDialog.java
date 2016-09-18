@@ -134,6 +134,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             }
         });
 
+
         List<String> extrasTitle = new ArrayList<>();
         for (Item extra : meal.getExtras()){
             extrasTitle.add(extra.getTitle());

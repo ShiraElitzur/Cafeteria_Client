@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import com.cafeteria.cafeteria_client.R;
 import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
+
+import java.util.Locale;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -51,6 +54,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         Typeface type = Typeface.DEFAULT.createFromAsset(getAssets(),"fonts/PoiretOne-Regular.ttf");
         htvTitle.setTypeface(type);
         htvTitle.setAnimateType(HTextViewType.FALL);
+
+        //set default language to hebrew
+        Locale locale = new Locale("iw");
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle(R.string.alert_dialog_no_internet_title)

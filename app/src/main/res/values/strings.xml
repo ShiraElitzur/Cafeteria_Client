@@ -35,6 +35,13 @@
     <string name="passwords_no_match_error">Passwords are not equal</string>
     <!--SignUp Activity End-->
 
+    <!--Exit Alert Dialog-->
+    <string name="exit_dialog_title">Exit Application</string>
+    <string name="exit_dialog_message">Are you sure you want to exit ?</string>
+    <string name="exit_dialog_postive">Yes</string>
+    <string name="exit_dialog_negavtive">No</string>
+    <!--Exit ALert Dialog End-->
+
     <!--Splash Screen-->
     <string name="progressBar_pre_execute">Please Wait..</string>
     <string name="progressBar_post_execute_error">Please check your internet connection</string>
