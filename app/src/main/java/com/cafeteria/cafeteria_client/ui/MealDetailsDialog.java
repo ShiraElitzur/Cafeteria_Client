@@ -317,7 +317,6 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             }
 
             tvListItem.setText(item.getTitle());
-            tvListItem.setTypeface(null, Typeface.BOLD);
 
             return convertView;
         }

@@ -2,13 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorHeadlines">
+    android:background="@color/colorHeadlines"
+    android:windowSoftInputMode="adjustResize"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:weightSum="90">
+
 
         <View
             android:layout_width="match_parent"
@@ -17,7 +20,7 @@
             android:background="@color/colorPrimaryLight" />
 
         <TextView
-            android:padding="10dp"
+            android:paddingTop="8dp"
             android:id="@+id/tvMealName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +38,7 @@
             android:layout_weight="10"
             android:gravity="center_horizontal"
             android:text="@string/dialog_tv_extras_amount"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <Button
             android:id="@+id/btnExtras"
@@ -87,7 +90,6 @@
 
 
         <EditText
-            android:padding="10dp"
             android:id="@+id/etComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,7 +97,7 @@
             android:layout_weight="10"
             android:ems="10"
             android:hint="@string/dialog_et_comment_hint"
-            android:inputType="textMultiLine" />
+            android:inputType="textAutoCorrect" />
 
         <TextView
             android:padding="10dp"
@@ -135,7 +137,6 @@
                 android:textColor="@color/colorPrimaryDark" />
 
         </LinearLayout>
-
 
     </LinearLayout>
 

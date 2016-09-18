@@ -12,9 +12,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
@@ -59,6 +61,15 @@ public class CategoriesFragment extends Fragment {
 
 
         grid.setAdapter(new GridViewAdapter(getActivity(),categories,R.layout.category_grid_cell));
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Category category = categories.get(position);
+                Intent categoryItemsIntent = new Intent(getContext(),CategoryItemsActivity.class);
+                categoryItemsIntent.putExtra("category",category);
+                startActivity(categoryItemsIntent);
+            }
+        });
 
         return v;
     }
@@ -120,7 +131,7 @@ public class CategoriesFragment extends Fragment {
                 holder = new ViewHolder();
                 holder.title =(TextView)convertView.findViewById(R.id.categoryTitle);
                 //holder.description =(TextView)convertView.findViewById(R.id.categoryDesc);
-                holder.image =(ImageButton) convertView.findViewById(R.id.categoryImage);
+                holder.image =(ImageView) convertView.findViewById(R.id.categoryImage);
 
                 convertView.setTag(holder);
             } else {
@@ -141,15 +152,15 @@ public class CategoriesFragment extends Fragment {
 
             // Setting imageButton onCLick function, will pass the clicked category to the next
             // activity
-            holder.image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent categoryItemsIntent = new Intent(context,CategoryItemsActivity.class);
-                    categoryItemsIntent.putExtra("category",category);
-                    startActivity(categoryItemsIntent);
-
-                }
-            });
+//            holder.image.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent categoryItemsIntent = new Intent(context,CategoryItemsActivity.class);
+//                    categoryItemsIntent.putExtra("category",category);
+//                    startActivity(categoryItemsIntent);
+//
+//                }
+//            });
 
             return convertView;
         }
@@ -157,7 +168,7 @@ public class CategoriesFragment extends Fragment {
         private class ViewHolder {
             private TextView title;
             private TextView description;
-            private ImageButton image;
+            private ImageView image;
         }
     }
 }

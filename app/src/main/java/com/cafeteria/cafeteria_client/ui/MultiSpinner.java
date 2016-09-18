@@ -15,6 +15,9 @@ import com.cafeteria.cafeteria_client.interfaces.MultiSpinnerListener;
 
 import java.util.List;
 
+/**
+ * Should Replace the adapter, ang get the real items
+ */
 public class MultiSpinner extends Spinner implements
         DialogInterface.OnMultiChoiceClickListener, DialogInterface.OnCancelListener {
 
@@ -75,13 +78,12 @@ public class MultiSpinner extends Spinner implements
     public void onCancel(DialogInterface dialog) {
         // refresh text on spinner
         StringBuffer spinnerBuffer = new StringBuffer();
-        boolean someUnselected = false;
+        boolean someUnselected = true;
         for (int i = 0; i < items.size(); i++) {
             if (selected[i] == true) {
                 spinnerBuffer.append(items.get(i));
                 spinnerBuffer.append(", ");
-            } else {
-                someUnselected = true;
+                someUnselected = false;
             }
         }
         String spinnerText;
@@ -92,10 +94,13 @@ public class MultiSpinner extends Spinner implements
 //        } else {
 //            spinnerText = defaultText;
 //        }
+        if (someUnselected){
+            spinnerText = defaultText;
+        }else {
             spinnerText = spinnerBuffer.toString();
             if (spinnerText.length() > 2)
                 spinnerText = spinnerText.substring(0, spinnerText.length() - 2);
-
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_item,
                 new String[]{spinnerText});

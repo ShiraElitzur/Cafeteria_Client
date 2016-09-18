@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This xml file describes a single cell in the grid in categories tab -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:background="@drawable/grid_cell"
     android:gravity="center"
-    android:weightSum="10">
+    android:weightSum="10"
+    android:descendantFocusability="blocksDescendants"
+
+    >
 
     <!--<LinearLayout-->
         <!--android:orientation="horizontal"-->
@@ -27,7 +29,7 @@
             android:id="@+id/categoryTitle"
             android:gravity="center"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/categoryImage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
