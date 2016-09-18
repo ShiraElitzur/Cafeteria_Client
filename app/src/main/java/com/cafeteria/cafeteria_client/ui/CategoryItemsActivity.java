@@ -81,7 +81,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setLogo(ContextCompat.getDrawable(this,R.drawable.logo));
+        getSupportActionBar().setLogo(ContextCompat.getDrawable(this,R.drawable.logo_transparent));
         getSupportActionBar().setTitle("");
 
         // Temporary creation of categories items according to the chosen category

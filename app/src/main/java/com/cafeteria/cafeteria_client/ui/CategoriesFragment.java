@@ -2,6 +2,10 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
@@ -115,7 +119,7 @@ public class CategoriesFragment extends Fragment {
                 // find the UI components of the cell
                 holder = new ViewHolder();
                 holder.title =(TextView)convertView.findViewById(R.id.categoryTitle);
-                holder.description =(TextView)convertView.findViewById(R.id.categoryDesc);
+                //holder.description =(TextView)convertView.findViewById(R.id.categoryDesc);
                 holder.image =(ImageButton) convertView.findViewById(R.id.categoryImage);
 
                 convertView.setTag(holder);
@@ -128,11 +132,11 @@ public class CategoriesFragment extends Fragment {
             category = items.get(position);
             // Title, description and image
             holder.title.setText(category.getTitle());
-            holder.description.setText(category.getDescription());
+//            holder.description.setText(category.getDescription());
 //            // The image currently is from a fictive list pic0...pic5 will be from the database
-//            int imageResource = getResources().getIdentifier( "@drawable/pic"+position, null, getActivity().getPackageName());
-//            //holder.image.setImageDrawable(getResources().getDrawable(imageResource));
-//            holder.image.setImageResource(imageResource);
+           int imageResource = getResources().getIdentifier( "@drawable/pic"+position, null, getActivity().getPackageName());
+            //holder.image.setImageDrawable(getResources().getDrawable(imageResource));
+            holder.image.setImageResource(imageResource);
 
 
             // Setting imageButton onCLick function, will pass the clicked category to the next

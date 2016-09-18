@@ -1,35 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This xml file describes a single cell in the grid in categories tab -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="170dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
     android:background="@drawable/grid_cell"
     android:gravity="center"
     android:weightSum="10">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:id="@+id/categoryImage" />
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="8"-->
+        <!--android:weightSum="8"-->
+        <!--&gt;-->
 
-    <!-- "Title" = Would be replaced in code -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:text="*Title*"
-        android:textSize="15dp"
-        android:id="@+id/categoryTitle"
-        android:gravity="center"/>
+        <!-- "Title" = Would be replaced in code -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:text="*Title*"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/categoryTitle"
+            android:gravity="center"/>
+
+        <ImageButton
+            android:id="@+id/categoryImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:paddingTop="25dp"
+            android:paddingBottom="25dp"
+            android:scaleType="fitXY"
+            android:background="@null"
+            android:layout_gravity="center_horizontal"
+            android:focusableInTouchMode="true"
+            />
+
+    <!--</LinearLayout>-->
 
     <!-- "Description" = Would be replaced in code -->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:text="*Description*"
-        android:id="@+id/categoryDesc"
-        android:gravity="center"/>
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="2"-->
+        <!--android:text="*Description*"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:id="@+id/categoryDesc"-->
+        <!--android:gravity="center"/>-->
 </LinearLayout>

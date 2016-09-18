@@ -38,16 +38,22 @@ public class LoginActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private EditText etMail;
+    private EditText etPassword;
     private final static String SERVER_IP = "172.16.26.12";
-    private final static String ANAEL_SERVER_IP = "192.168.1.11";
+    private final static String ANAEL_SERVER_IP = "192.168.43.91";
     List<Category> categoryList;
+    String emailTxt;
+    String passwordTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView signUpLinkTv = (TextView)findViewById(R.id.tvSignUpLink);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        etMail = (EditText) findViewById(R.id.etMail);
+
+        TextView signUpLinkTv = (TextView) findViewById(R.id.tvSignUpLink);
         signUpLinkTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,10 +67,9 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                etMail = (EditText)findViewById(R.id.etMail);
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("email",etMail.getText().toString());
+                editor.putString("email", etMail.getText().toString());
                 editor.apply();
 
                 new MyWebServiceTask().execute();
@@ -77,34 +82,39 @@ public class LoginActivity extends AppCompatActivity {
 
         // get email strign from shared prefrence
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String email = sharedPreferences.getString("email","");
+        String email = sharedPreferences.getString("email", "");
 
         // if the email found - it's not the first time opening this app
         // automatically redirect to home screen
-        if (email != null && !email.equals("")){
+        if (email != null && !email.equals("")) {
             finish();
-            Intent homeScreen = new Intent(this,MenuActivity.class);
+            Intent homeScreen = new Intent(this, MenuActivity.class);
             startActivity(homeScreen);
         }
     }
 
 
-    class MyWebServiceTask extends AsyncTask<String, Void, String>
-    {
+    class MyWebServiceTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
-            Type listType = new TypeToken<ArrayList<Category>>(){}.getType();
+            Type listType = new TypeToken<ArrayList<Category>>() {
+            }.getType();
 
-            categoryList = new Gson().fromJson(response,listType);
-            if (categoryList!= null) {
+            categoryList = new Gson().fromJson(response, listType);
+            if (categoryList != null) {
                 Toast.makeText(LoginActivity.this, categoryList.get(0).getTitle(), Toast.LENGTH_SHORT).show();
                 DataHolder.getInstance().setCategories(categoryList);
 
-                for (Category c : categoryList){
-                    Log.d("cat",c.toString());
-                    Log.d("meal",c.getMeals().toString());
+
+                for (Category c : categoryList) {
+                    if (c != null){
+                    Log.d("cat", c.toString());}
+                    if (c.getMeals() != null){
+                    Log.d("meal", c.getMeals().toString()); }
                 }
             }
+
+
         }
 
         @Override
@@ -112,7 +122,8 @@ public class LoginActivity extends AppCompatActivity {
             StringBuilder response;
             try {
 
-                URL url = new URL("http://"+ANAEL_SERVER_IP+":8080/CafeteriaServer/rest/data/getCategories");
+//                URL url = new URL("http://"+ANAEL_SERVER_IP+":8080/CafeteriaServer/rest/data/isCustomerExist?email="+emailTxt+"&pass="+passwordTxt+"");
+                URL url = new URL("http://" + ANAEL_SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -120,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 BufferedReader input = new BufferedReader(
-                        new InputStreamReader(conn .getInputStream()));
+                        new InputStreamReader(conn.getInputStream()));
 
                 String line;
                 while ((line = input.readLine()) != null) {
@@ -130,11 +141,18 @@ public class LoginActivity extends AppCompatActivity {
                 input.close();
 
                 conn.disconnect();
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
             return response.toString();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            emailTxt = etMail.getText().toString();
+            passwordTxt = etPassword.getText().toString();
         }
     }
 }
