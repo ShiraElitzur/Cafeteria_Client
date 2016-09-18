@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +30,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This activity displays the order items and meals ( both referred as item in this file ) and the amount for payment.
@@ -42,9 +45,11 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
      * The UI list that displays the items
      */
     private ListView lvOrderItems;
+    private Currency nis;
     // temp vars
     private List<OrderedMeal> orderedMeals;
     private List<Item> orderedItems;
+
     /**
      * The ActionBar MenuItem that displays the amount to pay
      */
@@ -68,6 +73,10 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         super.onCreateDrawer();
+
+        //nis symbol
+        Locale israel = new Locale("iw", "IL");
+        nis = Currency.getInstance(israel);
 
         // TODO: 15/09/2016 getOrder from local memory or some global class. meals & items will come with it of course
         order = new Order();
@@ -98,7 +107,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         itemBill = (MenuItem) menu.findItem(R.id.itemBill);
         BigDecimal bd = new BigDecimal(order.getPayment());
         bd = bd.setScale(1, RoundingMode.HALF_DOWN);
-        itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + bd);
+        itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + bd + " " + nis.getSymbol());
         pay = order.getPayment();
         // TODO: 15/09/2016 handle press on pay item. move to payment screen
         return super.onCreateOptionsMenu(menu);
@@ -165,12 +174,12 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 holder.imgBtnEditItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
-                        Bundle args = new Bundle();
-                        args.putSerializable("orderedMeal", items.get(position));
-                        mealDetailsDialog.setArguments(args);
-                        mealDetailsDialog.show(fm, "");
+//                        FragmentManager fm = getSupportFragmentManager();
+//                        MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
+//                        Bundle args = new Bundle();
+//                        args.putSerializable("orderedMeal", items.get(position));
+//                        mealDetailsDialog.setArguments(args);
+//                        mealDetailsDialog.show(fm, "");
                     }
                 });
                 holder.imgBtnRemoveItem.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +197,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                                 OrderItemsAdapter.this.remove(items.get(position));
                                                 // Refresh the UI
                                                 OrderActivity.this.findViewById(android.R.id.content).getRootView().invalidate();
-                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + pay);
+                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + pay + " " + nis.getSymbol());
                                             }
                                         })
                                 .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
@@ -210,7 +219,13 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
             bd = bd.setScale(1, RoundingMode.HALF_DOWN);
 
             holder.tvOrderItemTitle.setText(items.get(position).getTitle());
-            holder.tvOrderItemPrice.setText(bd + "");
+            holder.tvOrderItemPrice.setText(bd + " " + nis.getSymbol());
+
+            // check if the order is a meal and can be edited
+            if (getItem(position) instanceof OrderedMeal) {
+                Log.d("instance","yes");
+                holder.imgBtnEditItem.setVisibility(View.VISIBLE);
+            }
 
             return convertView;
         }
@@ -227,7 +242,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     @Override
     public void onBackPressed() {
         finish();
-        Intent menuActivtiyInent = new Intent(OrderActivity.this,MenuActivity.class);
+        Intent menuActivtiyInent = new Intent(OrderActivity.this, MenuActivity.class);
         startActivity(menuActivtiyInent);
     }
 }

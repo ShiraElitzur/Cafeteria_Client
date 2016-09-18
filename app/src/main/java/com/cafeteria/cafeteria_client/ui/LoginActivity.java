@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // get email strign from shared prefrence
+        // get email string from shared prefrence
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String email = sharedPreferences.getString("email", "");
 

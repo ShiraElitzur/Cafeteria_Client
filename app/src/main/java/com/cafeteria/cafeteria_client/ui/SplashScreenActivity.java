@@ -41,6 +41,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        setDefaultLanguageToHebrew();
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setProgress(0);
         tvStatus = (TextView) findViewById(R.id.tvStatus);
@@ -54,14 +56,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         Typeface type = Typeface.DEFAULT.createFromAsset(getAssets(),"fonts/PoiretOne-Regular.ttf");
         htvTitle.setTypeface(type);
         htvTitle.setAnimateType(HTextViewType.FALL);
-
-        //set default language to hebrew
-        Locale locale = new Locale("iw");
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle(R.string.alert_dialog_no_internet_title)
@@ -97,6 +91,16 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         alertDialog = alertDialogBuilder.create();
         new BackgroundTask().execute();
+    }
+
+    private void setDefaultLanguageToHebrew(){
+        //set default language to hebrew
+        Locale locale = new Locale("iw");
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
     }
 
     /**
