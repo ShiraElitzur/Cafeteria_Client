@@ -105,23 +105,26 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             btnDrink.setVisibility(View.GONE);
         }
 
-        List<String> extrasTitle = new ArrayList<>();
-        for (Item extra : meal.getExtras()){
-            extrasTitle.add(extra.getTitle());
-        }
-        spinnerExtras.setItems(extrasTitle,getString(R.string.dialog_multi_spinner_default_text), this);
-
-
-        btnExtras.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (spinnerExtras.getVisibility() == View.GONE) {
-                    spinnerExtras.setVisibility(View.VISIBLE);
-                } else {
-                    spinnerExtras.setVisibility(View.GONE);
-                }
+        if ( meal.getExtras() != null) {
+            List<String> extrasTitle = new ArrayList<>();
+            for (Item extra : meal.getExtras()) {
+                extrasTitle.add(extra.getTitle());
             }
-        });
+            spinnerExtras.setItems(extrasTitle, getString(R.string.dialog_multi_spinner_default_text), this);
+
+            btnExtras.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (spinnerExtras.getVisibility() == View.GONE) {
+                        spinnerExtras.setVisibility(View.VISIBLE);
+                    } else {
+                        spinnerExtras.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+
+
 
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
