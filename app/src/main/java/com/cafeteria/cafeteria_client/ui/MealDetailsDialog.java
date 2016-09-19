@@ -98,6 +98,53 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         dialog.getWindow().setAttributes(lp);
 
         initComponents();
+
+        if (meal.isDrink() || meal.getDrinkOptions()!= null) {
+            initSpinnerAndButtonDrink();
+        }
+
+        List<String> extrasTitle = new ArrayList<>();
+        for (Item extra : meal.getExtras()){
+            extrasTitle.add(extra.getTitle());
+        }
+        spinnerExtras.setItems(extrasTitle,getString(R.string.dialog_multi_spinner_default_text), this);
+
+
+        btnExtras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (spinnerExtras.getVisibility() == View.GONE) {
+                    spinnerExtras.setVisibility(View.VISIBLE);
+                } else {
+                    spinnerExtras.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveOrder();
+                mListener.onPositiveResult(orderedMeal);
+                dialog.dismiss();
+
+            }
+        });
+
+        btnKeepShopping.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveOrder();
+                mListener.onNegativeResult(orderedMeal);
+                dialog.dismiss();
+            }
+        });
+
+        return view;
+    }
+
+    private void initSpinnerAndButtonDrink() {
         List<Drink> drinks = new ArrayList<Drink>(meal.getDrinkOptions());
         Drink defaultText = new Drink();
         defaultText.setTitle(getString(R.string.dialog_spinner_default_text));
@@ -134,13 +181,6 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             }
         });
 
-
-        List<String> extrasTitle = new ArrayList<>();
-        for (Item extra : meal.getExtras()){
-            extrasTitle.add(extra.getTitle());
-        }
-        spinnerExtras.setItems(extrasTitle,getString(R.string.dialog_multi_spinner_default_text), this);
-
         btnDrink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,40 +191,6 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
                 }
             }
         });
-
-
-        btnExtras.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (spinnerExtras.getVisibility() == View.GONE) {
-                    spinnerExtras.setVisibility(View.VISIBLE);
-                } else {
-                    spinnerExtras.setVisibility(View.GONE);
-                }
-            }
-        });
-
-
-        btnOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveOrder();
-                mListener.onPositiveResult(orderedMeal);
-                dialog.dismiss();
-
-            }
-        });
-
-        btnKeepShopping.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveOrder();
-                mListener.onNegativeResult(orderedMeal);
-                dialog.dismiss();
-            }
-        });
-
-        return view;
     }
 
     private void saveOrder() {

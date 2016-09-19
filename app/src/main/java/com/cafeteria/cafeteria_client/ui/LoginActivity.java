@@ -3,7 +3,6 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -52,9 +51,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
         etPassword = (EditText) findViewById(R.id.etPassword);
         etMail = (EditText) findViewById(R.id.etMail);
@@ -127,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             if (categoryList != null) {
                 Toast.makeText(LoginActivity.this, categoryList.get(0).getTitle(), Toast.LENGTH_SHORT).show();
                 DataHolder.getInstance().setCategories(categoryList);
+            }
 
 
                 for (Category c : categoryList) {
@@ -135,7 +132,6 @@ public class LoginActivity extends AppCompatActivity {
                     if (c.getMeals() != null){
                     Log.d("meal", c.getMeals().toString()); }
                 }
-            }
 
 
         }
@@ -145,8 +141,8 @@ public class LoginActivity extends AppCompatActivity {
             StringBuilder response;
             try {
 
-//                URL url = new URL("http://"+ANAEL_SERVER_IP+":8080/CafeteriaServer/rest/data/isCustomerExist?email="+emailTxt+"&pass="+passwordTxt+"");
-                URL url = new URL("http://" + ANAEL_SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");
+                URL url = new URL("http://"+ANAEL_SERVER_IP+":8080/CafeteriaServer/rest/data/isCustomerExist?email="+emailTxt+"&pass="+passwordTxt+"");
+               // URL url = new URL("http://" + ANAEL_SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {

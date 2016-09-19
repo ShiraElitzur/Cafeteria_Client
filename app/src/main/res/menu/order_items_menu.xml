@@ -8,12 +8,12 @@
         android:title="0.0"
         app:showAsAction="always|withText">
     </item>
-    <item
-        android:title=""
-        android:icon="@drawable/nis"
-        app:showAsAction="always">
+    <!--<item-->
+        <!--android:title=""-->
+        <!--android:icon="@drawable/nis"-->
+        <!--app:showAsAction="always">-->
 
-    </item>
+    <!--</item>-->
     <item
         android:id="@+id/itemPayAction"
         android:title="@string/btn_move_to_payment"

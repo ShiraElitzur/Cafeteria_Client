@@ -266,21 +266,24 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         @Override
         public View getGroupView(int parentPosition, boolean isExpanded, View convertView,
                                  ViewGroup parentView) {
-            TextView tvItemName;
+            final ViewHolderPrimary holder;
             final Item item = (Item) getGroup(parentPosition);
             if (convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.category_items_parent,parentView,false);
-                tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
 
-                convertView.setTag(tvItemName);
+                holder = new ViewHolderPrimary();
+                holder.tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
+
+
+                convertView.setTag(holder);
 
             } else{
-                tvItemName = (TextView) convertView.getTag();
+                holder = (ViewHolderPrimary) convertView.getTag();
             }
 
-            tvItemName.setTypeface(null, Typeface.BOLD);
-            tvItemName.setText(item.getTitle());
+            holder.tvItemName.setTypeface(null, Typeface.BOLD);
+            holder.tvItemName.setText(item.getTitle());
 
             return  convertView;
         }
@@ -393,6 +396,11 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
             return convertView;
         }
+
+    }
+
+    private class ViewHolderPrimary {
+        TextView tvItemName;
 
     }
 

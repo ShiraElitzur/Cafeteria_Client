@@ -253,6 +253,7 @@ public class DataHolder{
         Meal parentMeal = new Meal();
         parentMeal.setTitle("שניצל בצלחת");
         orderedMeal.setParentMeal(parentMeal);
+        orderedMeal.getParentMeal().setPrice(15);
         List<Item> mealItems = new ArrayList<Item>();
         item = new Item();
         item.setTitle("אורז");
@@ -266,6 +267,7 @@ public class DataHolder{
         orderedMeal = new OrderedMeal();
         parentMeal = new Meal();
         parentMeal.setTitle("פרגית בבגט");
+        parentMeal.setPrice(15);
         orderedMeal.setParentMeal(parentMeal);
         mealItems = new ArrayList<Item>();
         item = new Item();
@@ -481,6 +483,14 @@ public class DataHolder{
         meal.setTitle("סלט פסטה");
         main = new Main();
         meal.setExtraAmount(0);
+
+        meal.setExtras(extras);
+        meal.setDrinkOptions(drinks);
+        meal.setPrice(25.0);
+        main.setTitle("סלט");
+        meal.setMain(main);
+        meals.add(meal);
+        items.add(item);
         extras = new ArrayList<Item>();
         extra = new Item();
         extra.setTitle("בטטה");
@@ -494,14 +504,6 @@ public class DataHolder{
         extra.setTitle("ביצה קשה");
         extra.setPrice(5);
         extras.add(extra);
-        meal.setExtras(extras);
-        meal.setDrinkOptions(drinks);
-        meal.setPrice(25.0);
-        main.setTitle("סלט");
-        meal.setMain(main);
-        meals.add(meal);
-        items.add(item);
-
         cat.setDescription("מבחר סלטים בהרכבה");
         cat.setItems(items);
         cat.setMeals(meals);
@@ -578,25 +580,21 @@ public class DataHolder{
 
         item = new Item();
         item.setTitle("במבה");
-        item.setPrice(5.5);
         item.setStandAlone(true);
         items.add(item);
         item = new Item();
         item.setTitle("ביסלי");
-        item.setPrice(5.5);
         item.setStandAlone(true);
         items.add(item);
         item = new Item();
         item.setTitle("פסק זמן");
-        item.setPrice(6.5);
         item.setStandAlone(true);
         items.add(item);
         item = new Item();
         item.setTitle("קליק");
-        item.setPrice(6.5);
         item.setStandAlone(true);
         items.add(item);
-        cat.setItems(items);
+
         cat.setDescription("במבה,ביסלי,פסק זמן");
         categories.add(cat);
 
