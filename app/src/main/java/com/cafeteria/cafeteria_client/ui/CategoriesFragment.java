@@ -57,7 +57,9 @@ public class CategoriesFragment extends Fragment {
 
         // Temporary creation of categories list
         // The real list should come from the data base of course
-        initCategories();
+        if (categories == null) {
+            initCategories();
+        }
 
 
         grid.setAdapter(new GridViewAdapter(getActivity(),categories,R.layout.category_grid_cell));

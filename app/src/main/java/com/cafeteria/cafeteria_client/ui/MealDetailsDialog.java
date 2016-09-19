@@ -101,6 +101,8 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
 
         if (meal.isDrink() || meal.getDrinkOptions()!= null) {
             initSpinnerAndButtonDrink();
+        } else{
+            btnDrink.setVisibility(View.GONE);
         }
 
         List<String> extrasTitle = new ArrayList<>();
