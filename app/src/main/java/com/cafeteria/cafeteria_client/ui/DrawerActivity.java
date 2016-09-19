@@ -1,5 +1,6 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -11,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
@@ -75,6 +77,15 @@ public abstract class DrawerActivity extends AppCompatActivity {
                         intent = new Intent(DrawerActivity.this,LoginActivity.class);
                         startActivity(intent);
                         DrawerActivity.this.finish();
+                        break;
+                    case R.id.navigation_item_about:
+                        final Dialog dialog = new Dialog(DrawerActivity.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setCancelable(true);
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.dialog_about_the_app);
+
+                        dialog.show();
                         break;
 
                 }

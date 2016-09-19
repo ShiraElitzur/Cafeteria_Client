@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
 
@@ -20,13 +22,14 @@ public class SignUpActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private EditText etMail;
     private EditText etPassword;
-    private EditText etConfirmMail;
+    private EditText etConfirmPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
@@ -67,8 +70,8 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        etConfirmMail = (EditText)findViewById(R.id.etConfirmPassword);
-        etConfirmMail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etConfirmPassword = (EditText)findViewById(R.id.etConfirmPassword);
+        etConfirmPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 EditText inputEdit = (EditText)v;
@@ -91,7 +94,21 @@ public class SignUpActivity extends AppCompatActivity {
                 // if all the one of the input fields is not valid so the sign up is not authorized
                 if( etMail.getError() != null || etPassword.getError() != null ||
                         etMail.getText().toString().isEmpty() ||
-                        etPassword.getText().toString().isEmpty()) {
+                        etPassword.getText().toString().isEmpty()
+                        || etConfirmPassword.getError() != null
+                        ) {
+                    String error = getString(R.string.btn_signup_failed) + '\n';
+                    if( etMail.getError() != null){
+                        error += etMail.getError();
+                        error+= "\n";
+                    }
+                    if (etPassword.getError() != null){
+                        error += etPassword.getError();
+                    }
+                    if (etConfirmPassword.getError() != null){
+                        error += etConfirmPassword.getError();
+                    }
+                    Toast.makeText(SignUpActivity.this,error,Toast.LENGTH_LONG).show();
                     return;
                 }
 

@@ -31,6 +31,7 @@
     <string name="signUpBtnText">הירשם</string>
     <string name="hint_confirm_password">אמת סיסמה</string>
     <string name="email_address_error">הזן כתובת אימייל חוקית</string>
+    <string name="btn_signup_failed">ההרשמה נכשלה !</string>
     <string name="new_password_error">הסיסמה חייבת להכיל בין 6-10 תווים</string>
     <string name="passwords_no_match_error">הסיסמאות אינן זהות</string>
     <!--SignUp Activity End-->
@@ -81,5 +82,10 @@
     <string name="dialog_no_extra_left">תוספת %1$d נוספה לתשלום</string>
     <string name="dialog_btn_keep_shopping_pressed">ההזמנה נוספה לסל הקניות</string>
     <!--MealDetails Dialog End-->
+
+    <!--AboutApp Dialog-->
+    <string name="dialog_tv_description">זאת אחלה אחלה אפליקציה</string>
+    <string name="dialog_tv_version">גרסה 1.0</string>
+    <!--AboutApp Dialog End-->
 
 </resources>

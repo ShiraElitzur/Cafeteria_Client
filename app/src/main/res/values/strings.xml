@@ -29,6 +29,7 @@
     <string name="signup_title">Sign Up</string>
     <string name="login_text">Already a member? Login</string>
     <string name="signUpBtnText">Sign Up</string>
+    <string name="btn_signup_failed">Sign up failed !</string>
     <string name="hint_confirm_password">Confirm password</string>
     <string name="email_address_error">Enter a valid email address</string>
     <string name="new_password_error">Must be 6-10 characters</string>
@@ -91,5 +92,10 @@
     <string name="dialog_no_extra_left">Addition of %1$d extra added to total</string>
     <string name="dialog_btn_keep_shopping_pressed">Order added to shopping bascket</string>
     <!--MealDetails Dialog End-->
+
+    <!--AboutApp Dialog-->
+    <string name="dialog_tv_description">This app is good, use it.</string>
+    <string name="dialog_tv_version">Version 1.0</string>
+    <!--AboutApp Dialog End-->
 
 </resources>
