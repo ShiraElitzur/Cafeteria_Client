@@ -175,7 +175,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                Log.e("SHIRA","before call to async task");
                 new MyWebServiceTask().execute();
+                Log.e("SHIRA","after call to async task");
                 finish();
                 startActivity(intent);
             }
@@ -198,11 +200,13 @@ public class SplashScreenActivity extends AppCompatActivity {
     class MyWebServiceTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
+            Log.e("CATEGORIES",response);
             Type listType = new TypeToken<ArrayList<Category>>() {
             }.getType();
             List<Category> categoryList;
             categoryList = new Gson().fromJson(response, listType);
             if (categoryList != null) {
+                Log.e("CATEGORIES","inside if categories not null");
                 DataHolder.getInstance().setCategories(categoryList);
 
 
@@ -219,6 +223,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
+            Log.e("SHIRA","Second do in background");
             StringBuilder response;
             try {
                 URL url = new URL("http://" + SHIRA_SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");

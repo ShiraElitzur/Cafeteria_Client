@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.data.Main;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
@@ -38,8 +40,11 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class CategoryItemsActivity extends AppCompatActivity implements OnDialogResultListener{
 
@@ -88,9 +93,10 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         initCategoryItems();
         itemsTitle = new ArrayList<>(itemsDetails.keySet());
 
-        if (category.getMeals() != null) {
+        if (category.getMeals() != null && category.getMeals().size() > 0) {
             initExpandableList();
         } else {
+            Log.e("LIST","normal list");
             initList();
         }
 
@@ -170,31 +176,68 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
     private void initCategoryItems() {
         itemsDetails = new HashMap<>();
-        String title;
-        List<Meal> meals;
+        //String title;
+        //List<Meal> meals;
+        boolean existMain;
+        List<Item> mains = new ArrayList<>();
 
-        // I filled only the "meat" category in the previous screen
-        if (category.getItems() != null) {
-
-            for (Item item : category.getItems()) {
-
-                title = item.getTitle(); //i.e. schnizel in zalacht
-                meals = new ArrayList<>();
-
-                if (category.getMeals() != null) {
-                    for (Meal meal : category.getMeals()) {
-
-                        if (title.equals(meal.getMain().getTitle())) {
-                            meals.add(meal);
-                        }
+        if( category.getMeals() != null ){
+            for(Meal meal : category.getMeals()) {
+                existMain = false;
+                for (Item main : mains ) {
+                    if( main.getTitle().equalsIgnoreCase(meal.getMain().getTitle())) {
+                        existMain = true;
+                        break;
                     }
                 }
+                if( ! existMain ) {
+                    mains.add(meal.getMain());
+                }
 
-                itemsDetails.put(item, meals);
             }
-        }else{
 
+            for( Item main : mains ) {
+                List<Meal> mealsWithMain = new ArrayList<>();
+                for( Meal meal : category.getMeals() ) {
+                    if( meal.getMain().getTitle().equalsIgnoreCase(main.getTitle())) {
+                        mealsWithMain.add(meal);
+                    }
+                }
+                itemsDetails.put(main,mealsWithMain);
+            }
         }
+
+        if( category.getItems()!= null) {
+            for( Item item : category.getItems() ) {
+                itemsDetails.put(item,new ArrayList<Meal>());
+            }
+        }
+
+
+
+//
+//        // I filled only the "meat" category in the previous screen
+//        if (category.getItems() != null) {
+//
+//            for (Item item : category.getItems()) {
+//
+//                title = item.getTitle(); //i.e. schnizel in zalacht
+//                meals = new ArrayList<>();
+//
+//                if (category.getMeals() != null) {
+//                    for (Meal meal : category.getMeals()) {
+//
+//                        if (title.equals(meal.getMain().getTitle())) {
+//                            meals.add(meal);
+//                        }
+//                    }
+//                }
+//
+//                itemsDetails.put(item, meals);
+//            }
+//        }else{
+//
+//        }
 
     }
 

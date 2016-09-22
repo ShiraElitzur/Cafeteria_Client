@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
             StringBuilder response;
             try {
 
-                URL url = new URL("http://"+ANAEL_SERVER_IP+":8080/CafeteriaServer/rest/data/isCustomerExist?email="+emailTxt+"&pass="+passwordTxt+"");
+                URL url = new URL("http://"+SERVER_IP+":8080/CafeteriaServer/rest/data/isCustomerExist?email="+emailTxt+"&pass="+passwordTxt+"");
                // URL url = new URL("http://" + ANAEL_SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
