@@ -19,21 +19,24 @@
     <!--Tabs Titles End-->
 
     <!--Login Activity-->
-    <string name="hint_email">דוא"ל</string>
-    <string name="hint_password">סיסמה</string>
     <string name="loginBtnText">הכנס</string>
     <string name="signup_text">אין לך חשבון עדיין? הירשם</string>
-    <string name="signup_title">הרשמה</string>
+    <string name="login_error">פרטי התחברות שגויים</string>
     <string name="login_text">משתמש רשום? התחבר</string>
     <!--Login Activity End-->
 
     <!--SignUp Activity-->
+    <string name="signup_title">הרשמה</string>
     <string name="signUpBtnText">הירשם</string>
     <string name="hint_confirm_password">אמת סיסמה</string>
     <string name="email_address_error">הזן כתובת אימייל חוקית</string>
     <string name="btn_signup_failed">ההרשמה נכשלה !</string>
     <string name="new_password_error">הסיסמה חייבת להכיל בין 6-10 תווים</string>
     <string name="passwords_no_match_error">הסיסמאות אינן זהות</string>
+    <string name="hint_firstname">שם פרטי</string>
+    <string name="hint_lastname">שם משפחה</string>
+    <string name="hint_email">דוא"ל</string>
+    <string name="hint_password">סיסמה</string>
     <!--SignUp Activity End-->
 
     <!--Splash Screen-->
@@ -86,6 +89,8 @@
     <!--AboutApp Dialog-->
     <string name="dialog_tv_description">זאת אחלה אחלה אפליקציה</string>
     <string name="dialog_tv_version">גרסה 1.0</string>
+    <string name="signup_error">SignUp failed</string>
+    <string name="guest_user">Hello Guest</string>
     <!--AboutApp Dialog End-->
 
 </resources>

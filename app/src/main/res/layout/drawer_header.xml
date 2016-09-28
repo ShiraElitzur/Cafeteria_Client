@@ -25,7 +25,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/header_title"
+            android:id="@+id/tvHeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ישראל ישראלי"
@@ -40,7 +40,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:src="@drawable/user_male"
-            android:layout_above="@id/header_title" />
+            android:layout_above="@id/tvHeaderTitle" />
 
     </RelativeLayout>
 

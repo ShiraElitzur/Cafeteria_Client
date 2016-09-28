@@ -38,23 +38,22 @@ import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity {
 
-
     private SharedPreferences sharedPreferences;
     private EditText etMail;
     private EditText etPassword;
-    private final static String SERVER_IP = "172.16.26.12";
-    private final static String ANAEL_SERVER_IP = "192.168.43.91";
-    List<Category> categoryList;
-    String emailTxt;
-    String passwordTxt;
+    private String emailTxt;
+    private String passwordTxt;
+
+    private final static String SERVER_IP = "192.168.43.231";  // SHIRA IP
+    //private final static String SERVER_IP = "192.168.43.91"; // ANAEL IP
+    private final static String USER_VALIDATION_URL = "http://"+SERVER_IP+":8080/CafeteriaServer/rest/users/isUserExist";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        // force portrait orientation
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
         etPassword = (EditText) findViewById(R.id.etPassword);
         etMail = (EditText) findViewById(R.id.etMail);
@@ -73,20 +72,11 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("email", etMail.getText().toString());
-                editor.apply();
-
                 new MyWebServiceTask().execute();
-
-                Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                startActivity(intent);
-                LoginActivity.this.finish();
             }
         });
 
-        // get email string from shared prefrence
+        // get email string from shared preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String email = sharedPreferences.getString("email", "");
 
@@ -117,39 +107,28 @@ public class LoginActivity extends AppCompatActivity {
                 .show();
     }
 
-    class MyWebServiceTask extends AsyncTask<String, Void, String> {
+    private class MyWebServiceTask extends AsyncTask<String, Void, Boolean> {
         @Override
-        protected void onPostExecute(String response) {
+        protected void onPostExecute(Boolean response) {
+            if(response != null && response ) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("email", etMail.getText().toString());
+                editor.apply();
 
-//            if (categoryList != null) {
-//                Type listType = new TypeToken<ArrayList<Category>>() {
-//                }.getType();
-//
-//                categoryList = new Gson().fromJson(response, listType);
-//
-//                Toast.makeText(LoginActivity.this, categoryList.get(0).getTitle(), Toast.LENGTH_SHORT).show();
-//                DataHolder.getInstance().setCategories(categoryList);
-//
-//
-//                for (Category c : categoryList) {
-//                    if (c != null) {
-//                        Log.d("cat", c.toString());
-//                    }
-//                    if (c.getMeals() != null) {
-//                        Log.d("meal", c.getMeals().toString());
-//                    }
-//                }
-//            }
+                Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                startActivity(intent);
+                LoginActivity.this.finish();
+            } else {
+                Toast.makeText(LoginActivity.this,getResources().getString(R.string.login_error),Toast.LENGTH_LONG).show();
+            }
 
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected Boolean doInBackground(String... params) {
             StringBuilder response;
             try {
-
-                URL url = new URL("http://"+SERVER_IP+":8080/CafeteriaServer/rest/data/isCustomerExist?email="+emailTxt+"&pass="+passwordTxt+"");
-               // URL url = new URL("http://" + ANAEL_SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");
+                URL url = new URL(USER_VALIDATION_URL+"?email="+emailTxt+"&pass="+passwordTxt);
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -172,13 +151,19 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
                 return null;
             }
-            return response.toString();
+
+            String responseString = response.toString();
+            if( responseString.trim().equalsIgnoreCase("OK")) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         @Override
         protected void onPreExecute() {
-            emailTxt = etMail.getText().toString();
-            passwordTxt = etPassword.getText().toString();
+            emailTxt = etMail.getText().toString().trim();
+            passwordTxt = etPassword.getText().toString().trim();
         }
     }
 }

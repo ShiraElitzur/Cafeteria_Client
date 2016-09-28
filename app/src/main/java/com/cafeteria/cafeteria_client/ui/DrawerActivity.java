@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
@@ -28,6 +29,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private Intent intent;
+    private TextView tvHeaderTitle;
 
     protected void onCreateDrawer() {
 
@@ -44,8 +46,14 @@ public abstract class DrawerActivity extends AppCompatActivity {
         //getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+
+        // TODO: 28/09/2016 change user name to real name from shared preferences. i dont know how
+//        tvHeaderTitle = (TextView)navigationView.findViewById((R.id.tvHeaderTitle));
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        String user_name = sharedPreferences.getString("user_name", getResources().getString(R.string.guest_user));
+//        tvHeaderTitle.setText(user_name);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {

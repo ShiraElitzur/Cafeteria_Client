@@ -47,8 +47,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private Intent intent;
     private HTextView htvTitle;
 
-    private final static String ANAEL_SERVER_IP = "192.168.43.91";
-    private final static String SHIRA_SERVER_IP = "192.168.43.231";
+    //private final static String SERVER_IP = "192.168.43.91";
+    private final static String SERVER_IP = "192.168.43.231";
 
 
 
@@ -226,7 +226,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             Log.e("SHIRA","Second do in background");
             StringBuilder response;
             try {
-                URL url = new URL("http://" + SHIRA_SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");
+                URL url = new URL("http://" + SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
