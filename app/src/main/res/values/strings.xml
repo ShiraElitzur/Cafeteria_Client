@@ -101,6 +101,7 @@
     <string name="dialog_tv_version">Version 1.0</string>
     <string name="signup_error">SignUp failed</string>
     <string name="guest_user">Hello Guest</string>
+    <string name="update_meal">Update</string>
     <!--AboutApp Dialog End-->
 
 </resources>

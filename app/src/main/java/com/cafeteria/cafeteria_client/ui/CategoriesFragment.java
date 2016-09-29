@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -146,10 +147,9 @@ public class CategoriesFragment extends Fragment {
             // Title, description and image
             holder.title.setText(category.getTitle());
 //            holder.description.setText(category.getDescription());
-//            // The image currently is from a fictive list pic0...pic5 will be from the database
-           int imageResource = getResources().getIdentifier( "@drawable/pic"+position, null, getActivity().getPackageName());
-            //holder.image.setImageDrawable(getResources().getDrawable(imageResource));
-            holder.image.setImageResource(imageResource);
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(category.getIcon() , 0, category.getIcon().length);
+            holder.image.setImageBitmap(bitmap);
 
 
             // Setting imageButton onCLick function, will pass the clicked category to the next
