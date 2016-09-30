@@ -152,7 +152,7 @@ public class Order {
     public double getPayment() {
         payment = 0;
         for( OrderedMeal meal : getMeals() ) {
-            payment += meal.getPrice();
+            payment += meal.getParentMeal().getPrice();
         }
 
         for( Item item : getItems() ) {

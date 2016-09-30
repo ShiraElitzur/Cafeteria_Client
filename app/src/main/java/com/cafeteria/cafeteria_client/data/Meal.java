@@ -36,7 +36,7 @@ public class Meal implements Serializable {
      * For example : Fries, Salad, Rice, Potatoes... from this
      * list the customer can choose *extraAmount*
      */
-    private List<Item> extras;
+    private List<Extra> extras;
 
     /**
      * Extra amount means how many extras the customer can choose
@@ -44,27 +44,9 @@ public class Meal implements Serializable {
     private int extraAmount;
 
     /**
-     * Indicates if this meal includes drink to choose
-     */
-    private boolean drink;
-
-    /**
-     * List of drinks that the customer can choose from
-     */
-    private List<Drink> drinkOptions;
-
-    /**
      * The price of this meal
      */
     private double price;
-
-    /**
-     * The category of this meal
-     */
-    private Category category;
-
-
-
 
     /**
      * Returns the id of this meal
@@ -118,7 +100,7 @@ public class Meal implements Serializable {
      * Returns the items that this meal contains or the extras for meal with main+extras
      * @return the items that this meal contains
      */
-    public List<Item> getExtras() {
+    public List<Extra> getExtras() {
         return extras;
     }
 
@@ -126,7 +108,7 @@ public class Meal implements Serializable {
      * Sets the items list for this meal
      * @param extras
      */
-    public void setExtras(List<Item> extras) {
+    public void setExtras(List<Extra> extras) {
         this.extras = extras;
     }
 
@@ -163,66 +145,4 @@ public class Meal implements Serializable {
         this.extraAmount = extraAmount;
     }
 
-    /**
-     * Returns whether this Meal contains drink
-     * @return whether this Meal contains drink
-     */
-    public boolean isDrink() {
-        return drink;
-    }
-
-    /**
-     * Sets whether this Meal contains drink
-     * @param drink
-     */
-    public void setDrink(boolean drink) {
-        this.drink = drink;
-    }
-
-    /**
-     * Returns list of the options that the customer can choose his drink from
-     * @return list of the options to drink in this meal
-     */
-    public List<Drink> getDrinkOptions() {
-        return drinkOptions;
-    }
-
-    /**
-     * Sets list of drink options
-     * @param drinkOptions
-     */
-    public void setDrinkOptions(List<Drink> drinkOptions) {
-        this.drinkOptions = drinkOptions;
-    }
-
-    /**
-     * Returns the category object of this meal
-     * @return the category of this meal
-     */
-    public Category getCategory() {
-        return category;
-    }
-
-    /**
-     * Sets category object to this meal
-     * @param category
-     */
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    @Override
-    public String toString() {
-        return "Meal{" +
-                "id=" + id +
-                ", main=" + main +
-                ", title='" + title + '\'' +
-                ", extras=" + extras +
-                ", extraAmount=" + extraAmount +
-                ", drink=" + drink +
-                ", drinkOptions=" + drinkOptions +
-                ", price=" + price +
-                ", category=" + category +
-                '}';
-    }
 }

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PaintDrawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -56,8 +57,6 @@ public class CategoriesFragment extends Fragment {
         View v =  inflater.inflate(R.layout.categories_fragment, container, false);
         grid = (GridView)v.findViewById(R.id.gridView);
 
-        // Temporary creation of categories list
-        // The real list should come from the data base of course
         if (categories == null) {
             initCategories();
         }
@@ -147,22 +146,12 @@ public class CategoriesFragment extends Fragment {
             // Title, description and image
             holder.title.setText(category.getTitle());
 //            holder.description.setText(category.getDescription());
-
-            Bitmap bitmap = BitmapFactory.decodeByteArray(category.getIcon() , 0, category.getIcon().length);
-            holder.image.setImageBitmap(bitmap);
-
-
-            // Setting imageButton onCLick function, will pass the clicked category to the next
-            // activity
-//            holder.image.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent categoryItemsIntent = new Intent(context,CategoryItemsActivity.class);
-//                    categoryItemsIntent.putExtra("category",category);
-//                    startActivity(categoryItemsIntent);
-//
-//                }
-//            });
+            if(category.getIcon() != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(category.getIcon() , 0, category.getIcon().length);
+                holder.image.setImageBitmap(bitmap);
+            } else {
+                holder.image.setBackgroundResource(R.drawable.star);
+            }
 
             return convertView;
         }

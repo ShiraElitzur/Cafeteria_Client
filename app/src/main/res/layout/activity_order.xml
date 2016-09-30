@@ -23,6 +23,11 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/lvOrderMeals"
+            android:layout_gravity="center_horizontal" />
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/lvOrderItems"
             android:layout_gravity="center_horizontal" />
 

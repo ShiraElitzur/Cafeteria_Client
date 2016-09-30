@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,10 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 import com.cafeteria.cafeteria_client.R;
+import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.data.Item;
+import com.cafeteria.cafeteria_client.data.Order;
+import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,7 @@ import java.util.Locale;
  * This activity extends the DrawerActivity to support the application navigation drawer
  */
 public class MenuActivity extends DrawerActivity {
+    private static boolean firstLaunch = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,13 @@ public class MenuActivity extends DrawerActivity {
         String language = sharedPreferences.getString("language", "");
         if (language == null || language.equals("")) {
             setDefaultLanguageToHebrew();
+        }
+
+        if( firstLaunch ) {
+            firstLaunch = false;
+            DataHolder.getInstance().setTheOrder(new Order());
+            DataHolder.getInstance().getTheOrder().setItems(new ArrayList<Item>());
+            DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
         }
     }
 

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.data.Drink;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hanks.htextview.HTextView;
@@ -108,6 +109,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         alertDialog = alertDialogBuilder.create();
         new BackgroundTask().execute();
+        new GetDrinksTask().execute();
     }
 
     private void setDefaultLanguageToHebrew(){
@@ -195,8 +197,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-
-
     class MyWebServiceTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
@@ -251,15 +251,54 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
             return response.toString();
         }
-
-        @Override
-        protected void onPreExecute() {
-        }
     }
 
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+
+    private class GetDrinksTask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            StringBuilder response;
+            try {
+                URL url = new URL("http://" + SERVER_IP + ":8080/CafeteriaServer/rest/data/getDrinks");
+                response = new StringBuilder();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                Log.e("DEBUG",conn.getResponseCode()+"");
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Log.e("DEBUG",conn.getResponseMessage());
+                    return null;
+                }
+
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                conn.disconnect();
+
+                Type listType = new TypeToken<ArrayList<Drink>>() {
+                }.getType();
+                List<Drink> drinksList;
+                drinksList = new Gson().fromJson(response.toString(), listType);
+                DataHolder.getInstance().setDrinksList(drinksList);
+                Log.e("DRINKS",drinksList.get(0).getTitle());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            return null;
+        }
     }
 
 }

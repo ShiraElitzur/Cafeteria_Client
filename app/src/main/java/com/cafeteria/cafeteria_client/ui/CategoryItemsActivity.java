@@ -1,6 +1,5 @@
 package com.cafeteria.cafeteria_client.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -12,12 +11,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -40,11 +36,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class CategoryItemsActivity extends AppCompatActivity implements OnDialogResultListener{
 
@@ -58,11 +51,13 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
      * Holds the name of the item and a list of the meal names
      * Format: Title, child title
      */
+    private HashMap<Main, List<Meal>> mainsItemsDetails;
     private HashMap<Item, List<Meal>> itemsDetails;
     /**
      * Holds the list of the meal names (same as the hash map)
      */
     private List<Item> itemsTitle;
+    private List<Main> mainsTitle;
     /**
      * The selected category
      */
@@ -92,6 +87,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         // Temporary creation of categories items according to the chosen category
         initCategoryItems();
         itemsTitle = new ArrayList<>(itemsDetails.keySet());
+        mainsTitle = new ArrayList<>(mainsItemsDetails.keySet());
 
         if (category.getMeals() != null && category.getMeals().size() > 0) {
             initExpandableList();
@@ -116,7 +112,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                 Toast.makeText(CategoryItemsActivity.this
                         ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
                 DataHolder dataHolder = DataHolder.getInstance();
-                dataHolder.addOrderdItem(selectedItem);
+                dataHolder.getTheOrder().getItems().add(selectedItem);
             }
         });
     }
@@ -126,7 +122,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         explvCategoryItems = (ExpandableListView) findViewById(R.id.explvCategoryItems);
         explvCategoryItems.setVisibility(View.VISIBLE);
 
-        categoryItemsAdapter = new CategoryItemsAdapter(this, itemsDetails,itemsTitle);
+        categoryItemsAdapter = new CategoryItemsAdapter(this, mainsItemsDetails,mainsTitle);
 
         explvCategoryItems.setAdapter(categoryItemsAdapter);
 
@@ -137,11 +133,11 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,
                                         int groupPosition, long id) {
-                if (itemsTitle.get(groupPosition).isStandAlone()){
-
-                    //nedd to be another dialog or be added straight to order activity "sal"
-
-                }
+//                if (mainsTitle.get(groupPosition) instanceof Item){
+//
+//                    //nedd to be another dialog or be added straight to order activity "sal"
+//
+//                }
                 return false;
             }
         });
@@ -152,8 +148,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Meal meal = itemsDetails.get(itemsTitle.get(groupPosition)).get(childPosition);
-                Item item = itemsTitle.get(groupPosition);
+                Meal meal = mainsItemsDetails.get(mainsTitle.get(groupPosition)).get(childPosition);
+                //Item item = itemsTitle.get(groupPosition);
 
                 initMealDetailsDialog(meal);
 
@@ -175,16 +171,17 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     }
 
     private void initCategoryItems() {
+        mainsItemsDetails = new HashMap<>();
         itemsDetails = new HashMap<>();
         //String title;
         //List<Meal> meals;
         boolean existMain;
-        List<Item> mains = new ArrayList<>();
+        List<Main> mains = new ArrayList<>();
 
         if( category.getMeals() != null ){
             for(Meal meal : category.getMeals()) {
                 existMain = false;
-                for (Item main : mains ) {
+                for (Main main : mains ) {
                     if( main.getTitle().equalsIgnoreCase(meal.getMain().getTitle())) {
                         existMain = true;
                         break;
@@ -196,14 +193,14 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
             }
 
-            for( Item main : mains ) {
+            for( Main main : mains ) {
                 List<Meal> mealsWithMain = new ArrayList<>();
                 for( Meal meal : category.getMeals() ) {
                     if( meal.getMain().getTitle().equalsIgnoreCase(main.getTitle())) {
                         mealsWithMain.add(meal);
                     }
                 }
-                itemsDetails.put(main,mealsWithMain);
+                mainsItemsDetails.put(main,mealsWithMain);
             }
         }
 
@@ -233,7 +230,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 //                    }
 //                }
 //
-//                itemsDetails.put(item, meals);
+//                mainsItemsDetails.put(item, meals);
 //            }
 //        }else{
 //
@@ -245,7 +242,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     @Override
     public void onPositiveResult(OrderedMeal orderedMeal) {
         DataHolder dataHolder = DataHolder.getInstance();
-        dataHolder.addOrderdMeal(orderedMeal);
+        dataHolder.getTheOrder().getMeals().add(orderedMeal);
+        //dataHolder.addOrderdMeal(orderedMeal);
         Intent orderActivityIntent = new Intent(CategoryItemsActivity.this,OrderActivity.class);
         startActivity(orderActivityIntent);
     }
@@ -255,40 +253,41 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     public void onNegativeResult(OrderedMeal orderedMeal) {
         Toast.makeText(this,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
         DataHolder dataHolder = DataHolder.getInstance();
-        dataHolder.addOrderdMeal(orderedMeal);
+        dataHolder.getTheOrder().getMeals().add(orderedMeal);
+        //dataHolder.addOrderdMeal(orderedMeal);
     }
 
     private class CategoryItemsAdapter extends BaseExpandableListAdapter{
 
         private Context context;
-        private HashMap<Item,List<Meal>> itemsDetails;
-        private List<Item> itemsTitle;
+        private HashMap<Main,List<Meal>> itemsDetails;
+        private List<Main> mains;
 
-        public CategoryItemsAdapter(Context context, HashMap<Item ,List<Meal>> itemsDetails,
-                                    List<Item> itemsTitle){
+        public CategoryItemsAdapter(Context context, HashMap<Main ,List<Meal>> itemsDetails,
+                                    List<Main> mains){
             this.context = context;
             this.itemsDetails = itemsDetails;
-            this.itemsTitle = itemsTitle;
+            this.mains = mains;
         }
 
         @Override
         public int getGroupCount() {
-            return itemsTitle.size();
+            return mains.size();
         }
 
         @Override
         public int getChildrenCount(int i) {
-            return itemsDetails.get(itemsTitle.get(i)).size();
+            return mainsItemsDetails.get(mains.get(i)).size();
         }
 
         @Override
         public Object getGroup(int i) {
-            return  itemsTitle.get(i);
+            return  mains.get(i);
         }
 
         @Override
         public Object getChild(int parent, int child) {
-            return itemsDetails.get(itemsTitle.get(parent)).get(child);
+            return mainsItemsDetails.get(mains.get(parent)).get(child);
         }
 
         @Override
@@ -310,24 +309,20 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         public View getGroupView(int parentPosition, boolean isExpanded, View convertView,
                                  ViewGroup parentView) {
             final ViewHolderPrimary holder;
-            final Item item = (Item) getGroup(parentPosition);
+            final Main main = (Main) getGroup(parentPosition);
             if (convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.category_items_parent,parentView,false);
 
                 holder = new ViewHolderPrimary();
                 holder.tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
-
-
                 convertView.setTag(holder);
-
             } else{
                 holder = (ViewHolderPrimary) convertView.getTag();
             }
 
             holder.tvItemName.setTypeface(null, Typeface.BOLD);
-            holder.tvItemName.setText(item.getTitle());
-
+            holder.tvItemName.setText(main.getTitle());
             return  convertView;
         }
 
@@ -420,7 +415,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                         Toast.makeText(CategoryItemsActivity.this
                                 ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
                         DataHolder dataHolder = DataHolder.getInstance();
-                        dataHolder.addOrderdItem(selectedItem);
+                        dataHolder.getTheOrder().getItems().add(selectedItem);
+                        //dataHolder.addOrderdItem(selectedItem);
                     }
                 });
 

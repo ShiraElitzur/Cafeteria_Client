@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.data.Extra;
 import com.cafeteria.cafeteria_client.interfaces.MultiSpinnerListener;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
@@ -58,7 +60,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
     private double drinkPrice = 0;
     private double extraPrice = 0;
     private Drink chosenDrink;
-    private List<Item> chosenExtra = new ArrayList<>();
+    private List<Extra> chosenExtra = new ArrayList<>();
 
     public MealDetailsDialog() {
 
@@ -98,16 +100,11 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         dialog.getWindow().setAttributes(lp);
 
         initComponents();
-
-        if (meal.isDrink() || meal.getDrinkOptions()!= null) {
-            initSpinnerAndButtonDrink();
-        } else{
-            btnDrink.setVisibility(View.GONE);
-        }
+        initSpinnerAndButtonDrink();
 
         if ( meal.getExtras() != null) {
             List<String> extrasTitle = new ArrayList<>();
-            for (Item extra : meal.getExtras()) {
+            for (Extra extra : meal.getExtras()) {
                 extrasTitle.add(extra.getTitle());
             }
             spinnerExtras.setItems(extrasTitle, getString(R.string.dialog_multi_spinner_default_text), this);
@@ -150,7 +147,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
     }
 
     private void initSpinnerAndButtonDrink() {
-        List<Drink> drinks = new ArrayList<Drink>(meal.getDrinkOptions());
+        List<Drink> drinks = new ArrayList<Drink>(DataHolder.getInstance().getDrinksList());
         Drink defaultText = new Drink();
         defaultText.setTitle(getString(R.string.dialog_spinner_default_text));
         drinks.add(0,defaultText);
@@ -166,7 +163,6 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
 
                 String total = String.format(getResources().getString(R.string.dialog_tv_total)
                         , bd.doubleValue(), nis.getSymbol());
-
                 tvTotal.setText(total);
 
 
@@ -247,8 +243,8 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
                 chosenExtra.add(meal.getExtras().get(i));
             }
         }
-        for (Item item: chosenExtra){
-            extrasTitle.add(item.getTitle());
+        for (Extra extra: chosenExtra){
+            extrasTitle.add(extra.getTitle());
         }
 
         int extrasLeft = meal.getExtraAmount() - chosenExtra.size();
@@ -259,8 +255,8 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             extraPrice = 0;
         }else{
             extrasAmount = String.format(getResources().getString(R.string.dialog_no_extra_left),extrasLeft*(-1));
-
-            extraPrice = chosenExtra.get(chosenExtra.size()-1).getPrice();
+            // ****** What is the idea of this index ? which extra it should find
+            //extraPrice = chosenExtra.get(chosenExtra.size()-1).getPrice();
             BigDecimal bd = new BigDecimal(meal.getPrice() + drinkPrice + extraPrice);
             bd = bd.setScale(2, RoundingMode.HALF_UP);
 
@@ -278,19 +274,20 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
 
         Context context;
         int resource;
-        List<Item> items;
+        List<Drink> drinks;
 
-        public MyAdapter(Context context, int resource, List<Item> items) {
-            this.context = context;
-            this.resource = resource;
-            this.items = items;
-        }
+
+//        public MyAdapter(Context context, int resource, List<Item> items) {
+//            this.context = context;
+//            this.resource = resource;
+//            this.items = items;
+//        }
 
         public MyAdapter(Context context, List<Drink> drinks, int resource) {
             this.context = context;
             this.resource = resource;
-            List<Item> items = (List) new ArrayList<Drink>(drinks);
-            this.items = items;
+//            List<Item> items = (List) new ArrayList<Drink>(drinks);
+            this.drinks = drinks;
         }
 
         @Override
@@ -300,23 +297,23 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
 
         @Override
         public int getCount() {
-            return items.size();
+            return drinks.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return items.get(position);
+            return drinks.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return items.get(position).getId();
+            return drinks.get(position).getId();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView tvListItem;
-            final Item item = items.get(position);
+            final Drink drink = drinks.get(position);
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(resource, parent, false);
@@ -327,13 +324,11 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
                 tvListItem = (TextView) convertView.getTag();
             }
 
-            tvListItem.setText(item.getTitle());
+            tvListItem.setText(drink.getTitle());
 
             return convertView;
         }
 
     }
-
-
 
 }
