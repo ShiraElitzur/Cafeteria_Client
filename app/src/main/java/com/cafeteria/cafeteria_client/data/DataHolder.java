@@ -15,8 +15,6 @@ import java.util.List;
 public class DataHolder{
 
     private Order theOrder;
-//    private List<OrderedMeal> orderedMeals = new ArrayList<>();
-//    private List<Item> orderedItems = new ArrayList<>();
     private List<Category> categories = new ArrayList<>();
 
     public List<Drink> getDrinksList() {

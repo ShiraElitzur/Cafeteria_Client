@@ -57,6 +57,7 @@ public class MenuActivity extends DrawerActivity {
             setDefaultLanguageToHebrew();
         }
 
+        // On MenuActivity's first launch we create a new Order for this session
         if( firstLaunch ) {
             firstLaunch = false;
             DataHolder.getInstance().setTheOrder(new Order());

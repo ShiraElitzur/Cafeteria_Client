@@ -92,6 +92,7 @@
     <string name="signup_error">SignUp failed</string>
     <string name="guest_user">Hello Guest</string>
     <string name="update_meal">Update</string>
+    <string name="succesful_edit_meal">Your meal was update succesfuly</string>
     <!--AboutApp Dialog End-->
 
 </resources>

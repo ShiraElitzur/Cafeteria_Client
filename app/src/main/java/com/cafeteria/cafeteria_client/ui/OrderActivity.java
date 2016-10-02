@@ -14,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.data.DataHolder;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
@@ -49,6 +51,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     // temp vars
     private List<OrderedMeal> orderedMeals;
     private List<Item> orderedItems;
+    ArrayAdapter mealsAdapter;
 
     /**
      * The ActionBar MenuItem that displays the amount to pay
@@ -58,13 +61,13 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
      * The Order object that this activity displays its details
      */
     private Order order;
-    // temp var
-    double pay;
+    View layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+        layout = (View)findViewById(R.id.llOrderLayout);
         super.onCreateDrawer();
 
         //nis symbol
@@ -76,8 +79,18 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         order = dataHolder.getTheOrder();
         lvOrderItems = (ListView) findViewById(R.id.lvOrderItems);
         lvOrderMeals = (ListView) findViewById(R.id.lvOrderMeals);
+
         lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, order.getItems()));
-        lvOrderItems.setAdapter(new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
+        lvOrderMeals.setAdapter(mealsAdapter = new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent menuActivtiyInent = new Intent(OrderActivity.this, MenuActivity.class);
+        startActivity(menuActivtiyInent);
     }
 
     /**
@@ -94,7 +107,6 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         BigDecimal bd = new BigDecimal(order.getPayment());
         bd = bd.setScale(1, RoundingMode.HALF_DOWN);
         itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + bd + " " + nis.getSymbol());
-        pay = order.getPayment();
         // TODO: 15/09/2016 handle press on pay item. move to payment screen
         return super.onCreateOptionsMenu(menu);
     }
@@ -108,15 +120,6 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 //
 //    }
 
-    @Override
-    public void onPositiveResult(OrderedMeal meal) {
-
-    }
-
-    @Override
-    public void onNegativeResult(OrderedMeal meal) {
-
-    }
 
     /**
      * This inner class adapts between the ListView of the items and the actual list of <OrderItem>
@@ -166,12 +169,11 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                pay -= items.get(position).getPrice();
+                                                order.setPayment(order.getPayment() - items.get(position).getPrice() );
                                                 // Remove the item from the adapter
                                                 OrderItemsAdapter.this.remove(items.get(position));
                                                 // Refresh the UI
-                                                OrderActivity.this.findViewById(android.R.id.content).getRootView().invalidate();
-                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + pay + " " + nis.getSymbol());
+                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
                                             }
                                         })
                                 .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
@@ -242,12 +244,12 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 holder.imgBtnEditItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        FragmentManager fm = getSupportFragmentManager();
-//                        MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
-//                        Bundle args = new Bundle();
-//                        args.putSerializable("orderedMeal", items.get(position));
-//                        mealDetailsDialog.setArguments(args);
-//                        mealDetailsDialog.show(fm, "");
+                        FragmentManager fm = getSupportFragmentManager();
+                        MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
+                        Bundle args = new Bundle();
+                        args.putSerializable("meal", meals.get(position));
+                        mealDetailsDialog.setArguments(args);
+                        mealDetailsDialog.show(fm, "");
                     }
                 });
                 holder.imgBtnRemoveItem.setOnClickListener(new View.OnClickListener() {
@@ -260,12 +262,15 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                pay -= meals.get(position).getParentMeal().getPrice();
+                                                double payChange = meals.get(position).getParentMeal().getPrice();
+                                                payChange += meals.get(position).getDrinkPrice();
+                                                payChange += meals.get(position).getExtraPrice();
+                                                order.setPayment( order.getPayment() - payChange);
                                                 // Remove the item from the adapter
                                                 OrderMealsAdapter.this.remove(meals.get(position));
                                                 // Refresh the UI
                                                 OrderActivity.this.findViewById(android.R.id.content).getRootView().invalidate();
-                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + pay + " " + nis.getSymbol());
+                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
                                             }
                                         })
                                 .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
@@ -283,7 +288,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 holder = (ViewHolder) convertView.getTag();
             }
             // in both cases sets the ui data to fit the item data
-            BigDecimal bd = new BigDecimal(meals.get(position).getParentMeal().getPrice());
+            double mealPrice = meals.get(position).getParentMeal().getPrice() + meals.get(position).getExtraPrice()+
+                    meals.get(position).getDrinkPrice();
+            BigDecimal bd = new BigDecimal(mealPrice);
             bd = bd.setScale(1, RoundingMode.HALF_DOWN);
 
             holder.tvOrderItemTitle.setText(meals.get(position).getParentMeal().getTitle());
@@ -301,11 +308,31 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
     }
 
-
+    // On the edit meal dialog - update meal and keep shopping buttons leads here
+    // update click
     @Override
-    public void onBackPressed() {
-        finish();
-        Intent menuActivtiyInent = new Intent(OrderActivity.this, MenuActivity.class);
-        startActivity(menuActivtiyInent);
+    public void onPositiveResult(OrderedMeal meal) {
+        Toast.makeText(this,getString(R.string.succesful_edit_meal),Toast.LENGTH_SHORT).show();
+        DataHolder dataHolder = DataHolder.getInstance();
+        dataHolder.getTheOrder().getMeals().remove(meal);
+        dataHolder.getTheOrder().getMeals().add(meal);
+
+        mealsAdapter.notifyDataSetChanged();
+        itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+
     }
+
+    // keep shopping click
+    @Override
+    public void onNegativeResult(OrderedMeal meal) {
+        Toast.makeText(this,getString(R.string.succesful_edit_meal),Toast.LENGTH_SHORT).show();
+        DataHolder dataHolder = DataHolder.getInstance();
+        dataHolder.getTheOrder().getMeals().remove(meal);
+        dataHolder.getTheOrder().getMeals().add(meal);
+
+        Intent menuActivityIntent = new Intent(OrderActivity.this, MenuActivity.class);
+        startActivity(menuActivityIntent);
+        finish();
+    }
+
 }

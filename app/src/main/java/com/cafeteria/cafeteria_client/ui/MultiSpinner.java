@@ -73,6 +73,21 @@ public class MultiSpinner extends Spinner implements
         setAdapter(adapter);
     }
 
+    public void setItems(List<String> items, String allText,
+                         MultiSpinnerListener listener, boolean[] selections) {
+        this.items = items;
+        this.defaultText = allText;
+        this.listener = listener;
+
+        // all Deselected by default
+        selected = selections;
+
+        // all text on the spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_item, new String[]{allText});
+        setAdapter(adapter);
+    }
+
 
     @Override
     public void onCancel(DialogInterface dialog) {
