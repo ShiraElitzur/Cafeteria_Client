@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -63,15 +64,6 @@ public class CategoriesFragment extends Fragment {
 
 
         grid.setAdapter(new GridViewAdapter(getActivity(),categories,R.layout.category_grid_cell));
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Category category = categories.get(position);
-                Intent categoryItemsIntent = new Intent(getContext(),CategoryItemsActivity.class);
-                categoryItemsIntent.putExtra("category",category);
-                startActivity(categoryItemsIntent);
-            }
-        });
 
         return v;
     }
@@ -131,9 +123,8 @@ public class CategoriesFragment extends Fragment {
 
                 // find the UI components of the cell
                 holder = new ViewHolder();
-                holder.title =(TextView)convertView.findViewById(R.id.categoryTitle);
-                //holder.description =(TextView)convertView.findViewById(R.id.categoryDesc);
-                holder.image =(ImageView) convertView.findViewById(R.id.categoryImage);
+
+                holder.categoryBtn = (Button) convertView.findViewById(R.id.categoryBtn);
 
                 convertView.setTag(holder);
             } else {
@@ -143,15 +134,28 @@ public class CategoriesFragment extends Fragment {
 
             // change the components to fit the current item that the cell should display
             category = items.get(position);
-            // Title, description and image
-            holder.title.setText(category.getTitle());
-//            holder.description.setText(category.getDescription());
+            holder.categoryBtn.setText(category.getTitle());
+
             if(category.getIcon() != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(category.getIcon() , 0, category.getIcon().length);
-                holder.image.setImageBitmap(bitmap);
+                Drawable image = new BitmapDrawable(getResources(), bitmap);
+                image.setBounds( 0, 0, 60, 60 );
+                holder.categoryBtn.setCompoundDrawables( image, null, null, null );
+
             } else {
                 holder.image.setBackgroundResource(R.drawable.star);
+                holder.categoryBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.star, 0, 0, 0);
+
             }
+            holder.categoryBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent categoryItemsIntent = new Intent(getContext(),CategoryItemsActivity.class);
+                    categoryItemsIntent.putExtra("category",category);
+                    startActivity(categoryItemsIntent);
+                }
+            });
+
 
             return convertView;
         }
@@ -160,6 +164,8 @@ public class CategoriesFragment extends Fragment {
             private TextView title;
             private TextView description;
             private ImageView image;
+
+            private Button categoryBtn;
         }
     }
 }

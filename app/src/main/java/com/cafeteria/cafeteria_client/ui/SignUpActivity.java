@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,8 +46,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     String print;
 
-    //private final static String SERVER_IP = "192.168.43.91";
-    private final static String SERVER_IP = "192.168.43.231";
+    private final static String SERVER_IP = "192.168.1.11";
+    //private final static String SERVER_IP = "192.168.43.231";
     private final static String USER_REGISTRATION_URL = "http://"+SERVER_IP+":8080/CafeteriaServer/rest/users/insertUser";
 
     @Override
@@ -64,12 +65,14 @@ public class SignUpActivity extends AppCompatActivity {
         etFirstName = (EditText)findViewById(R.id.etFirstName);
         etLastName = (EditText)findViewById(R.id.etLastName);
         etMail = (EditText)findViewById(R.id.etMail);
-        etMail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        TextInputLayout input_layout_email = (TextInputLayout) findViewById(R.id.input_layout_email);
+        input_layout_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
-                    EditText emailEdit = (EditText)v;
-                    String emailInput = emailEdit.getText().toString();
+                    TextInputLayout emailEdit = (TextInputLayout)v;
+                    //EditText emailEdit = (EditText)v;
+                    String emailInput = etMail.getText().toString();
                     if (emailInput.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
                         emailEdit.setError(getResources().getString(R.string.email_address_error));
                     } else {

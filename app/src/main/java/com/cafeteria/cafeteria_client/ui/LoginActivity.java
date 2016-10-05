@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     private String emailTxt;
     private String passwordTxt;
 
-    private final static String SERVER_IP = "192.168.43.231";  // SHIRA IP
-    //private final static String SERVER_IP = "192.168.43.91"; // ANAEL IP
+    //private final static String SERVER_IP = "192.168.43.231";  // SHIRA IP
+    private final static String SERVER_IP = "192.168.1.11"; // ANAEL IP
     private final static String USER_VALIDATION_URL = "http://"+SERVER_IP+":8080/CafeteriaServer/rest/users/isUserExist";
 
     @Override

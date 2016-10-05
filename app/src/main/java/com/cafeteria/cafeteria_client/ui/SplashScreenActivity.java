@@ -48,8 +48,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private Intent intent;
     private HTextView htvTitle;
 
-    //private final static String SERVER_IP = "192.168.43.91";
-    private final static String SERVER_IP = "192.168.43.231";
+    private final static String SERVER_IP = "192.168.1.11";
+    //private final static String SERVER_IP = "192.168.43.231";
 
 
 

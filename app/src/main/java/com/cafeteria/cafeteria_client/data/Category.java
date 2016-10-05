@@ -1,6 +1,7 @@
 package com.cafeteria.cafeteria_client.data;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -130,4 +131,15 @@ public class Category implements Serializable{
         this.icon = icon;
     }
 
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", items=" + items +
+                ", meals=" + meals +
+                ", icon=" + Arrays.toString(icon) +
+                '}';
+    }
 }
