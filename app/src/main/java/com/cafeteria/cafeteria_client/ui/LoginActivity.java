@@ -52,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // force portrait orientation
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         etPassword = (EditText) findViewById(R.id.etPassword);
         etMail = (EditText) findViewById(R.id.etMail);

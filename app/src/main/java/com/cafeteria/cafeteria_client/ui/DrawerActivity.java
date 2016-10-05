@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
+import com.cafeteria.cafeteria_client.data.LocaleHelper;
 
 /**
  * An activity with Navigation Drawer
@@ -94,6 +95,20 @@ public abstract class DrawerActivity extends AppCompatActivity {
                         dialog.setContentView(R.layout.dialog_about_the_app);
 
                         dialog.show();
+                        break;
+                    case R.id.navigation_item_langauge:
+
+                        String language = LocaleHelper.getLanguage(DrawerActivity.this);
+                        if (language.equals("en")){
+                            LocaleHelper.setLocale(DrawerActivity.this, "iw");
+                            DrawerActivity.this.recreate();
+
+                        } else if (language.equals("iw")){
+                            LocaleHelper.setLocale(DrawerActivity.this, "en");
+                            DrawerActivity.this.recreate();
+
+                        }
+
                         break;
 
                 }

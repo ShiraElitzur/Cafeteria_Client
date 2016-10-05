@@ -10,6 +10,7 @@
     <string name="nav_item_settings">הגדרות</string>
     <string name="nav_item_log_out">התנתק</string>
     <string name="nav_item_about">על האפליקציה</string>
+    <string name="nav_item_language">החלף שפה לאנגלית</string>
     <!--Drawer and Navigation End-->
 
     <!--Tabs Titles-->
