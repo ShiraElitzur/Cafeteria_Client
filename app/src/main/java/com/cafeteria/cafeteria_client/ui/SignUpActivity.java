@@ -10,8 +10,11 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,79 +40,166 @@ import java.net.URL;
 public class SignUpActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
-    private EditText etMail;
+    private EditText etEmail;
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etPassword;
     private EditText etConfirmPassword;
     private Customer customer;
+    private boolean isValid = true;
 
     String print;
 
     private final static String SERVER_IP = "192.168.1.11";
     //private final static String SERVER_IP = "192.168.43.231";
-    private final static String USER_REGISTRATION_URL = "http://"+SERVER_IP+":8080/CafeteriaServer/rest/users/insertUser";
+    private final static String USER_REGISTRATION_URL = "http://" + SERVER_IP + ":8080/CafeteriaServer/rest/users/insertUser";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
         /* Get the components from the UI and set listeners to them */
         // The Email EditText - handle events of changes in the focus, validation check
 
-        etFirstName = (EditText)findViewById(R.id.etFirstName);
-        etLastName = (EditText)findViewById(R.id.etLastName);
-        etMail = (EditText)findViewById(R.id.etMail);
-        TextInputLayout input_layout_email = (TextInputLayout) findViewById(R.id.input_layout_email);
-        input_layout_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etFirstName = (EditText) findViewById(R.id.etFirstName);
+        etLastName = (EditText) findViewById(R.id.etLastName);
+        etEmail = (EditText) findViewById(R.id.etEmail);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
+
+
+        etFirstName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
-                    TextInputLayout emailEdit = (TextInputLayout)v;
-                    //EditText emailEdit = (EditText)v;
-                    String emailInput = etMail.getText().toString();
-                    if (emailInput.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
-                        emailEdit.setError(getResources().getString(R.string.email_address_error));
-                    } else {
-                        emailEdit.setError(null);
-                    }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                TextInputLayout firstNameLayout = (TextInputLayout) findViewById(R.id.input_layout_firstName);
+                if (etFirstName.getText().toString().isEmpty()) {
+                    firstNameLayout.setError(getResources().getString(R.string.empty_error));
+                    isValid = false;
+                } else {
+                    firstNameLayout.setError(null);
+                    isValid = true;
                 }
             }
         });
 
-        // The Password EditText - handle events of changes in the focus, validation check
-
-        etPassword = (EditText)findViewById(R.id.etPassword);
-        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etLastName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
-                    EditText passwordEdit = (EditText)v;
-                    String passwordInput = passwordEdit.getText().toString();
-                    if (passwordInput.isEmpty() || passwordInput.length() < 6 || passwordInput.length() > 10 ) {
-                        passwordEdit.setError(getResources().getString(R.string.new_password_error));
-                    } else {
-                        passwordEdit.setError(null);
-                    }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                TextInputLayout lastNameLayout = (TextInputLayout) findViewById(R.id.input_layout_lastName);
+                if (etLastName.getText().toString().isEmpty()) {
+                    lastNameLayout.setError(getResources().getString(R.string.empty_error));
+                    isValid = false;
+                } else {
+                    lastNameLayout.setError(null);
+                    isValid = true;
                 }
             }
         });
 
-        etConfirmPassword = (EditText)findViewById(R.id.etConfirmPassword);
-        etConfirmPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        etEmail.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                EditText inputEdit = (EditText)v;
-                String inputString = inputEdit.getText().toString();
-                String passwordString = etPassword.getText().toString();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                if(!inputString.equals(passwordString)) {
-                    inputEdit.setError(getResources().getString(R.string.passwords_no_match_error));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String email = etEmail.getText().toString();
+                TextInputLayout emailInputLayout = (TextInputLayout) findViewById(R.id.input_layout_email);
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    emailInputLayout.setError(getResources().getString(R.string.email_address_error));
+                    isValid = false;
+                } else if (email.isEmpty()) {
+                    emailInputLayout.setError(getResources().getString(R.string.empty_error));
+                    isValid = false;
+                } else {
+                    emailInputLayout.setError(null);
+                    isValid = true;
+                }
+            }
+        });
+
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String password = etPassword.getText().toString();
+                TextInputLayout passwordInputLayout = (TextInputLayout) findViewById(R.id.input_layout_password);
+                if (password.length() < 6 || password.length() > 10) {
+                    passwordInputLayout.setError(getResources().getString(R.string.new_password_error));
+                    isValid = false;
+                } else if(password.isEmpty()) {
+                    passwordInputLayout.setError(getResources().getString(R.string.empty_error));
+                    isValid = false;
+                }
+                else {
+                    passwordInputLayout.setError(null);
+                    isValid = true;
+                }
+            }
+        });
+
+        etConfirmPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String confirmPassword = etConfirmPassword.getText().toString();
+                String password = etPassword.getText().toString();
+                TextInputLayout confirmPasswordInputLayout = (TextInputLayout) findViewById(R.id.input_layout_confirm_password);
+                if (!confirmPassword.equals(password)) {
+                    confirmPasswordInputLayout.setError(getResources().getString(R.string.passwords_no_match_error));
+                    isValid = false;
+                } else {
+                    confirmPasswordInputLayout.setError(null);
+                    isValid = true;
                 }
             }
         });
@@ -117,39 +207,20 @@ public class SignUpActivity extends AppCompatActivity {
         // The SignUp Button - handle the event of click on the button
 
         Button signUpBtn;
-        signUpBtn = (Button)findViewById(R.id.signUpBtn);
+        signUpBtn = (Button) findViewById(R.id.signUpBtn);
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // if all the one of the input fields is not valid so the sign up is not authorized
-//                if( etMail.getError() != null || etPassword.getError() != null ||
-//                        etMail.getText().toString().isEmpty() ||
-//                        etPassword.getText().toString().isEmpty()
-//                        || etConfirmPassword.getError() != null
-//                        ) {
-//                    String error = getString(R.string.btn_signup_failed) + '\n';
-//                    if( etMail.getError() != null){
-//                        error += etMail.getError();
-//                        error+= "\n";
-//                    }
-//                    if (etPassword.getError() != null){
-//                        error += etPassword.getError();
-//                    }
-//                    if (etConfirmPassword.getError() != null){
-//                        error += etConfirmPassword.getError();
-//                    }
-//                    Toast.makeText(SignUpActivity.this,error,Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-
-                // TODO: 13/09/2016  Add a real signUp logic (save details in db) and think about and fix the validation logic
-
-                new SignUpTask().execute();
+                if (isValid) {
+                    new SignUpTask().execute();
+                } else {
+                    Toast.makeText(SignUpActivity.this, getString(R.string.signup_error), Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
 
-        TextView loginLinkTv = (TextView)findViewById(R.id.loginLinkTv);
+        TextView loginLinkTv = (TextView) findViewById(R.id.loginLinkTv);
         loginLinkTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,31 +231,31 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     public void onBackPressed() {
-            new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle(getString(R.string.exit_dialog_title))
-                    .setMessage(getString(R.string.exit_dialog_message))
-                    .setPositiveButton(getString(R.string.exit_dialog_postive), new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(getString(R.string.exit_dialog_title))
+                .setMessage(getString(R.string.exit_dialog_message))
+                .setPositiveButton(getString(R.string.exit_dialog_postive), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
 
-                    })
-                    .setNegativeButton(getString(R.string.exit_dialog_negavtive), null)
-                    .show();
-        }
+                })
+                .setNegativeButton(getString(R.string.exit_dialog_negavtive), null)
+                .show();
+    }
 
-    private class SignUpTask extends AsyncTask<Void,Void,Boolean> {
+    private class SignUpTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
             // create a Customer out of the edit texts
             customer = new Customer();
-            customer.setEmail(etMail.getText().toString());
+            customer.setEmail(etEmail.getText().toString());
             customer.setFirstName(etFirstName.getText().toString());
             customer.setLastName(etLastName.getText().toString());
             customer.setPassword(etPassword.getText().toString());
@@ -196,7 +267,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             // Request - send the customer as json to the server for insertion
             Gson gson = new Gson();
-            String jsonUser = gson.toJson(customer,Customer.class);
+            String jsonUser = gson.toJson(customer, Customer.class);
             URL url = null;
             try {
                 url = new URL(USER_REGISTRATION_URL);
@@ -229,7 +300,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 con.disconnect();
 
-                if(response.toString().trim().equals("OK")) {
+                if (response.toString().trim().equals("OK")) {
                     result = true;
                 }
 //                JsonObject objectRes = new JsonParser().parse(response.toString()).getAsJsonObject();
@@ -249,17 +320,17 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if(result != null && result ) {
+            if (result != null && result) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("email",customer.getEmail());
-                editor.putString("user_name",customer.getFirstName());
+                editor.putString("email", customer.getEmail());
+                editor.putString("user_name", customer.getFirstName());
                 editor.apply();
 
                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
                 SignUpActivity.this.finish();
             } else {
-                Toast.makeText(SignUpActivity.this, getResources().getString(R.string.signup_error),Toast.LENGTH_LONG).show();
+                Toast.makeText(SignUpActivity.this, getResources().getString(R.string.signup_error), Toast.LENGTH_LONG).show();
             }
 
         }
