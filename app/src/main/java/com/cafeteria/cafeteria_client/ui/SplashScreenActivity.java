@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -34,6 +35,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -47,6 +49,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private AlertDialog alertDialog;
     private Intent intent;
     private HTextView htvTitle;
+    private getCategoriesTask getCategoriesTask;
+    private GetDrinksTask getDrinksTask;
 
     private final static String SERVER_IP = "192.168.1.11";
     //private final static String SERVER_IP = "192.168.43.231";
@@ -84,7 +88,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         progressBar.setProgress(0);
-                        new BackgroundTask().execute();
+                        new ProgressBarTask().execute();
 
                     }
                 })
@@ -109,8 +113,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         alertDialog = alertDialogBuilder.create();
-        new BackgroundTask().execute();
-        new GetDrinksTask().execute();
+        new ProgressBarTask().execute();
     }
 
     /**
@@ -119,19 +122,30 @@ public class SplashScreenActivity extends AppCompatActivity {
      * Integer - on progress update
      * Boolean - doing backgroung
      */
-    private class BackgroundTask extends AsyncTask<Void, Integer, Boolean>{
+    private class ProgressBarTask extends AsyncTask<Void, Integer, Boolean>{
 
         int i = 0;
         boolean isConnected;
+        boolean getCategoriesTaskFinished = false;
+        boolean getDrinksTaskFinished = false;
 
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             while (i < 100){
                 try {
-                    Thread.sleep(SPLASH_TIME);
-                    i+=25;
-                    publishProgress(i);
+                    if (i <=75){
+                        Thread.sleep(SPLASH_TIME);
+                        i+=25;
+                        publishProgress(i);
+                    } else {
+                        getCategoriesTaskFinished = getCategoriesTask.getStatus() == Status.FINISHED;
+                        getDrinksTaskFinished = getDrinksTask.getStatus() == Status.FINISHED;
+                        if (getCategoriesTaskFinished && getDrinksTaskFinished){
+                            i+=25;
+                            publishProgress(i);
+                        }
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -139,7 +153,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             isConnected = isOnline();
 
-            
+
             return isConnected;
         }
 
@@ -147,7 +161,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             tvStatus.setText(R.string.progressBar_pre_execute);
-
+            getCategoriesTask = new getCategoriesTask();
+            getCategoriesTask.execute();
+            getDrinksTask = new GetDrinksTask();
+            getDrinksTask.execute();
         }
 
 
@@ -167,10 +184,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                Log.e("SHIRA","before call to async task");
-                new MyWebServiceTask().execute();
-                Log.e("SHIRA","after call to async task");
                 finish();
                 startActivity(intent);
             }
@@ -188,10 +201,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    class MyWebServiceTask extends AsyncTask<String, Void, String> {
+    class getCategoriesTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
-            if(response!= null) {
+            if (response!=null) {
                 Log.e("CATEGORIES", response);
                 Type listType = new TypeToken<ArrayList<Category>>() {
                 }.getType();
@@ -211,8 +224,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                         }
                     }
                 }
-            } else{
-                Toast.makeText(SplashScreenActivity.this,"categories is empty",Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(SplashScreenActivity.this,"Server is down on client side at least..",Toast.LENGTH_LONG).show();
             }
 
         }
