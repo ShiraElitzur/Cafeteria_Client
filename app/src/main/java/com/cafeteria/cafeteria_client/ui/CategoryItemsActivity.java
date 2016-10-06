@@ -178,64 +178,37 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         boolean existMain;
         List<Main> mains = new ArrayList<>();
 
-        if( category.getMeals() != null ){
-            for(Meal meal : category.getMeals()) {
+        if (category.getMeals() != null) {
+            for (Meal meal : category.getMeals()) {
                 existMain = false;
-                for (Main main : mains ) {
-                    if( main.getTitle().equalsIgnoreCase(meal.getMain().getTitle())) {
+                for (Main main : mains) {
+                    if (main.getTitle().equalsIgnoreCase(meal.getMain().getTitle())) {
                         existMain = true;
                         break;
                     }
                 }
-                if( ! existMain ) {
+                if (!existMain) {
                     mains.add(meal.getMain());
                 }
 
             }
 
-            for( Main main : mains ) {
+            for (Main main : mains) {
                 List<Meal> mealsWithMain = new ArrayList<>();
-                for( Meal meal : category.getMeals() ) {
-                    if( meal.getMain().getTitle().equalsIgnoreCase(main.getTitle())) {
+                for (Meal meal : category.getMeals()) {
+                    if (meal.getMain().getTitle().equalsIgnoreCase(main.getTitle())) {
                         mealsWithMain.add(meal);
                     }
                 }
-                mainsItemsDetails.put(main,mealsWithMain);
+                mainsItemsDetails.put(main, mealsWithMain);
             }
         }
 
-        if( category.getItems()!= null) {
-            for( Item item : category.getItems() ) {
-                itemsDetails.put(item,new ArrayList<Meal>());
+        if (category.getItems() != null) {
+            for (Item item : category.getItems()) {
+                itemsDetails.put(item, new ArrayList<Meal>());
             }
         }
-
-
-
-//
-//        // I filled only the "meat" category in the previous screen
-//        if (category.getItems() != null) {
-//
-//            for (Item item : category.getItems()) {
-//
-//                title = item.getTitle(); //i.e. schnizel in zalacht
-//                meals = new ArrayList<>();
-//
-//                if (category.getMeals() != null) {
-//                    for (Meal meal : category.getMeals()) {
-//
-//                        if (title.equals(meal.getMain().getTitle())) {
-//                            meals.add(meal);
-//                        }
-//                    }
-//                }
-//
-//                mainsItemsDetails.put(item, meals);
-//            }
-//        }else{
-//
-//        }
-
     }
 
     // btn order clicked, add the chosen meal and go to order activity

@@ -3,7 +3,9 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -14,20 +16,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.data.LocaleHelper;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Item;
-import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -82,6 +82,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
         lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, order.getItems()));
         lvOrderMeals.setAdapter(mealsAdapter = new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
+
     }
 
 
@@ -110,15 +111,31 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         // TODO: 15/09/2016 handle press on pay item. move to payment screen
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.itemPayAction:
+                Intent payPalIntent = new Intent(this, PayPal.class);
+                payPalIntent.putExtra("language",LocaleHelper.getLanguage(this));
+                payPalIntent.putExtra("order",order);
+                startActivity(payPalIntent);
+
+                // here, before clearing the order we need to save the order
+                // in addition, we need to change the shared prefrences value that we save
+                // we need to save the customer object instead of just email and password
+                DataHolder data = DataHolder.getInstance();
+                data.getTheOrder().setPaid(true);
+                DataHolder.getInstance().setTheOrder(new Order());
+                DataHolder.getInstance().getTheOrder().setItems(new ArrayList<Item>());
+                DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
+                this.recreate();
 //
-//    public void addMeal(OrderedMeal meal) {
-//        items.add(meal);
-//    }
-//
-//    // temp method
-//    private void initMeals() {
-//
-//    }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
     /**

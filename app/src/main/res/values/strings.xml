@@ -107,4 +107,7 @@
     <string name="succesful_edit_meal">Your meal was update succesfuly</string>
     <!--AboutApp Dialog End-->
 
+    <!--PayPal-->
+    <string name="paypal_payment_total">Total: </string>
+
 </resources>
