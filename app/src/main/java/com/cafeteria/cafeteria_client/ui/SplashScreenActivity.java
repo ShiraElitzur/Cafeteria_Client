@@ -3,7 +3,6 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -16,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
@@ -34,7 +34,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -192,24 +191,29 @@ public class SplashScreenActivity extends AppCompatActivity {
     class MyWebServiceTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
-            Log.e("CATEGORIES",response);
-            Type listType = new TypeToken<ArrayList<Category>>() {
-            }.getType();
-            List<Category> categoryList;
-            categoryList = new Gson().fromJson(response, listType);
-            if (categoryList != null) {
-                Log.e("CATEGORIES","inside if categories not null");
-                DataHolder.getInstance().setCategories(categoryList);
+            if(response!= null) {
+                Log.e("CATEGORIES", response);
+                Type listType = new TypeToken<ArrayList<Category>>() {
+                }.getType();
+                List<Category> categoryList;
+                categoryList = new Gson().fromJson(response, listType);
+                if (categoryList != null) {
+                    Log.e("CATEGORIES", "inside if categories not null");
+                    DataHolder.getInstance().setCategories(categoryList);
 
 
-                for (Category c : categoryList) {
-                    if (c != null){
-                        Log.d("cat", c.toString());}
-                    if (c.getMeals() != null){
-                        Log.d("meal", c.getMeals().toString()); }
+                    for (Category c : categoryList) {
+                        if (c != null) {
+                            Log.d("cat", c.toString());
+                        }
+                        if (c.getMeals() != null) {
+                            Log.d("meal", c.getMeals().toString());
+                        }
+                    }
                 }
+            } else{
+                Toast.makeText(SplashScreenActivity.this,"categories is empty",Toast.LENGTH_LONG).show();
             }
-
 
         }
 

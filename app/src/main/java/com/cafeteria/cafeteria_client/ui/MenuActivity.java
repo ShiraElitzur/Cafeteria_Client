@@ -1,15 +1,10 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -22,7 +17,6 @@ import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Shira Elitzur on 08/09/2016.
@@ -51,12 +45,6 @@ public class MenuActivity extends DrawerActivity {
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String language = sharedPreferences.getString("language", "");
-        if (language == null || language.equals("")) {
-            setDefaultLanguageToHebrew();
-        }
-
         // On MenuActivity's first launch we create a new Order for this session
         if( firstLaunch ) {
             firstLaunch = false;
@@ -64,16 +52,6 @@ public class MenuActivity extends DrawerActivity {
             DataHolder.getInstance().getTheOrder().setItems(new ArrayList<Item>());
             DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
         }
-    }
-
-    private void setDefaultLanguageToHebrew(){
-        //set default language to hebrew
-        Locale locale = new Locale("iw");
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
     }
 
     @Override

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
+import com.cafeteria.cafeteria_client.data.Customer;
+import com.google.gson.Gson;
 
 
 import java.io.BufferedReader;
@@ -62,11 +64,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // get email string from shared preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String email = sharedPreferences.getString("email", "");
+        String customer = sharedPreferences.getString("customer", "");
 
         // if the email found - it's not the first time opening this app
         // automatically redirect to home screen
-        if (email != null && !email.equals("")) {
+        if (customer != null && !customer.equals("")) {
             finish();
             Intent homeScreen = new Intent(this, MenuActivity.class);
             startActivity(homeScreen);
@@ -91,13 +93,16 @@ public class LoginActivity extends AppCompatActivity {
                 .show();
     }
 
-    private class MyWebServiceTask extends AsyncTask<String, Void, Boolean> {
+    private class MyWebServiceTask extends AsyncTask<String, Void, String> {
         @Override
-        protected void onPostExecute(Boolean response) {
-            if(response != null && response ) {
+        protected void onPostExecute(String response) {
+            if(response != null ) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("email", etMail.getText().toString());
-                editor.apply();
+                Gson gson = new Gson();
+                Customer toSave = gson.fromJson(response,Customer.class);
+                String customerJSON = gson.toJson(toSave);
+                editor.putString("customer", customerJSON);
+                editor.commit();
 
                 Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                 startActivity(intent);
@@ -109,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             StringBuilder response;
             try {
                 URL url = new URL(USER_VALIDATION_URL+"?email="+emailTxt+"&pass="+passwordTxt);
@@ -137,11 +142,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             String responseString = response.toString();
-            if( responseString.trim().equalsIgnoreCase("OK")) {
-                return true;
-            } else {
-                return false;
-            }
+            return responseString.toString();
         }
 
         @Override
@@ -150,4 +151,5 @@ public class LoginActivity extends AppCompatActivity {
             passwordTxt = etPassword.getText().toString().trim();
         }
     }
+
 }

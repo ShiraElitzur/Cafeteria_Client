@@ -11,9 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -315,11 +313,6 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             if (result != null && result) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("email", customer.getEmail());
-                editor.putString("user_name", customer.getFirstName());
-                editor.apply();
-
                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
                 SignUpActivity.this.finish();

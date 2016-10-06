@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.LocaleHelper;
@@ -80,7 +79,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
                     case R.id.navigation_item_log_out:
                         SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor editor = mySPrefs.edit();
-                        editor.remove("email");
+                        editor.remove("customer");
                         editor.apply();
 
                         intent = new Intent(DrawerActivity.this,LoginActivity.class);

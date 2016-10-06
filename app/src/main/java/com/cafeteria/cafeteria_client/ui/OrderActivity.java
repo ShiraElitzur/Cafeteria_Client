@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.DataHolder;
 import com.cafeteria.cafeteria_client.data.LocaleHelper;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
@@ -27,10 +27,12 @@ import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
+import com.google.gson.Gson;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
@@ -126,11 +128,18 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 // we need to save the customer object instead of just email and password
                 DataHolder data = DataHolder.getInstance();
                 data.getTheOrder().setPaid(true);
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                Gson gson = new Gson();
+                String customerJSON = sharedPreferences.getString("customer", "");
+                Customer c = gson.fromJson(customerJSON,Customer.class);
+                data.getTheOrder().setCustomer(c);
+                data.getTheOrder().setCalendar(Calendar.getInstance());
+
                 DataHolder.getInstance().setTheOrder(new Order());
                 DataHolder.getInstance().getTheOrder().setItems(new ArrayList<Item>());
                 DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
                 this.recreate();
-//
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -3,14 +3,10 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.interfaces.MultiSpinnerListener;
 
 import java.util.List;
