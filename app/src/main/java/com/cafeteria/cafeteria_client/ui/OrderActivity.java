@@ -332,9 +332,7 @@ private class OrderMealsAdapter<T> extends ArrayAdapter<OrderedMeal> {
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            double payChange = meals.get(position).getParentMeal().getPrice();
-                                            payChange += meals.get(position).getDrinkPrice();
-                                            payChange += meals.get(position).getExtraPrice();
+                                            double payChange = meals.get(position).getTotalPrice();
                                             order.setPayment(order.getPayment() - payChange);
                                             // Remove the item from the adapter
                                             OrderMealsAdapter.this.remove(meals.get(position));
@@ -358,8 +356,7 @@ private class OrderMealsAdapter<T> extends ArrayAdapter<OrderedMeal> {
             holder = (ViewHolder) convertView.getTag();
         }
         // in both cases sets the ui data to fit the item data
-        double mealPrice = meals.get(position).getParentMeal().getPrice() + meals.get(position).getExtraPrice() +
-                meals.get(position).getDrinkPrice();
+        double mealPrice = meals.get(position).getTotalPrice();
         BigDecimal bd = new BigDecimal(mealPrice);
         bd = bd.setScale(1, RoundingMode.HALF_DOWN);
 

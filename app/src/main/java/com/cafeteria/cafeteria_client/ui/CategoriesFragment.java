@@ -133,7 +133,6 @@ public class CategoriesFragment extends Fragment {
                 holder.categoryBtn.setCompoundDrawables( image, null, null, null );
 
             } else {
-                holder.image.setBackgroundResource(R.drawable.star);
                 holder.categoryBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.star, 0, 0, 0);
 
             }

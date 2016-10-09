@@ -44,10 +44,10 @@ public class OrderedMeal implements Serializable {
      */
     private Order order;
 
-    private double drinkPrice;
-
-    private double extraPrice;
-
+    /**
+     * The parent-meal price is the start of this ordered meal
+     */
+    private double totalPrice;
 
     /**
      * Returns the id of this ordered meal
@@ -146,20 +146,21 @@ public class OrderedMeal implements Serializable {
         this.order = order;
     }
 
-    public double getDrinkPrice() {
-        return drinkPrice;
+    /**
+     * Returns the total price of this ordered meal
+     * @return the total price of the meal
+     */
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setDrinkPrice(double drinkPrice) {
-        this.drinkPrice = drinkPrice;
+    /**
+     * Sets total price to this meal
+     * @param totalPrice
+     */
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public double getExtraPrice() {
-        return extraPrice;
-    }
-
-    public void setExtraPrice(double extraPrice) {
-        this.extraPrice = extraPrice;
-    }
 
 }

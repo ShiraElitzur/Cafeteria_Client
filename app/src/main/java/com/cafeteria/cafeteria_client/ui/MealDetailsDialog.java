@@ -79,15 +79,20 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         view = inflater.inflate(R.layout.dialog_meal_details, container);
 
         if(getArguments().getSerializable("meal") instanceof  Meal) {
-            //meal = (Meal) getArguments().getSerializable("meal");
             orderedMeal = new OrderedMeal();
             orderedMeal.setParentMeal((Meal) getArguments().getSerializable("meal"));
         } else if (getArguments().getSerializable("meal") instanceof OrderedMeal) {
             orderedMeal = (OrderedMeal) getArguments().getSerializable("meal");
-            drinkPrice = orderedMeal.getDrinkPrice();
-            extraPrice = orderedMeal.getExtraPrice();
+            if (orderedMeal.getChosenExtras() != null){
+                if (orderedMeal.getChosenExtras().size() > orderedMeal.getParentMeal().getExtraAmount()){
+                    extraPrice = orderedMeal.getChosenExtras().get(orderedMeal.getChosenExtras().size()-1).getPrice();
+                }
+                chosenExtra = orderedMeal.getChosenExtras();
+            }
+
             if(orderedMeal.getChosenDrink() != null) {
                 chosenDrink = orderedMeal.getChosenDrink();
+                drinkPrice = orderedMeal.getChosenDrink().getPrice();
             }
             edit = true;
             //meal = orderedMeal.getParentMeal();
@@ -160,7 +165,6 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 chosenDrink = (Drink) parent.getItemAtPosition(position);
                 drinkPrice = chosenDrink.getPrice();
-                orderedMeal.setDrinkPrice(drinkPrice);
                 BigDecimal bd = new BigDecimal(orderedMeal.getParentMeal().getPrice() + drinkPrice + extraPrice);
                 bd = bd.setScale(2, RoundingMode.HALF_UP);
 
@@ -174,7 +178,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
                 chosenDrink = null;
                 drinkPrice = 0;
                 // because i may also work on an existing orderedMeal i must reduce the drink price from the object
-                orderedMeal.setDrinkPrice(0);
+
                 BigDecimal bd = new BigDecimal(orderedMeal.getParentMeal().getPrice() + drinkPrice + extraPrice);
                 bd = bd.setScale(2, RoundingMode.HALF_UP);
 
@@ -237,9 +241,9 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         orderedMeal.setComment(etComment.getText().toString());
         if (chosenDrink != null) {
             orderedMeal.setChosenDrink(chosenDrink);
-            orderedMeal.setDrinkPrice(chosenDrink.getPrice());
         }
         orderedMeal.setChosenExtras(chosenExtra);
+        orderedMeal.setTotalPrice(orderedMeal.getParentMeal().getPrice() + drinkPrice + extraPrice);
     }
 
 
@@ -277,11 +281,26 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         String total = String.format(getResources().getString(R.string.dialog_tv_total)
                 , bd.doubleValue(), nis.getSymbol());
 
-        String extrasAmount = String.format(getResources().getString(R.string.dialog_tv_extras_amount)
-                , orderedMeal.getParentMeal().getExtraAmount());
+        String extrasAmount = "";
+        // in case this is an update of existing order
+        if (orderedMeal.getChosenExtras() != null){
+            int extrasLeft = orderedMeal.getParentMeal().getExtraAmount() - orderedMeal.getChosenExtras().size();
+            if (extrasLeft == 0){
+                extrasAmount = String.format(getResources().getString(R.string.dialog_tv_extras_amount)
+                        , extrasLeft);
+            }else{
+                extrasAmount = String.format(getResources().getString(R.string.dialog_no_extra_left),extrasLeft*(-1));
+                extraPrice = chosenExtra.get(chosenExtra.size()-1).getPrice();
+            }
+        }else{
+            extrasAmount = String.format(getResources().getString(R.string.dialog_tv_extras_amount)
+                    , orderedMeal.getParentMeal().getExtraAmount());
+        }
+
+        tvExtrasAmount.setText(extrasAmount);
+
 
         tvMealName.setText(orderedMeal.getParentMeal().getTitle());
-        tvExtrasAmount.setText(extrasAmount);
         tvTotal.setText(total);
     }
 
@@ -309,15 +328,16 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             extraPrice = 0;
         }else{
             extrasAmount = String.format(getResources().getString(R.string.dialog_no_extra_left),extrasLeft*(-1));
-            //extraPrice = chosenExtra.get(chosenExtra.size()-1).getPrice();
-            BigDecimal bd = new BigDecimal(orderedMeal.getParentMeal().getPrice() + drinkPrice + extraPrice);
-            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            extraPrice = chosenExtra.get(chosenExtra.size()-1).getPrice();
 
-            String total = String.format(getResources().getString(R.string.dialog_tv_total)
-                    , bd.doubleValue(), nis.getSymbol());
-
-            tvTotal.setText(total);
         }
+        BigDecimal bd = new BigDecimal(orderedMeal.getParentMeal().getPrice() + extraPrice + drinkPrice);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+
+        String total = String.format(getResources().getString(R.string.dialog_tv_total)
+                , bd.doubleValue(), nis.getSymbol());
+
+        tvTotal.setText(total);
         tvExtrasAmount.setText(extrasAmount);
 
     }
@@ -330,16 +350,9 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         List<Drink> drinks;
 
 
-//        public MyAdapter(Context context, int resource, List<Item> items) {
-//            this.context = context;
-//            this.resource = resource;
-//            this.items = items;
-//        }
-
         public MyAdapter(Context context, List<Drink> drinks, int resource) {
             this.context = context;
             this.resource = resource;
-//            List<Item> items = (List) new ArrayList<Drink>(drinks);
             this.drinks = drinks;
         }
 

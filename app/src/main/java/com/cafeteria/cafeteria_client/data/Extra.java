@@ -18,6 +18,10 @@ public class Extra implements Serializable {
      */
     private String title;
 
+    /**
+     * The price of this extra.
+     */
+    private Double price;
 
     /**
      * Returns the id of this extra
@@ -51,4 +55,19 @@ public class Extra implements Serializable {
         this.title = title;
     }
 
+    /**
+     * Returns the price of this extra
+     * @return the price of this extra
+     */
+    public Double getPrice() {
+        return price;
+    }
+
+    /**
+     * Sets price to this extra
+     * @param price
+     */
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 }

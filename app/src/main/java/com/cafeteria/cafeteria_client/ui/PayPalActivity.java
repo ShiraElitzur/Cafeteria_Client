@@ -134,7 +134,7 @@ public class PayPalActivity extends AppCompatActivity {
             orderItems.add(payPalItem);
         }
         for (OrderedMeal meal : order.getMeals()){
-            Double total = meal.getParentMeal().getPrice() + meal.getDrinkPrice() + meal.getExtraPrice();
+            Double total = meal.getTotalPrice();
             payPalItem = new PayPalItem(meal.getParentMeal().getTitle(),1,new BigDecimal(total),currency,String.valueOf(meal.getId()));
             orderItems.add(payPalItem);
         }
