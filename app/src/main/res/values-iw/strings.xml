@@ -20,10 +20,13 @@
     <!--Tabs Titles End-->
 
     <!--Login Activity-->
-    <string name="loginBtnText">הכנס</string>
+    <string name="loginBtnText">התחבר</string>
     <string name="signup_text">אין לך חשבון עדיין? הירשם</string>
     <string name="login_error">פרטי התחברות שגויים</string>
-    <string name="login_text">משתמש רשום? התחבר</string>
+    <string name="or">או</string>
+    <string name="com_facebook_loginview_log_out_button">התנתק</string>
+    <string name="com_facebook_loginview_log_in_button">התחבר</string>
+    <string name="com_facebook_loginview_log_in_button_long">התחבר עם פייסבוק</string>
     <!--Login Activity End-->
 
     <!--SignUp Activity-->
@@ -40,7 +43,7 @@
     <string name="hint_email">דוא"ל</string>
     <string name="hint_password">סיסמה</string>
     <string name="signup_error">חלק מהפרטים לא תקינים</string>
-
+    <string name="login_text">משתמש רשום? התחבר</string>
     <!--SignUp Activity End-->
 
     <!--Splash Screen-->

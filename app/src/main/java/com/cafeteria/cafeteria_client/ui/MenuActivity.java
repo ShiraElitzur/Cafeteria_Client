@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;

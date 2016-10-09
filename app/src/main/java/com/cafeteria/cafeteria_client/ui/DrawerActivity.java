@@ -16,7 +16,9 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.LocaleHelper;
+import com.cafeteria.cafeteria_client.utils.LocaleHelper;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 
 /**
  * An activity with Navigation Drawer
@@ -81,6 +83,11 @@ public abstract class DrawerActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = mySPrefs.edit();
                         editor.remove("customer");
                         editor.apply();
+
+                        FacebookSdk.sdkInitialize(getApplicationContext());
+                        if (LoginManager.getInstance() != null){
+                            LoginManager.getInstance().logOut();
+                        }
 
                         intent = new Intent(DrawerActivity.this,LoginActivity.class);
                         startActivity(intent);

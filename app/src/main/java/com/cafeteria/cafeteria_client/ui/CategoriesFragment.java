@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
-import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
 
 import java.util.List;
 

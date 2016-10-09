@@ -27,7 +27,5 @@ dependencies {
     compile 'hanks.xyz:htextview-library:0.1.5'
     compile files('libs/gson-2.2.2.jar')
     compile 'com.paypal.sdk:paypal-android-sdk:2.15.0'
-
-
-
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }

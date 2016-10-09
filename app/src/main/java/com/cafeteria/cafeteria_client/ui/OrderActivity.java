@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,8 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.data.Customer;
-import com.cafeteria.cafeteria_client.data.DataHolder;
-import com.cafeteria.cafeteria_client.data.LocaleHelper;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
+import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Item;
@@ -84,6 +85,13 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
         lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, order.getItems()));
         lvOrderMeals.setAdapter(mealsAdapter = new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String customerJSON = sharedPreferences.getString("customer", "");
+        Customer c = gson.fromJson(customerJSON,Customer.class);
+        Log.d("FACEBOOK",c.getFirstName() +" " +c.getEmail());
+
 
     }
 

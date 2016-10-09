@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -41,22 +44,12 @@ public class SignUpActivity extends AppCompatActivity {
     private Customer customer;
     private boolean isValid = true;
 
-    String print;
-
-    private final static String SERVER_IP = "192.168.1.11";
-    //private final static String SERVER_IP = "192.168.43.231";
-    private final static String USER_REGISTRATION_URL = "http://" + SERVER_IP + ":8080/CafeteriaServer/rest/users/insertUser";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-
-        /* Get the components from the UI and set listeners to them */
-        // The Email EditText - handle events of changes in the focus, validation check
 
         etFirstName = (EditText) findViewById(R.id.etFirstName);
         etLastName = (EditText) findViewById(R.id.etLastName);
@@ -262,7 +255,7 @@ public class SignUpActivity extends AppCompatActivity {
             String jsonUser = gson.toJson(customer, Customer.class);
             URL url = null;
             try {
-                url = new URL(USER_REGISTRATION_URL);
+                url = new URL(ApplicationConstant.USER_REGISTRATION_URL);
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setDoOutput(true);
                 con.setDoInput(true);

@@ -3,7 +3,9 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -12,6 +14,7 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -20,9 +23,10 @@ import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
-import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Drink;
-import com.cafeteria.cafeteria_client.data.LocaleHelper;
+import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hanks.htextview.HTextView;
@@ -33,9 +37,10 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -52,17 +57,11 @@ public class SplashScreenActivity extends AppCompatActivity {
     private getCategoriesTask getCategoriesTask;
     private GetDrinksTask getDrinksTask;
 
-    private final static String SERVER_IP = "192.168.1.11";
-    //private final static String SERVER_IP = "192.168.43.231";
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
+        printKeyHash();
         // set default language to hebrew
         LocaleHelper.onCreate(this, "iw");
 
@@ -88,6 +87,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         progressBar.setProgress(0);
+                        getDrinksTask.cancel(true);
+                        getCategoriesTask.cancel(true);
                         new ProgressBarTask().execute();
 
                     }
@@ -116,6 +117,23 @@ public class SplashScreenActivity extends AppCompatActivity {
         new ProgressBarTask().execute();
     }
 
+    private void printKeyHash(){
+        // Add code to print out the key hash
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.cafeteria.cafeteria_client",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d("KeyHash:", e.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.d("KeyHash:", e.toString());
+        }
+    }
     /**
      * THE 3 ARGUMENTS REPRESNT:
      * VOID = the arguments sent to doingBackground (when we exceute)
@@ -201,7 +219,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    class getCategoriesTask extends AsyncTask<String, Void, String> {
+    private class getCategoriesTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
             if (response!=null) {
@@ -235,7 +253,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             Log.e("SHIRA","Second do in background");
             StringBuilder response;
             try {
-                URL url = new URL("http://" + SERVER_IP + ":8080/CafeteriaServer/rest/data/getCategories");
+                URL url = new URL(ApplicationConstant.GET_CATEGORIES_URL);
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -274,7 +292,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             StringBuilder response;
             try {
-                URL url = new URL("http://" + SERVER_IP + ":8080/CafeteriaServer/rest/data/getDrinks");
+                URL url = new URL(ApplicationConstant.GET_DRINKS_URL);
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 Log.e("DEBUG",conn.getResponseCode()+"");

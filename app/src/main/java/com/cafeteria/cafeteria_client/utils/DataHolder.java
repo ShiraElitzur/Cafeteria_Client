@@ -1,5 +1,9 @@
-package com.cafeteria.cafeteria_client.data;
+package com.cafeteria.cafeteria_client.utils;
 
+
+import com.cafeteria.cafeteria_client.data.Category;
+import com.cafeteria.cafeteria_client.data.Drink;
+import com.cafeteria.cafeteria_client.data.Order;
 
 import java.util.ArrayList;
 import java.util.List;

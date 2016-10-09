@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.cafeteria.cafeteria_client.data.DataHolder;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Extra;
 import com.cafeteria.cafeteria_client.interfaces.MultiSpinnerListener;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;

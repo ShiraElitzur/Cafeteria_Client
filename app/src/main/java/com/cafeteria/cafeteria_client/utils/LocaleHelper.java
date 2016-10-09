@@ -1,4 +1,4 @@
-package com.cafeteria.cafeteria_client.data;
+package com.cafeteria.cafeteria_client.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

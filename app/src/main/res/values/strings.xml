@@ -23,6 +23,10 @@
     <string name="loginBtnText">Login</string>
     <string name="signup_text">No account yet? Create one</string>
     <string name="login_error">Wrong Login details</string>
+    <string name="com_facebook_loginview_log_out_button">Log Out</string>
+    <string name="com_facebook_loginview_log_in_button">Log in</string>
+    <string name="com_facebook_loginview_log_in_button_long">Log in with Facebook</string>
+    <string name="or">or</string>
     <!--Login Activity End-->
 
     <!--SignUp Activity-->
@@ -40,6 +44,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="signup_error">Some of the details aren\'t correct</string>
+    <string name="facebook_app_id">1045054335615065</string>
     <!--SignUp Activity End-->
 
     <!--Exit Alert Dialog-->
