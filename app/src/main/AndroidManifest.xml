@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.OrderActivity" />
-        <activity android:name=".ui.PayPal">
+        <activity android:name=".ui.PayPalActivity">
         </activity>
     </application>
 

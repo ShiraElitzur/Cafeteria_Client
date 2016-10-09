@@ -88,7 +88,6 @@
             android:spinnerMode="dropdown"
             android:visibility="gone" />
 
-
         <EditText
             android:id="@+id/etComment"
             android:layout_width="match_parent"
@@ -135,6 +134,8 @@
                 android:layout_weight="5"
                 android:text="@string/dialog_btn_order"
                 android:textColor="@color/colorPrimaryDark" />
+
+
 
         </LinearLayout>
 

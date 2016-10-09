@@ -35,7 +35,7 @@
     <string name="hint_confirm_password">אמת סיסמה</string>
     <string name="email_address_error">הזן כתובת אימייל חוקית</string>
     <string name="btn_signup_failed">ההרשמה נכשלה !</string>
-    <string name="new_password_error">הסיסמה חייבת להכיל בין 6-10 תווים</string>
+    <string name="new_password_error">הסיסמה חייבת להכיל בין 6-20 תווים</string>
     <string name="passwords_no_match_error">הסיסמאות אינן זהות</string>
     <string name="empty_error">שדה זה אינו יכול להישאר ריק</string>
     <string name="hint_firstname">שם פרטי</string>
@@ -72,6 +72,11 @@
     <string name="btn_move_to_payment">שלם</string>
     <string name="pay_amount">לתשלום</string>
     <string name="nav_item_cart">לעגלת הקניות</string>
+    <string name="empty_cart">ההזמנה ריקה!</string>
+    <string name="dialog_time_picker_title">בחר שעה לאיסוף המנה</string>
+    <string name="dialog_time_picker_limit_time">נדרש מינמום של 15 דקות להכנת ההזמנה</string>
+    <string name="dialog_time_picker_time_passed">שעה זו כבר חלפה!</string>
+    <!-- OrderActivity End-->
 
     <!-- Delete item alert dialog -->
     <string name="alert_dialog_delete_item_title">אתה בטוח שברצונך למחוק את הפריט?</string>
@@ -87,6 +92,8 @@
     <string name="dialog_tv_total">לתשלום: %1$.2f %2$s</string>
     <string name="dialog_btn_keep_shopping">המשך לקנות</string>
     <string name="dialog_btn_order">הזמן</string>
+    <string name="dialog_btn_add_time">הוסף שעה לאיסוף (אופציונלי)</string>
+    <string name="dialog_tv_time">HH/MM</string>
     <string name="dialog_multi_spinner_default_text">בחר את התוספות</string>
     <string name="dialog_spinner_default_text">בחר משקה</string>
     <string name="dialog_no_extra_left">%1$d תוספות נוספו לתשלום</string>
@@ -96,12 +103,12 @@
     <!--AboutApp Dialog-->
     <string name="dialog_tv_description">זאת אחלה אחלה אפליקציה</string>
     <string name="dialog_tv_version">גרסה 1.0</string>
-    <string name="guest_user">Hello Guest</string>
-    <string name="update_meal">Update</string>
-    <string name="succesful_edit_meal">Your meal was update succesfuly</string>
+    <string name="guest_user">שלום אורח</string>
+    <string name="update_meal">עדכן</string>
+    <string name="succesful_edit_meal">הארוחה עודכנה בהצלחה!</string>
     <!--AboutApp Dialog End-->
 
-    <!--PayPal-->
+    <!--PayPalActivity-->
     <string name="paypal_payment_total">סך הכל לתשלום: </string>
 
 </resources>

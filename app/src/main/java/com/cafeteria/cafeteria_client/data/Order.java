@@ -64,6 +64,10 @@ public class Order implements Serializable{
      */
     private String comment;
 
+    /**
+     * The customer can add a time for picking up his order
+     */
+    private String pickupTime;
 
 
     /**
@@ -233,5 +237,13 @@ public class Order implements Serializable{
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(String pickupTime) {
+        this.pickupTime = pickupTime;
     }
 }

@@ -52,7 +52,6 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
     // Data Objects
     private Drink chosenDrink;
     private List<Extra> chosenExtra = new ArrayList<>();
-    //private Meal meal;
     private OrderedMeal orderedMeal;
 
     private OnDialogResultListener mListener;
@@ -168,8 +167,6 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
                 String total = String.format(getResources().getString(R.string.dialog_tv_total)
                         , bd.doubleValue(), nis.getSymbol());
                 tvTotal.setText(total);
-
-
             }
 
             @Override

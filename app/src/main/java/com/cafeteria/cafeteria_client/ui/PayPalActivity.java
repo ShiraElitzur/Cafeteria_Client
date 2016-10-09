@@ -48,7 +48,7 @@ import java.util.Set;
  * For sample mobile backend interactions, see
  * https://github.com/paypal/rest-api-sdk-python/tree/master/samples/mobile_backend
  */
-public class PayPal extends AppCompatActivity {
+public class PayPalActivity extends AppCompatActivity {
     private static final String TAG = "paymentExample";
     /**
      * - Set to PayPalConfiguration.ENVIRONMENT_PRODUCTION to move real money.
@@ -57,7 +57,7 @@ public class PayPal extends AppCompatActivity {
      * from https://developer.paypal.com
      *
      * - Set to PayPalConfiguration.ENVIRONMENT_NO_NETWORK to kick the tires
-     * without communicating to PayPal's servers.
+     * without communicating to PayPalActivity's servers.
      */
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
     // note that these credentials will differ between live & sandbox environments.
@@ -110,7 +110,7 @@ public class PayPal extends AppCompatActivity {
          * See getStuffToBuy(..) for examples of some available payment options.
          */
 
-        Intent intent = new Intent(PayPal.this, PaymentActivity.class);
+        Intent intent = new Intent(PayPalActivity.this, PaymentActivity.class);
 
         // send the same configuration for restart resiliency
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
@@ -189,7 +189,7 @@ public class PayPal extends AppCompatActivity {
 //    }
 
     public void onFuturePaymentPressed(View pressed) {
-        Intent intent = new Intent(PayPal.this, PayPalFuturePaymentActivity.class);
+        Intent intent = new Intent(PayPalActivity.this, PayPalFuturePaymentActivity.class);
 
         // send the same configuration for restart resiliency
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
@@ -200,7 +200,7 @@ public class PayPal extends AppCompatActivity {
     private PayPalOAuthScopes getOauthScopes() {
         /* create the set of required scopes
          * Note: see https://developer.paypal.com/docs/integration/direct/identity/attributes/ for mapping between the
-         * attributes you select for this app in the PayPal developer portal and the scopes required here.
+         * attributes you select for this app in the PayPalActivity developer portal and the scopes required here.
          */
         Set<String> scopes = new HashSet<String>(
                 Arrays.asList(PayPalOAuthScopes.PAYPAL_SCOPE_EMAIL, PayPalOAuthScopes.PAYPAL_SCOPE_ADDRESS) );
@@ -228,7 +228,7 @@ public class PayPal extends AppCompatActivity {
                          */
                         Toast.makeText(
                                 getApplicationContext(),
-                                "PaymentConfirmation info received from PayPal", Toast.LENGTH_LONG)
+                                "PaymentConfirmation info received from PayPalActivity", Toast.LENGTH_LONG)
                                 .show();
 
                     } catch (JSONException e) {
@@ -258,7 +258,7 @@ public class PayPal extends AppCompatActivity {
                         sendAuthorizationToServer(auth);
                         Toast.makeText(
                                 getApplicationContext(),
-                                "Future Payment code received from PayPal", Toast.LENGTH_LONG)
+                                "Future Payment code received from PayPalActivity", Toast.LENGTH_LONG)
                                 .show();
 
                     } catch (JSONException e) {
@@ -288,7 +288,7 @@ public class PayPal extends AppCompatActivity {
          * can execute payments for this user in the future.
          *
          * A more complete example that includes the required app-server to
-         * PayPal-server integration is available from
+         * PayPalActivity-server integration is available from
          * https://github.com/paypal/rest-api-sdk-python/tree/master/samples/mobile_backend
          */
 
@@ -301,7 +301,7 @@ public class PayPal extends AppCompatActivity {
         Log.i("FuturePaymentExample", "Client Metadata ID: " + metadataId);
 
         // TODO: Send metadataId and transaction details to your server for processing with
-        // PayPal...
+        // PayPalActivity...
         Toast.makeText(
                 getApplicationContext(), "Client Metadata Id received from SDK", Toast.LENGTH_LONG)
                 .show();

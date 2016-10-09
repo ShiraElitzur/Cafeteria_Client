@@ -12,13 +12,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
+import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.google.gson.Gson;
 
 /**
  * An activity with Navigation Drawer
@@ -49,12 +52,14 @@ public abstract class DrawerActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        View headerView = navigationView.getHeaderView(0);
 
-        // TODO: 28/09/2016 change user name to real name from shared preferences. i dont know how
-//        tvHeaderTitle = (TextView)navigationView.findViewById((R.id.tvHeaderTitle));
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        String user_name = sharedPreferences.getString("user_name", getResources().getString(R.string.guest_user));
-//        tvHeaderTitle.setText(user_name);
+        tvHeaderTitle = (TextView) headerView.findViewById((R.id.tvHeaderTitle));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Gson gson = new Gson();
+        String customerJSON = sharedPreferences.getString("customer", "");
+        Customer c = gson.fromJson(customerJSON,Customer.class);;
+        tvHeaderTitle.setText(c.getFirstName() + " " + c.getLastName());
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

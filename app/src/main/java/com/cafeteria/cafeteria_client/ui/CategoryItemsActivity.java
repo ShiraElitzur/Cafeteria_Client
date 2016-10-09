@@ -216,7 +216,6 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     public void onPositiveResult(OrderedMeal orderedMeal) {
         DataHolder dataHolder = DataHolder.getInstance();
         dataHolder.getTheOrder().getMeals().add(orderedMeal);
-        //dataHolder.addOrderdMeal(orderedMeal);
         Intent orderActivityIntent = new Intent(CategoryItemsActivity.this,OrderActivity.class);
         startActivity(orderActivityIntent);
     }
@@ -227,7 +226,6 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         Toast.makeText(this,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
         DataHolder dataHolder = DataHolder.getInstance();
         dataHolder.getTheOrder().getMeals().add(orderedMeal);
-        //dataHolder.addOrderdMeal(orderedMeal);
     }
 
     private class CategoryItemsAdapter extends BaseExpandableListAdapter{
