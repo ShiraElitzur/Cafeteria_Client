@@ -44,12 +44,22 @@ public class SignUpActivity extends AppCompatActivity {
     private Customer customer;
     private boolean isValid = true;
 
+    String print;
+
+    //private final static String SERVER_IP = "192.168.1.11";
+    private final static String SERVER_IP = "192.168.43.231";
+    private final static String USER_REGISTRATION_URL = "http://" + SERVER_IP + ":8080/CafeteriaServer/rest/users/insertUser";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+
+        /* Get the components from the UI and set listeners to them */
+        // The Email EditText - handle events of changes in the focus, validation check
 
         etFirstName = (EditText) findViewById(R.id.etFirstName);
         etLastName = (EditText) findViewById(R.id.etLastName);

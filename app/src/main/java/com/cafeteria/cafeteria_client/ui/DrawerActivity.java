@@ -121,6 +121,15 @@ public abstract class DrawerActivity extends AppCompatActivity {
                         }
 
                         break;
+                    case R.id.navigation_item_history:
+                        if( DrawerActivity.this instanceof OrdersHistoryActivity){
+                            return false;
+                        }
+                        intent = new Intent(DrawerActivity.this,OrdersHistoryActivity.class);
+                        startActivity(intent);
+                        DrawerActivity.this.finish();
+                        break;
+
 
                 }
                 return true;

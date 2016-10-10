@@ -61,6 +61,9 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton facebookLoginBtn;
     private ProfileTracker profileTracker;
 
+    private final static String SERVER_IP = "192.168.43.231";  // SHIRA IP
+    //private final static String SERVER_IP = "192.168.1.11"; // ANAEL IP
+    private final static String USER_VALIDATION_URL = "http://"+SERVER_IP+":8080/CafeteriaServer/rest/users/isUserExist";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,12 +242,15 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             if (response != null) {
+                Log.e("DEBUG","before save user");
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Gson gson = new Gson();
                 Customer toSave = gson.fromJson(response, Customer.class);
                 String customerJSON = gson.toJson(toSave);
                 editor.putString("customer", customerJSON);
                 editor.apply();
+
+                Log.e("DEBUG","after save user");
 
                 Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                 startActivity(intent);

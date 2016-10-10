@@ -110,5 +110,8 @@
 
     <!--PayPalActivity-->
     <string name="paypal_payment_total">סך הכל לתשלום: </string>
+    <string name="history_meals_title">ארוחות:</string>
+    <string name="history_items_title">פריטים:</string>
+    <string name="history_extra_title">תוספות-</string>
 
 </resources>

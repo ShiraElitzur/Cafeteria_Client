@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -37,7 +38,7 @@ public class Order implements Serializable{
     /**
      * The date and time when this order created
      */
-    private Calendar calendar;
+    private Date date;
 
     /**
      * The amount to pay for the items/meals in this order
@@ -137,16 +138,16 @@ public class Order implements Serializable{
      * Returns the Date&Time when this order was created
      * @return
      */
-    public Calendar getCalendar() {
-        return calendar;
+    public Date getDate() {
+        return date;
     }
 
     /**
      * Sets the Date and Time for this order ( when it was created )
      * @param
      */
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     /**
@@ -159,15 +160,16 @@ public class Order implements Serializable{
         double extrasPrice = 0;
 
         for( OrderedMeal meal : getMeals() ) {
-            if (meal.getChosenDrink()!= null) {
-                drinkPrice = meal.getChosenDrink().getPrice();
-            }
-            // if the amount of extras chosen is bigger then the amount allowed,
-            // add the price of last meal - to be changed according to the expensive/cheap extra
-            if (meal.getChosenExtras().size() > meal.getParentMeal().getExtraAmount()){
-                extrasPrice = meal.getChosenExtras().get(meal.getChosenExtras().size()-1).getPrice();
-            }
-            payment += (meal.getParentMeal().getPrice()) + drinkPrice + extrasPrice;
+//            if (meal.getChosenDrink()!= null) {
+//                drinkPrice = meal.getChosenDrink().getPrice();
+//            }
+//            // if the amount of extras chosen is bigger then the amount allowed,
+//            // add the price of last meal - to be changed according to the expensive/cheap extra
+//            if (meal.getChosenExtras().size() > meal.getParentMeal().getExtraAmount()){
+//                extrasPrice = meal.getChosenExtras().get(meal.getChosenExtras().size()-1).getPrice();
+//            }
+//            payment += (meal.getParentMeal().getPrice()) + drinkPrice + extrasPrice;
+            payment += meal.getTotalPrice();
         }
 
         for( Item item : getItems() ) {

@@ -13,14 +13,15 @@ public class ApplicationConstant {
     /**
      * Anael IP
      */
-    public final static String SERVER_IP = "192.168.1.11";
+    //public final static String SERVER_IP = "192.168.1.11";
 
     /**
      * Shira IP
      */
-    //public final static String SERVER_IP = "192.168.43.231";
+    public final static String SERVER_IP = "192.168.43.231";
 
-
+    public static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
+    public static final String DATE_FORMAT = "dd-MM-yyyy";
     public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +
             ":8080/CafeteriaServer/rest/data/getCategories";
 

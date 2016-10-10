@@ -49,6 +49,8 @@ public class OrderedMeal implements Serializable {
      */
     private double totalPrice;
 
+    private String title;
+
     /**
      * Returns the id of this ordered meal
      * @return the id of this ordered meal
@@ -79,6 +81,7 @@ public class OrderedMeal implements Serializable {
      */
     public void setParentMeal(Meal parentMeal) {
         this.parentMeal = parentMeal;
+        this.title = parentMeal.getTitle();
     }
 
     /**
@@ -162,5 +165,13 @@ public class OrderedMeal implements Serializable {
         this.totalPrice = totalPrice;
     }
 
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
 }

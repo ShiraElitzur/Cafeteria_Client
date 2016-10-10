@@ -29,6 +29,9 @@
         <activity android:name=".ui.OrderActivity" />
         <activity android:name=".ui.PayPalActivity">
         </activity>
+        <activity
+            android:name=".ui.OrdersHistoryActivity"
+            android:label="@string/title_activity_orders_history"></activity>
     </application>
 
 </manifest>

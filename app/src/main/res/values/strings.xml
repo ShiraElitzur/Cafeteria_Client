@@ -122,5 +122,9 @@
 
     <!--PayPalActivity-->
     <string name="paypal_payment_total">Total: </string>
+    <string name="title_activity_orders_history">OrdersHistoryActivity</string>
+    <string name="history_meals_title">Meals:</string>
+    <string name="history_items_title">Items:</string>
+    <string name="history_extra_title">Extras-</string>
 
 </resources>

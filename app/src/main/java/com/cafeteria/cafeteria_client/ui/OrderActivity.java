@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.LocalDBHandler;
 import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.utils.LocaleHelper;
@@ -107,6 +110,13 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                     startActivity(payPalIntent);
 
                     // here, before clearing the order we need to save the order
+                    //new SaveOrderLocallyTask().execute();
+                    Log.e("DATE",Calendar.getInstance().getTime().toString());
+                    order.setDate(Calendar.getInstance().getTime());
+                    MyApplicationClass app = (MyApplicationClass)getApplication();
+                    LocalDBHandler db = app.getLocalDB();
+                    db.insertOrder(order);
+
                     DataHolder data = DataHolder.getInstance();
                     data.getTheOrder().setPaid(true);
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -114,7 +124,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                     String customerJSON = sharedPreferences.getString("customer", "");
                     Customer c = gson.fromJson(customerJSON, Customer.class);
                     data.getTheOrder().setCustomer(c);
-                    data.getTheOrder().setCalendar(Calendar.getInstance());
+                    data.getTheOrder().setDate(Calendar.getInstance().getTime());
 
                     DataHolder.getInstance().setTheOrder(new Order());
                     DataHolder.getInstance().getTheOrder().setItems(new ArrayList<Item>());
@@ -181,199 +191,199 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                         }
 
                     }
-        },hour, minute, true);//Yes 24 hour time
+                },hour, minute, true);//Yes 24 hour time
                 timePicker.setTitle(getResources().getString(R.string.dialog_time_picker_title));
                 timePicker.show();
 
-        default:
-        return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
-}
 
-
-/**
- * This inner class adapts between the ListView of the items and the actual list of <OrderItem>
- * OrderItem is an interface that with it we force on the items classes to implement the method we use here
- * getTitle() and getPrice()
- *
- * @param <T>
- */
-private class OrderItemsAdapter<T> extends ArrayAdapter<Item> {
-
-    private int layout;
-    private List<Item> items;
 
     /**
-     * @param context the ui context
-     * @param layout  the layout for one row
-     * @param items   the list of the data
+     * This inner class adapts between the ListView of the items and the actual list of <OrderItem>
+     * OrderItem is an interface that with it we force on the items classes to implement the method we use here
+     * getTitle() and getPrice()
+     *
+     * @param <T>
      */
-    public OrderItemsAdapter(Context context, int layout, List<Item> items) {
-        super(context, layout, items);
-        this.layout = layout;
-        this.items = items;
-    }
+    private class OrderItemsAdapter<T> extends ArrayAdapter<Item> {
 
+        private int layout;
+        private List<Item> items;
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-
-        ViewHolder holder;
-        // in the creation of the listView rows i assign the components to vars
-        if (convertView == null) {
-
-            LayoutInflater inflater = getLayoutInflater();
-            convertView = inflater.inflate(layout, parent, false);
-
-            holder = new ViewHolder();
-            holder.tvOrderItemTitle = (TextView) convertView.findViewById(R.id.tvOrderItemTitle);
-            holder.tvOrderItemPrice = (TextView) convertView.findViewById(R.id.tvOrderItemPrice);
-            holder.imgBtnRemoveItem = (ImageButton) convertView.findViewById(R.id.imgBtnRemoveItem);
-            holder.imgBtnRemoveItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OrderActivity.this);
-                    alertDialogBuilder.setTitle(R.string.alert_dialog_delete_item_title)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.alert_dialog_delete_item_positive_button,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            order.setPayment(order.getPayment() - items.get(position).getPrice());
-                                            // Remove the item from the adapter
-                                            OrderItemsAdapter.this.remove(items.get(position));
-                                            // Refresh the UI
-                                            itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
-                                        }
-                                    })
-                            .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        }
-                                    }).create().show();
-                }
-            });
-            // keep as tag of the row the vars that match its components
-            convertView.setTag(holder);
-        } else { // if it is not the creation of the row we take to components from the row's tag
-            holder = (ViewHolder) convertView.getTag();
+        /**
+         * @param context the ui context
+         * @param layout  the layout for one row
+         * @param items   the list of the data
+         */
+        public OrderItemsAdapter(Context context, int layout, List<Item> items) {
+            super(context, layout, items);
+            this.layout = layout;
+            this.items = items;
         }
-        // in both cases sets the ui data to fit the item data
-        BigDecimal bd = new BigDecimal(items.get(position).getPrice());
-        bd = bd.setScale(1, RoundingMode.HALF_DOWN);
-
-        holder.tvOrderItemTitle.setText(items.get(position).getTitle());
-        holder.tvOrderItemPrice.setText(bd + " " + nis.getSymbol());
-
-        return convertView;
-    }
-
-    private class ViewHolder {
-        TextView tvOrderItemTitle;
-        ImageButton imgBtnRemoveItem;
-        TextView tvOrderItemPrice;
-        ImageButton imgBtnEditItem;
-    }
-
-}
-
-private class OrderMealsAdapter<T> extends ArrayAdapter<OrderedMeal> {
-
-    private int layout;
-    private List<OrderedMeal> meals;
-
-    /**
-     * @param context the ui context
-     * @param layout  the layout for one row
-     * @param meals   the list of the data
-     */
-    public OrderMealsAdapter(Context context, int layout, List<OrderedMeal> meals) {
-        super(context, layout, meals);
-        this.layout = layout;
-        this.meals = meals;
-    }
 
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
-        ViewHolder holder;
-        // in the creation of the listView rows i assign the components to vars
-        if (convertView == null) {
+            ViewHolder holder;
+            // in the creation of the listView rows i assign the components to vars
+            if (convertView == null) {
 
-            LayoutInflater inflater = getLayoutInflater();
-            convertView = inflater.inflate(layout, parent, false);
+                LayoutInflater inflater = getLayoutInflater();
+                convertView = inflater.inflate(layout, parent, false);
 
-            holder = new ViewHolder();
-            holder.tvOrderItemTitle = (TextView) convertView.findViewById(R.id.tvOrderItemTitle);
-            holder.tvOrderItemPrice = (TextView) convertView.findViewById(R.id.tvOrderItemPrice);
-            holder.imgBtnRemoveItem = (ImageButton) convertView.findViewById(R.id.imgBtnRemoveItem);
-            holder.imgBtnEditItem = (ImageButton) convertView.findViewById(R.id.imgBtnEditItem);
-            holder.imgBtnEditItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentManager fm = getSupportFragmentManager();
-                    MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
-                    Bundle args = new Bundle();
-                    args.putSerializable("meal", meals.get(position));
-                    mealDetailsDialog.setArguments(args);
-                    mealDetailsDialog.show(fm, "");
-                }
-            });
-            holder.imgBtnRemoveItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OrderActivity.this);
-                    alertDialogBuilder.setTitle(R.string.alert_dialog_delete_item_title)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.alert_dialog_delete_item_positive_button,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            double payChange = meals.get(position).getTotalPrice();
-                                            order.setPayment(order.getPayment() - payChange);
-                                            // Remove the item from the adapter
-                                            OrderMealsAdapter.this.remove(meals.get(position));
-                                            // Refresh the UI
-                                            OrderActivity.this.findViewById(android.R.id.content).getRootView().invalidate();
-                                            itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
-                                        }
-                                    })
-                            .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+                holder = new ViewHolder();
+                holder.tvOrderItemTitle = (TextView) convertView.findViewById(R.id.tvOrderItemTitle);
+                holder.tvOrderItemPrice = (TextView) convertView.findViewById(R.id.tvOrderItemPrice);
+                holder.imgBtnRemoveItem = (ImageButton) convertView.findViewById(R.id.imgBtnRemoveItem);
+                holder.imgBtnRemoveItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OrderActivity.this);
+                        alertDialogBuilder.setTitle(R.string.alert_dialog_delete_item_title)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.alert_dialog_delete_item_positive_button,
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                order.setPayment(order.getPayment() - items.get(position).getPrice());
+                                                // Remove the item from the adapter
+                                                OrderItemsAdapter.this.remove(items.get(position));
+                                                // Refresh the UI
+                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+                                            }
+                                        })
+                                .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
 
-                                        }
-                                    }).create().show();
-                }
-            });
-            // keep as tag of the row the vars that match its components
-            convertView.setTag(holder);
-        } else { // if it is not the creation of the row we take to components from the row's tag
-            holder = (ViewHolder) convertView.getTag();
+                                            }
+                                        }).create().show();
+                    }
+                });
+                // keep as tag of the row the vars that match its components
+                convertView.setTag(holder);
+            } else { // if it is not the creation of the row we take to components from the row's tag
+                holder = (ViewHolder) convertView.getTag();
+            }
+            // in both cases sets the ui data to fit the item data
+            BigDecimal bd = new BigDecimal(items.get(position).getPrice());
+            bd = bd.setScale(1, RoundingMode.HALF_DOWN);
+
+            holder.tvOrderItemTitle.setText(items.get(position).getTitle());
+            holder.tvOrderItemPrice.setText(bd + " " + nis.getSymbol());
+
+            return convertView;
         }
-        // in both cases sets the ui data to fit the item data
-        double mealPrice = meals.get(position).getTotalPrice();
-        BigDecimal bd = new BigDecimal(mealPrice);
-        bd = bd.setScale(1, RoundingMode.HALF_DOWN);
 
-        holder.tvOrderItemTitle.setText(meals.get(position).getParentMeal().getTitle());
-        holder.tvOrderItemPrice.setText(bd + " " + nis.getSymbol());
-        holder.imgBtnEditItem.setVisibility(View.VISIBLE);
-        return convertView;
+        private class ViewHolder {
+            TextView tvOrderItemTitle;
+            ImageButton imgBtnRemoveItem;
+            TextView tvOrderItemPrice;
+            ImageButton imgBtnEditItem;
+        }
+
     }
 
-    private class ViewHolder {
-        TextView tvOrderItemTitle;
-        ImageButton imgBtnRemoveItem;
-        TextView tvOrderItemPrice;
-        ImageButton imgBtnEditItem;
-    }
+    private class OrderMealsAdapter<T> extends ArrayAdapter<OrderedMeal> {
 
-}
+        private int layout;
+        private List<OrderedMeal> meals;
+
+        /**
+         * @param context the ui context
+         * @param layout  the layout for one row
+         * @param meals   the list of the data
+         */
+        public OrderMealsAdapter(Context context, int layout, List<OrderedMeal> meals) {
+            super(context, layout, meals);
+            this.layout = layout;
+            this.meals = meals;
+        }
+
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            ViewHolder holder;
+            // in the creation of the listView rows i assign the components to vars
+            if (convertView == null) {
+
+                LayoutInflater inflater = getLayoutInflater();
+                convertView = inflater.inflate(layout, parent, false);
+
+                holder = new ViewHolder();
+                holder.tvOrderItemTitle = (TextView) convertView.findViewById(R.id.tvOrderItemTitle);
+                holder.tvOrderItemPrice = (TextView) convertView.findViewById(R.id.tvOrderItemPrice);
+                holder.imgBtnRemoveItem = (ImageButton) convertView.findViewById(R.id.imgBtnRemoveItem);
+                holder.imgBtnEditItem = (ImageButton) convertView.findViewById(R.id.imgBtnEditItem);
+                holder.imgBtnEditItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fm = getSupportFragmentManager();
+                        MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
+                        Bundle args = new Bundle();
+                        args.putSerializable("meal", meals.get(position));
+                        mealDetailsDialog.setArguments(args);
+                        mealDetailsDialog.show(fm, "");
+                    }
+                });
+                holder.imgBtnRemoveItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OrderActivity.this);
+                        alertDialogBuilder.setTitle(R.string.alert_dialog_delete_item_title)
+                                .setCancelable(false)
+                                .setPositiveButton(R.string.alert_dialog_delete_item_positive_button,
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                double payChange = meals.get(position).getTotalPrice();
+                                                order.setPayment(order.getPayment() - payChange);
+                                                // Remove the item from the adapter
+                                                OrderMealsAdapter.this.remove(meals.get(position));
+                                                // Refresh the UI
+                                                OrderActivity.this.findViewById(android.R.id.content).getRootView().invalidate();
+                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+                                            }
+                                        })
+                                .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        }).create().show();
+                    }
+                });
+                // keep as tag of the row the vars that match its components
+                convertView.setTag(holder);
+            } else { // if it is not the creation of the row we take to components from the row's tag
+                holder = (ViewHolder) convertView.getTag();
+            }
+            // in both cases sets the ui data to fit the item data
+            double mealPrice = meals.get(position).getTotalPrice();
+            BigDecimal bd = new BigDecimal(mealPrice);
+            bd = bd.setScale(1, RoundingMode.HALF_DOWN);
+
+            holder.tvOrderItemTitle.setText(meals.get(position).getParentMeal().getTitle());
+            holder.tvOrderItemPrice.setText(bd + " " + nis.getSymbol());
+            holder.imgBtnEditItem.setVisibility(View.VISIBLE);
+            return convertView;
+        }
+
+        private class ViewHolder {
+            TextView tvOrderItemTitle;
+            ImageButton imgBtnRemoveItem;
+            TextView tvOrderItemPrice;
+            ImageButton imgBtnEditItem;
+        }
+
+    }
 
     // On the edit meal dialog - update meal and keep shopping buttons leads here
     // update click
@@ -400,6 +410,17 @@ private class OrderMealsAdapter<T> extends ArrayAdapter<OrderedMeal> {
         Intent menuActivityIntent = new Intent(OrderActivity.this, MenuActivity.class);
         startActivity(menuActivityIntent);
         finish();
+    }
+
+    private class SaveOrderLocallyTask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MyApplicationClass app = (MyApplicationClass)getApplication();
+            LocalDBHandler db = app.getLocalDB();
+            db.insertOrder(order);
+            return null;
+        }
     }
 
 }
