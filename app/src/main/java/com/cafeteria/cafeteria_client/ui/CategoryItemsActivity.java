@@ -36,6 +36,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,8 +52,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
      * Holds the name of the item and a list of the meal names
      * Format: Title, child title
      */
-    private HashMap<Main, List<Meal>> mainsItemsDetails;
-    private HashMap<Item, List<Meal>> itemsDetails;
+    private LinkedHashMap<Main, List<Meal>> mainsItemsDetails;
+    private LinkedHashMap<Item, List<Meal>> itemsDetails;
     /**
      * Holds the list of the meal names (same as the hash map)
      */
@@ -171,8 +172,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     }
 
     private void initCategoryItems() {
-        mainsItemsDetails = new HashMap<>();
-        itemsDetails = new HashMap<>();
+        mainsItemsDetails = new LinkedHashMap<>();
+        itemsDetails = new LinkedHashMap<>();
         //String title;
         //List<Meal> meals;
         boolean existMain;
