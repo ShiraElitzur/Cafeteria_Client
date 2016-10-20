@@ -99,13 +99,15 @@ public abstract class DrawerActivity extends AppCompatActivity {
                         DrawerActivity.this.finish();
                         break;
                     case R.id.navigation_item_about:
-                        final Dialog dialog = new Dialog(DrawerActivity.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setCancelable(true);
-                        dialog.setCanceledOnTouchOutside(true);
-                        dialog.setContentView(R.layout.dialog_about_the_app);
-
-                        dialog.show();
+//                        final Dialog dialog = new Dialog(DrawerActivity.this);
+//                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                        dialog.setCancelable(true);
+//                        dialog.setCanceledOnTouchOutside(true);
+//                        dialog.setContentView(R.layout.dialog_about_the_app);
+//
+//                        dialog.show();
+                        intent = new Intent(DrawerActivity.this,AboutActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.navigation_item_langauge:
 

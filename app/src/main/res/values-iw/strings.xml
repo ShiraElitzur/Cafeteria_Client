@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">קרנף</string>
+    <string name="app_name">Time2eaT</string>
 
     <!--Drawer and Navigation-->
     <string name="drawer_header_text">כותרת</string>
@@ -100,18 +100,26 @@
     <string name="dialog_btn_keep_shopping_pressed">ההזמנה נוספה לסל הקניות</string>
     <!--MealDetails Dialog End-->
 
-    <!--AboutApp Dialog-->
-    <string name="dialog_tv_description">זאת אחלה אחלה אפליקציה</string>
-    <string name="dialog_tv_version">גרסה 1.0</string>
+    <!--AboutApp Activity -->
+    <string name="dialog_tv_description">אפליקציית הזמנת ארוחות בקפיטריית האוניברסיטה- כי נמאס לנו לבזבז את ההפסקה שלנו על עמידה בתור :)</string>
+    <string name="dialog_tv_version">1.0</string>
+    <string name="developedByTitle">פיתוח:</string>
+    <string name="developersNames">אנאל שומראי ושירה אליצור</string>
+    <string name="appDescriptionTitle">תיאור:</string>
+    <string name="appVersionTitle">גרסה:</string>
+    <!--AboutApp Activity End-->
+
     <string name="guest_user">שלום אורח</string>
     <string name="update_meal">עדכן</string>
     <string name="succesful_edit_meal">הארוחה עודכנה בהצלחה!</string>
-    <!--AboutApp Dialog End-->
 
     <!--PayPalActivity-->
+
+    <!--OrderHistoryActivity -->
     <string name="paypal_payment_total">סך הכל לתשלום: </string>
     <string name="history_meals_title">ארוחות:</string>
     <string name="history_items_title">פריטים:</string>
     <string name="history_extra_title">תוספות-</string>
+    <!--OrderHistoryActivity Ends-->
 
 </resources>
