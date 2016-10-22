@@ -16,7 +16,8 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".ui.MenuActivity" />
+        <activity android:name=".ui.MenuActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.SignUpActivity" />
         <activity
@@ -35,7 +36,13 @@
             android:name=".ui.OrdersHistoryActivity"
             android:label="@string/title_activity_orders_history" />
         <activity android:name=".ui.AboutActivity"
-            android:parentActivityName=".ui.MenuActivity"/>
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".ui.MenuActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".ui.MenuActivity" />
+        </activity>
     </application>
 
 </manifest>

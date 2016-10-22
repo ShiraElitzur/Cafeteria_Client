@@ -101,6 +101,7 @@
     <!--MealDetails Dialog End-->
 
     <!--AboutApp Activity -->
+    <string name="title_activity_about">אודות</string>
     <string name="dialog_tv_description">אפליקציית הזמנת ארוחות בקפיטריית האוניברסיטה- כי נמאס לנו לבזבז את ההפסקה שלנו על עמידה בתור :)</string>
     <string name="dialog_tv_version">1.0</string>
     <string name="developedByTitle">פיתוח:</string>
@@ -116,6 +117,7 @@
     <!--PayPalActivity-->
 
     <!--OrderHistoryActivity -->
+    <string name="title_activity_orders_history">היסטוריית הזמנות</string>
     <string name="paypal_payment_total">סך הכל לתשלום: </string>
     <string name="history_meals_title">ארוחות:</string>
     <string name="history_items_title">פריטים:</string>

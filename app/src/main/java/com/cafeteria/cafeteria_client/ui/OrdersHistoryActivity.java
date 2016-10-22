@@ -55,6 +55,8 @@ public class OrdersHistoryActivity extends DrawerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders_history);
         super.onCreateDrawer();
+        getSupportActionBar().setTitle(this.getTitle());
+
         lvOrdersHistory = (ListView)findViewById(R.id.lvordersHistory);
         //nis symbol
         Locale israel = new Locale("iw", "IL");

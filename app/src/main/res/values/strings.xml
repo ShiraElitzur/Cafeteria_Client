@@ -113,6 +113,7 @@
     <!--MealDetails Dialog End-->
 
     <!--AboutApp Dialog-->
+    <string name="title_activity_about">About</string>
     <string name="dialog_tv_description">This app is good, use it.</string>
     <string name="dialog_tv_version">1.0</string>
     <string name="developedByTitle">Developed By:</string>
@@ -129,10 +130,12 @@
     <string name="paypal_payment_total">Total: </string>
 
     <!--OrderHistoryActivity -->
-    <string name="title_activity_orders_history">OrdersHistoryActivity</string>
+    <string name="title_activity_orders_history">Orders History</string>
     <string name="history_meals_title">Meals:</string>
     <string name="history_items_title">Items:</string>
     <string name="history_extra_title">Extras-</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <!--OrderHistoryActivity Ends-->
 
 </resources>

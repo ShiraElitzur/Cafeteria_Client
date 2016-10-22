@@ -31,7 +31,7 @@ public class MenuActivity extends DrawerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_categories); // The layout with the tabs
+        setContentView(R.layout.activity_menu); // The layout with the tabs
         super.onCreateDrawer();
 
         CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager());
@@ -41,7 +41,6 @@ public class MenuActivity extends DrawerActivity {
         adapter.addFragment(new FavoritesFragment(), getResources().getString(R.string.favorites_tab_title));
         adapter.addFragment(new SpecialsFragment(), getResources().getString(R.string.specials_tab_title));
         viewPager.setAdapter(adapter);
-
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
 
