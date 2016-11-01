@@ -8,8 +8,12 @@ android {
         applicationId "com.cafeteria.cafeteria_client"
         minSdkVersion 21
         targetSdkVersion 24
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [onesignal_app_id: "272de338-7ae2-498a-b1fc-a56f3f603dd2",
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: "42273918950"]
     }
     buildTypes {
         release {
@@ -28,4 +32,12 @@ dependencies {
     compile files('libs/gson-2.2.2.jar')
     compile 'com.paypal.sdk:paypal-android-sdk:2.15.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    compile 'com.onesignal:OneSignal:3.+@aar'
+
+    // Required for OneSignal, even if you have added FCM.
+    compile 'com.google.android.gms:play-services-gcm:+'
+
+    // Required for geotagging
+    compile "com.google.android.gms:play-services-location:+"
 }

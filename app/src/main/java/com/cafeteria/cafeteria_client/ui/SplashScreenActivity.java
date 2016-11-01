@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
+import com.onesignal.OneSignal;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -328,5 +329,4 @@ public class SplashScreenActivity extends AppCompatActivity {
             return null;
         }
     }
-
 }

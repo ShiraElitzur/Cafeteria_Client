@@ -32,6 +32,7 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
+import com.onesignal.OneSignal;
 
 
 import org.json.JSONException;
@@ -61,15 +62,17 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton facebookLoginBtn;
     private ProfileTracker profileTracker;
 
-    private final static String SERVER_IP = "192.168.43.231";  // SHIRA IP
-    //private final static String SERVER_IP = "192.168.1.11"; // ANAEL IP
-    private final static String USER_VALIDATION_URL = "http://"+SERVER_IP+":8080/CafeteriaServer/rest/users/isUserExist";
+    /**
+     *  The Id of tbe user that this class logs in - PK for primary key
+     *  this is the user id in the database
+     */
+    private int userPKId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//         With this lines the events will show in the developer
+        // With this lines the events will show in the developer
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(getApplication());
 
@@ -86,6 +89,12 @@ public class LoginActivity extends AppCompatActivity {
         // if the email found - it's not the first time opening this app
         // automatically redirect to home screen
         if (customer != null && !customer.equals("")) {
+            // before the redirect... get the userId and execute the task that checks if this user
+            // has this device token in the db
+            Gson gson = new Gson();
+            Customer c = gson.fromJson(customer, Customer.class);
+            userPKId = c.getId();
+            new RefreshTokenTask().execute();
             finish();
             Intent homeScreen = new Intent(this, MenuActivity.class);
             startActivity(homeScreen);
@@ -183,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MyWebServiceTask().execute();
+                new LoginAndValidationTask().execute();
             }
         });
     }
@@ -238,7 +247,7 @@ public class LoginActivity extends AppCompatActivity {
                 .show();
     }
 
-    private class MyWebServiceTask extends AsyncTask<String, Void, String> {
+    private class LoginAndValidationTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
             if (response != null) {
@@ -246,6 +255,9 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Gson gson = new Gson();
                 Customer toSave = gson.fromJson(response, Customer.class);
+                // ***********
+                userPKId = toSave.getId();
+                // ***********
                 String customerJSON = gson.toJson(toSave);
                 editor.putString("customer", customerJSON);
                 editor.apply();
@@ -421,7 +433,7 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 Log.d("FACEBOOK","Client is already exist or signup is failed");
             }
-
+            new RefreshTokenTask().execute();
             finish();
             Intent homeScreen = new Intent(LoginActivity.this, MenuActivity.class);
             startActivity(homeScreen);
@@ -434,6 +446,84 @@ public class LoginActivity extends AppCompatActivity {
         super.onDestroy();
         if (profileTracker != null) {
             profileTracker.stopTracking();
+        }
+    }
+
+    private class RefreshTokenTask extends AsyncTask<Void,Void,Void> {
+        // to compare with the device token
+        String userOldToken;
+        StringBuilder response;
+        URL url;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                // http request to get the old token of the current user
+                url = new URL(ApplicationConstant.GET_TOKEN+"?user="+userPKId);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                Log.e("GET TOKEN",conn.getResponseCode()+"");
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Log.e("GET TOKEN",conn.getResponseMessage());
+                    return null;
+                }
+
+                // get the response data
+                response = new StringBuilder();
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+                // and get the token out of it as a clean string
+                userOldToken = response.toString().trim();
+                Log.e("TOKEN","old token : " + userOldToken);
+                conn.disconnect();
+
+                // now comparing this old token with the device token (= 'userId' in the overridden method)
+                OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+                    @Override
+                    public void idsAvailable(String userId, String registrationId) {
+                        Log.d("debug", "Device Token:" + userId);
+                        // if there is no saved token or token is different from device token
+                        if(userOldToken == null || !userOldToken.equals(userId)) {
+                            try {
+                                // request the server to attach the device token (userId) to the right user (with the id userPKId)
+                                url = new URL(ApplicationConstant.SET_TOKEN+"?userId="+userPKId+"&pushId="+userId);
+                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                Log.e("SET TOKEN", conn.getResponseCode() + "");
+                                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                                    Log.e("SET TOKEN", conn.getResponseMessage());
+                                }
+                            }catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (registrationId != null)
+                            Log.d("debug", "registrationId:" + registrationId);
+                    }
+                });
+
+                // ******* SEND THE NOTIFICATION ***********
+                // trigger the server to send the notification, shouldn't be here but i want to keep the code
+//                url = new URL(ApplicationConstant.SEND_NOTI_URL+"?userId="+userPKId);
+//                conn = (HttpURLConnection) url.openConnection();
+//                Log.e("DEBUG",conn.getResponseCode()+"");
+//                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+//                    Log.e("DEBUG",conn.getResponseMessage());
+//                    return null;
+//                }
+//                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            return null;
         }
     }
 }

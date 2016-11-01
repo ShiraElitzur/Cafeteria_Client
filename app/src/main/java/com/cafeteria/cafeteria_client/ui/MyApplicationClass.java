@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.cafeteria.cafeteria_client.LocalDBHandler;
 import com.cafeteria.cafeteria_client.utils.LocaleHelper;
+import com.onesignal.OneSignal;
 
 public class MyApplicationClass extends Application {
 
@@ -15,6 +16,8 @@ public class MyApplicationClass extends Application {
     public void onCreate() {
         super.onCreate();
         Log.e("APP","OnCreate APP");
+        // initialize OneSignal for handling push notifications
+        OneSignal.startInit(this).init();
         db = new LocalDBHandler(this);
     }
 
