@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -241,6 +242,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         orderedMeal.setComment(etComment.getText().toString());
         if (chosenDrink != null) {
             orderedMeal.setChosenDrink(chosenDrink);
+            Log.e("DRINK",chosenDrink.getTitle() +": "+chosenDrink.getId()+"");
         }
         orderedMeal.setChosenExtras(chosenExtra);
         orderedMeal.setTotalPrice(orderedMeal.getParentMeal().getPrice() + drinkPrice + extraPrice);

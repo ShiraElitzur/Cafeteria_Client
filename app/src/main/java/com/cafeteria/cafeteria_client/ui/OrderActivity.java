@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.LocalDBHandler;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
@@ -34,6 +35,7 @@ import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -104,6 +106,18 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                     Toast.makeText(OrderActivity.this, getResources().getString(R.string.empty_cart), Toast.LENGTH_LONG).show();
                 } else {
 
+                    DataHolder data = DataHolder.getInstance();
+                    data.getTheOrder().setPaid(true);
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    //Gson gson = new Gson();
+                    Gson gson=  new GsonBuilder().setDateFormat(ApplicationConstant.DATE_TIME_FORMAT).create();
+
+                    String customerJSON = sharedPreferences.getString("customer", "");
+                    Customer c = gson.fromJson(customerJSON, Customer.class);
+                    data.getTheOrder().setCustomer(c);
+                    data.getTheOrder().setDate(Calendar.getInstance().getTime());
+
+
                     Intent payPalIntent = new Intent(OrderActivity.this, PayPalActivity.class);
                     payPalIntent.putExtra("language", LocaleHelper.getLanguage(OrderActivity.this));
                     payPalIntent.putExtra("order", order);
@@ -116,15 +130,6 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                     MyApplicationClass app = (MyApplicationClass)getApplication();
                     LocalDBHandler db = app.getLocalDB();
                     db.insertOrder(order);
-
-                    DataHolder data = DataHolder.getInstance();
-                    data.getTheOrder().setPaid(true);
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    Gson gson = new Gson();
-                    String customerJSON = sharedPreferences.getString("customer", "");
-                    Customer c = gson.fromJson(customerJSON, Customer.class);
-                    data.getTheOrder().setCustomer(c);
-                    data.getTheOrder().setDate(Calendar.getInstance().getTime());
 
                     DataHolder.getInstance().setTheOrder(new Order());
                     DataHolder.getInstance().getTheOrder().setItems(new ArrayList<Item>());

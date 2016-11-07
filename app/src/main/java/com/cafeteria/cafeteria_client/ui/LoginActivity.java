@@ -85,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
         // get email string from shared preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String customer = sharedPreferences.getString("customer", "");
-
         // if the email found - it's not the first time opening this app
         // automatically redirect to home screen
         if (customer != null && !customer.equals("")) {
@@ -251,7 +250,6 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             if (response != null) {
-                Log.e("DEBUG","before save user");
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Gson gson = new Gson();
                 Customer toSave = gson.fromJson(response, Customer.class);
@@ -261,9 +259,7 @@ public class LoginActivity extends AppCompatActivity {
                 String customerJSON = gson.toJson(toSave);
                 editor.putString("customer", customerJSON);
                 editor.apply();
-
-                Log.e("DEBUG","after save user");
-
+                new RefreshTokenTask().execute();
                 Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                 startActivity(intent);
                 LoginActivity.this.finish();
@@ -312,6 +308,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // FACEBOOK LOGIN TASK
     private class validateOrSignUpTask extends AsyncTask<Void, Void, Boolean> {
         Customer facebookCustomer;
         String emailTxt;
@@ -441,14 +438,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (profileTracker != null) {
-            profileTracker.stopTracking();
-        }
-    }
-
     private class RefreshTokenTask extends AsyncTask<Void,Void,Void> {
         // to compare with the device token
         String userOldToken;
@@ -463,7 +452,7 @@ public class LoginActivity extends AppCompatActivity {
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                 Log.e("GET TOKEN",conn.getResponseCode()+"");
-                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                if (conn.getResponseCode() < HttpURLConnection.HTTP_OK) {
                     Log.e("GET TOKEN",conn.getResponseMessage());
                     return null;
                 }
@@ -484,8 +473,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 // now comparing this old token with the device token (= 'userId' in the overridden method)
                 OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-                    @Override
-                    public void idsAvailable(String userId, String registrationId) {
+                        @Override
+                        public void idsAvailable(String userId, String registrationId) {
                         Log.d("debug", "Device Token:" + userId);
                         // if there is no saved token or token is different from device token
                         if(userOldToken == null || !userOldToken.equals(userId)) {
@@ -524,6 +513,14 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             return null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (profileTracker != null) {
+            profileTracker.stopTracking();
         }
     }
 }

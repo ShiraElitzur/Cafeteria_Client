@@ -4,6 +4,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +15,9 @@ import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
+import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.paypal.android.sdk.payments.PayPalAuthorization;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalFuturePaymentActivity;
@@ -27,7 +31,14 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import org.json.JSONException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -120,6 +131,14 @@ public class PayPalActivity extends AppCompatActivity {
 
 
         startActivityForResult(intent, REQUEST_CODE_PAYMENT);
+        // TODO: 04/11/2016 Remove the excexution of the task from here. right now the paypal payment is not always working properly and i want to work on the order insertion to the db. but later should be only after payment
+        /*
+
+        Should be in other place!
+
+        */
+        Log.d("DEBUG","back. invoking sendOrderToServer");
+        new SendOrderToServer().execute();
 
     }
 
@@ -231,6 +250,8 @@ public class PayPalActivity extends AppCompatActivity {
                                 "PaymentConfirmation info received from PayPalActivity", Toast.LENGTH_LONG)
                                 .show();
 
+                        // ************************ send to db
+                        new SendOrderToServer().execute();
                     } catch (JSONException e) {
                         Log.e(TAG, "an extremely unlikely failure occurred: ", e);
                     }
@@ -260,7 +281,8 @@ public class PayPalActivity extends AppCompatActivity {
                                 getApplicationContext(),
                                 "Future Payment code received from PayPalActivity", Toast.LENGTH_LONG)
                                 .show();
-
+                        // ************************ send to db
+                        new SendOrderToServer().execute();
                     } catch (JSONException e) {
                         Log.e("FuturePaymentExample", "an extremely unlikely failure occurred: ", e);
                     }
@@ -305,6 +327,62 @@ public class PayPalActivity extends AppCompatActivity {
         Toast.makeText(
                 getApplicationContext(), "Client Metadata Id received from SDK", Toast.LENGTH_LONG)
                 .show();
+    }
+
+    private class SendOrderToServer extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean result = false;
+            Log.e("DEBUG","inside do in background of SendOrderToServer");
+
+            // Request - send the order as json to the server for insertion
+            Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy HH:mm:ss.SSSZ").create();
+            String jsonOrder = gson.toJson(order, Order.class);
+            URL url = null;
+            try {
+                url = new URL(ApplicationConstant.SEND_ORDER);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                con.setRequestProperty("Content-Type", "text/plain");
+                con.setRequestProperty("Accept", "text/plain");
+                con.setRequestMethod("POST");
+
+                OutputStream os = con.getOutputStream();
+                os.write(jsonOrder.getBytes("UTF-8"));
+                os.flush();
+
+                if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return null;
+                }
+
+                // Response
+                StringBuilder response = new StringBuilder();
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(con.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                con.disconnect();
+
+                if (response.toString().trim().equals("OK")) {
+                    result = true;
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }  catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
     }
 
     @Override

@@ -138,4 +138,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <!--OrderHistoryActivity Ends-->
 
+
+    <string name="order_number_title">Order Number:</string>
+    <string name="order_ready_text">Your order is ready, go to the cafeteria and show the approval here to the seller. Bon Appetit!</string>
+    <string name="title_activity_order_ready">Order Ready</string>
+
+
 </resources>

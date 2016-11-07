@@ -124,4 +124,10 @@
     <string name="history_extra_title">תוספות-</string>
     <!--OrderHistoryActivity Ends-->
 
+
+    <string name="order_number_title">מספר הזמנה:</string>
+    <string name="order_ready_text">ההזמנה שלך מוכנה. גש לקפיטריה, הצג את מספר האישור למוכר ובתיאבון!</string>
+    <string name="title_activity_order_ready">ההזמנה שלך מוכנה!</string>
+
+
 </resources>

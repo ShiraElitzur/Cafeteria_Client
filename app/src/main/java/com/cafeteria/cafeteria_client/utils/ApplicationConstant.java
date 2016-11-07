@@ -33,13 +33,13 @@ public class ApplicationConstant {
 
     public final static String USER_VALIDATION_URL = "http://" + SERVER_IP +
             ":8080/CafeteriaServer/rest/users/isUserExist";
-    // part of temporary functionality
-//    public final static String SEND_NOTI_URL = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/push/OrderReadyNotify";
 
     public final static String GET_TOKEN = "http://" + SERVER_IP +
             ":8080/CafeteriaServer/rest/push/getToken";
 
     public final static String SET_TOKEN = "http://" + SERVER_IP +
             ":8080/CafeteriaServer/rest/push/attachPushIdToUser";
+
+    public final static String SEND_ORDER = "http://" + SERVER_IP +
+            ":8080/CafeteriaServer/rest/data/insertOrder";
 }
