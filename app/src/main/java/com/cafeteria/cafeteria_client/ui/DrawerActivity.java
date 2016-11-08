@@ -50,8 +50,8 @@ public abstract class DrawerActivity extends AppCompatActivity {
         // Right now we have a background image on the action bar that contains the app name -
         // Need to think about that point.
         getSupportActionBar().setTitle("");
-        //getSupportActionBar().setLogo(ContextCompat.getDrawable(this,R.drawable.logo_transparent));
-        //getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.logo));
+        //getSupportActionBar().setLogo(ContextCompat.getDrawable(this,R.drawable.main_logo));
+        //getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.main_logo));
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
