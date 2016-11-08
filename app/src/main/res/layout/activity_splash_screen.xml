@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:backgroundTint="@android:color/holo_blue_dark">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/splash_screen_background"
-        />
+    android:background="@drawable/splash_screen_background">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10"
+        >
+
+
+        <view
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="android.support.v4.widget.Space"
+            android:id="@+id/view"
+            android:layout_weight="2" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/main_logo"
+            android:layout_gravity="center|top"
+            android:id="@+id/imageView"
+            android:layout_weight="2"
+            />
 
 
         <com.hanks.htextview.HTextView
@@ -29,6 +42,7 @@
             android:paddingTop="10dp"
             android:layout_marginRight="3dp"
             android:layout_marginLeft="3dp"
+            android:layout_weight="1"
             />
 
         <TextView
@@ -41,6 +55,7 @@
             android:textColor="@android:color/secondary_text_light"
             android:id="@+id/tvStatus"
             android:layout_marginBottom="20dp"
+            android:layout_weight="1"
             />
 
         <ProgressBar
@@ -48,7 +63,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/progressBar"
-            android:layout_gravity="center_horizontal|bottom" />
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_weight="1"
+            />
 
 
     </LinearLayout>

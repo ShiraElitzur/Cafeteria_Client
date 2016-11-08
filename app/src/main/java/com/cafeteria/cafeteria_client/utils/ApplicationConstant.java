@@ -13,12 +13,12 @@ public class ApplicationConstant {
     /**
      * Anael IP
      */
-    //public final static String SERVER_IP = "192.168.1.11";
+    public final static String SERVER_IP = "192.168.43.91";
 
     /**
      * Shira IP
      */
-    public final static String SERVER_IP = "192.168.43.231";
+//    public final static String SERVER_IP = "192.168.43.231";
 
     /**
      * Moshe IP

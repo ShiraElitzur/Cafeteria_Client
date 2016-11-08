@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     android:fitsSystemWindows="true">
     <!-- We use a Toolbar so that our drawer can be displayed
              in front of the action bar; Added for Material Design -->
@@ -53,12 +54,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorPrimaryDark">
+
+            </View>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tablayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimaryDark"
+                android:background="@color/colorPrimary"
                 app:tabGravity="fill"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
