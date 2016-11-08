@@ -249,7 +249,8 @@ public class LoginActivity extends AppCompatActivity {
     private class LoginAndValidationTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPostExecute(String response) {
-            if (response != null) {
+            if (response != null && !response.equals("null")) {
+                Log.e("DEBUG",response);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Gson gson = new Gson();
                 Customer toSave = gson.fromJson(response, Customer.class);
@@ -297,8 +298,9 @@ public class LoginActivity extends AppCompatActivity {
                 return null;
             }
 
-            String responseString = response.toString();
-            return responseString.toString();
+            String responseString = response.toString().trim();
+            Log.e("DEBUG","user response : "+ responseString);
+            return responseString;
         }
 
         @Override
