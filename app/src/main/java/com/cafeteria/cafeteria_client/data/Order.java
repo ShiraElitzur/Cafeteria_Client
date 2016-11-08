@@ -46,11 +46,6 @@ public class Order implements Serializable{
     private double payment;
 
     /**
-     * An indicator if the customer already paid for this order
-     */
-    private boolean isPaid;
-
-    /**
      * An indicator if the order was delivered
      */
     private boolean isDelivered;
@@ -185,22 +180,6 @@ public class Order implements Serializable{
      */
     public void setPayment(double payment) {
         this.payment = payment;
-    }
-
-    /**
-     * Returns true if the order was already paid or false if not
-     * @return true if the order was already paid
-     */
-    public boolean isPaid() {
-        return isPaid;
-    }
-
-    /**
-     * Sets true if the order was already paid or false if not
-     * @param isPaid
-     */
-    public void setPaid(boolean isPaid) {
-        this.isPaid = isPaid;
     }
 
     /**

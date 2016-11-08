@@ -49,8 +49,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MenuActivity" />
         </activity>
-        <activity android:name=".ui.OrderReadyActivity"
-
+        <activity
+            android:name=".ui.OrderReadyActivity"
             android:label="@string/title_activity_order_ready"
             android:parentActivityName=".ui.MenuActivity">
 
@@ -58,6 +58,9 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MenuActivity" />
+        </activity>
+        <activity android:name=".ui.UserDetailsActivity"
+                  android:label="@string/title_activity_user_details">
         </activity>
     </application>
 

@@ -18,7 +18,7 @@
             android:icon="@drawable/orderd_history"
             android:title="@string/nav_item_history" />
         <item
-            android:id="@+id/navigation_item_location"
+            android:id="@+id/navigation_item_personal_details"
             android:icon="@drawable/personal_details"
             android:title="@string/nav_item_personal" />
 

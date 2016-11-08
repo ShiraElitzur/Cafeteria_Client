@@ -35,11 +35,6 @@ public class Customer implements Serializable {
     private String email;
 
     /**
-     * The phone number of the customer
-     */
-    private String phoneNumber;
-
-    /**
      * The password of this customer
      */
     private String password;
@@ -112,22 +107,6 @@ public class Customer implements Serializable {
      */
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    /**
-     * Returns the phone number of the customer
-     * @return the phone number of the customer
-     */
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    /**
-     * Sets phone number for the customer
-     * @param phoneNumber
-     */
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     /**

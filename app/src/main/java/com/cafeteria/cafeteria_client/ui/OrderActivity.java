@@ -107,7 +107,6 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 } else {
 
                     DataHolder data = DataHolder.getInstance();
-                    data.getTheOrder().setPaid(true);
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     //Gson gson = new Gson();
                     Gson gson=  new GsonBuilder().setDateFormat(ApplicationConstant.DATE_TIME_FORMAT).create();

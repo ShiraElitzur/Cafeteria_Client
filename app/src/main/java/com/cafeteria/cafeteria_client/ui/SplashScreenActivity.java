@@ -259,6 +259,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Log.e("DEBUG","getCategories " +conn.getResponseCode() + " : "+ conn.getResponseMessage() );
                     return null;
                 }
 

@@ -20,6 +20,13 @@ public class ApplicationConstant {
      */
     public final static String SERVER_IP = "192.168.43.231";
 
+    /**
+     * Moshe IP
+     */
+    //public final static String SERVER_IP = "10.0.0.146";
+
+
+
     public static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
     public static final String DATE_FORMAT = "dd-MM-yyyy";
     public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +

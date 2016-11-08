@@ -144,4 +144,10 @@
     <string name="title_activity_order_ready">Order Ready</string>
 
 
+    <string name="title_activity_user_details">User Details</string>
+    <string name="update_user_btn_txt">Update User\'s Details</string>
+    <string name="hint_edit_password">Press to edit your password</string>
+    <string name="enable_edit_btn_txt">Enable Edit</string>
+
+
 </resources>
