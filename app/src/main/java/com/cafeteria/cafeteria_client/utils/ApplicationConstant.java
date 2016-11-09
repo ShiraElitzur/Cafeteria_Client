@@ -13,12 +13,12 @@ public class ApplicationConstant {
     /**
      * Anael IP
      */
-    public final static String SERVER_IP = "192.168.43.91";
+    //public final static String SERVER_IP = "192.168.43.91";
 
     /**
      * Shira IP
      */
-//    public final static String SERVER_IP = "192.168.43.231";
+    public final static String SERVER_IP = "192.168.43.231";
 
     /**
      * Moshe IP
@@ -37,6 +37,9 @@ public class ApplicationConstant {
 
     public final static String USER_REGISTRATION_URL = "http://" + SERVER_IP +
             ":8080/CafeteriaServer/rest/users/insertUser";
+
+    public final static String UPDATE_USER_URL = "http://" + SERVER_IP +
+            ":8080/CafeteriaServer/rest/users/updateUser";
 
     public final static String USER_VALIDATION_URL = "http://" + SERVER_IP +
             ":8080/CafeteriaServer/rest/users/isUserExist";

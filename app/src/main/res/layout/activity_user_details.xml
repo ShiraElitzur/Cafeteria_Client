@@ -34,12 +34,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <Button
-        android:id="@+id/btnEnableEdit"
-        android:text="@string/enable_edit_btn_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -72,8 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:hint="@string/hint_firstname"
-                    android:enabled="false"/>
+                    android:hint="@string/hint_firstname"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -94,8 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="@string/hint_lastname"
-                    android:enabled="false" />
+                    android:hint="@string/hint_lastname" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -116,40 +108,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:hint="@string/hint_email"
-                    android:enabled="false" />
+                    android:hint="@string/hint_email" />
 
             </android.support.design.widget.TextInputLayout>
 
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_password"
+            <TextView
+                android:id="@+id/tvEditPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:layout_weight="0.5"
-                >
+                android:text="@string/edit_password_btn_txt"
+                android:textSize="@dimen/headLines3"
+                android:gravity="center"
+                android:textColor="@color/colorPrimaryDark"/>
 
-                <EditText
-                    android:layout_weight="0.5"
-                    android:id="@+id/etPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:hint="@string/hint_edit_password"
-                    android:enabled="false" />
-
-            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/btnEditUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/update_user_btn_txt"
-                android:enabled="false"/>
+                android:layout_margin="20dp"
+                android:background="@color/colorPrimaryDark"/>
 
 
         </LinearLayout>

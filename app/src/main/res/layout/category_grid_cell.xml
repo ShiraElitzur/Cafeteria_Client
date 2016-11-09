@@ -4,8 +4,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="110dp"
-    android:background="@drawable/grid_cell"
     android:gravity="center"
+    android:background="@drawable/grid_cell"
     android:weightSum="10"
 
     >

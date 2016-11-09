@@ -133,7 +133,14 @@
     <string name="title_activity_user_details">פרטי משתמש</string>
     <string name="update_user_btn_txt">עדכן פרטי משתמש</string>
     <string name="hint_edit_password">לחץ לעריכת סיסמתך</string>
-    <string name="enable_edit_btn_txt">אפשר עריכה</string>
+    <string name="edit_password_btn_txt">ערוך את סיסמתך</string>
+    <string name="old_password">סיסמה ישנה</string>
+    <string name="new_password">סיסמה חדשה</string>
+    <string name="change_password">שנה סיסמה</string>
+    <string name="password_change_success">Password successfully changed</string>
+    <string name="password_incorrect">Password is incorrect</string>
+    <string name="update_user_success">Details updated successfully</string>
+    <string name="update_user_failed">Details update failed</string>
 
 
 </resources>

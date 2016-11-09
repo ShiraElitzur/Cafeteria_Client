@@ -147,7 +147,14 @@
     <string name="title_activity_user_details">User Details</string>
     <string name="update_user_btn_txt">Update User\'s Details</string>
     <string name="hint_edit_password">Press to edit your password</string>
-    <string name="enable_edit_btn_txt">Enable Edit</string>
+    <string name="edit_password_btn_txt">Edit your password</string>
+    <string name="old_password">Your old password</string>
+    <string name="new_password">New password</string>
+    <string name="change_password">Change Password</string>
+    <string name="password_change_success">Password successfully changed</string>
+    <string name="password_incorrect">Password is incorrect</string>
+    <string name="update_user_success">Details updated successfully</string>
+    <string name="update_user_failed">Details update failed</string>
 
 
 </resources>

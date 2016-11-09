@@ -44,6 +44,10 @@ public class Customer implements Serializable {
      */
     private ArrayList<Order> orders;
 
+    /**
+     * The image of this customer
+     */
+    private byte[] image;
 
     /**
      * Returns the id of the customer
@@ -139,6 +143,22 @@ public class Customer implements Serializable {
      */
     public void setOrders(ArrayList<Order> orders) {
         this.orders = orders;
+    }
+
+    /**
+     * Returns the image of this customer
+     * @return the image of this customer
+     */
+    public byte[] getImage() {
+        return image;
+    }
+
+    /**
+     * Sets the image of this customer
+     * @param image
+     */
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
 }
