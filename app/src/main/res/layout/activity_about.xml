@@ -39,6 +39,7 @@
                 android:text="@string/developedByTitle"
                 android:textSize="@dimen/headLines3"
                 android:textAlignment="viewStart" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

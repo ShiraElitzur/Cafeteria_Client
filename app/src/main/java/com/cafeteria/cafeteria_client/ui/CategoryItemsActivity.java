@@ -3,11 +3,13 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +20,9 @@ import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +37,7 @@ import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
@@ -92,7 +97,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
         if (category.getMeals() != null && category.getMeals().size() > 0) {
             initExpandableList();
-        } else {
+        }
+        if (category.getItems() != null && category.getItems().size() > 0){
             Log.e("LIST","normal list");
             initList();
         }
@@ -105,6 +111,10 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
         categoryStandAloneItemsAdapter = new CategoryStandAloneItemsAdapter(this, R.layout.category_items_child,itemsTitle);
         lvCategoryItems.setAdapter(categoryStandAloneItemsAdapter);
+        TextView itemsHeadline = new TextView(this);
+        itemsHeadline.setTextAppearance(this,android.R.style.TextAppearance_Material_Menu);
+        itemsHeadline.setText(getString(R.string.categotry_items_items));
+        lvCategoryItems.addHeaderView(itemsHeadline,null,false);
 
         lvCategoryItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
@@ -126,6 +136,11 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         categoryItemsAdapter = new CategoryItemsAdapter(this, mainsItemsDetails,mainsTitle);
 
         explvCategoryItems.setAdapter(categoryItemsAdapter);
+        TextView mealsHeadline = new TextView(this);
+        mealsHeadline.setText(getString(R.string.category_items_meals));
+        mealsHeadline.setTextAppearance(this,android.R.style.TextAppearance_Material_Menu);
+        explvCategoryItems.addHeaderView(mealsHeadline,null,false);
+
 
         // Parent Listener - listener for the items Title
         explvCategoryItems.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -174,8 +189,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     private void initCategoryItems() {
         mainsItemsDetails = new LinkedHashMap<>();
         itemsDetails = new LinkedHashMap<>();
-        //String title;
-        //List<Meal> meals;
+
         boolean existMain;
         List<Main> mains = new ArrayList<>();
 

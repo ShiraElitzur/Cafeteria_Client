@@ -94,6 +94,10 @@
 
     <!-- OrderActivity End-->
 
+
+    <string name="category_items_meals">Meals</string>
+    <string name="categotry_items_items">Items</string>
+
     <!--MealDetails Dialog-->
     <string name="dialog_tv_extras_amount">Extras Amount: %1$d</string>
     <string name="dialog_btn_extras">Choose Extras</string>

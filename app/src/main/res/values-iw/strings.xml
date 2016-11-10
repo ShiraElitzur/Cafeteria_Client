@@ -84,6 +84,11 @@
     <string name="alert_dialog_delete_item_negative_button">בטל</string>
     <!-- Delete item alert dialog End-->
 
+
+    <string name="category_items_meals">ארוחות</string>
+    <string name="categotry_items_items">פריטים</string>
+
+
     <!--MealDetails Dialog-->
     <string name="dialog_tv_extras_amount">מספר תוספות: %1$d</string>
     <string name="dialog_btn_extras">בחר תוספות</string>
