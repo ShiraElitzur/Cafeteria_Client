@@ -73,7 +73,7 @@
     <string name="pay_amount">לתשלום</string>
     <string name="nav_item_cart">לעגלת הקניות</string>
     <string name="empty_cart">ההזמנה ריקה!</string>
-    <string name="dialog_time_picker_title">בחר שעה לאיסוף המנה</string>
+    <string name="dialog_time_picker_title">בחר שעה לאיסוף ההזמנה</string>
     <string name="dialog_time_picker_limit_time">נדרש מינמום של 15 דקות להכנת ההזמנה</string>
     <string name="dialog_time_picker_time_passed">שעה זו כבר חלפה!</string>
     <!-- OrderActivity End-->

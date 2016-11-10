@@ -88,9 +88,7 @@
             android:id="@+id/fabPay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:layout_margin="15dp"
-            app:backgroundTint="#ff8a65"
             android:clickable="true"
             />
 

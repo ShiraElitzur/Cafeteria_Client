@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.CategoryItemsActivity"
     android:id="@+id/layout"
+
     >
 
     <android.support.v7.widget.Toolbar
@@ -41,6 +42,7 @@
         android:dividerHeight="0.5dp"
         android:id="@+id/lvCategoryItems"
         android:headerDividersEnabled="false"
+        android:choiceMode="singleChoice"
         android:visibility="gone"
         />
 

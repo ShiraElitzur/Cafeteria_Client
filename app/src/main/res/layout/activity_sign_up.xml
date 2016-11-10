@@ -17,6 +17,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:weightSum="10">
 
     <!--  The Title section -->
@@ -69,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:textSize="15dp"
+                    android:nextFocusDown="@+id/etLastName"
                     android:hint="@string/hint_firstname" />
 
             </android.support.design.widget.TextInputLayout>
@@ -91,6 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
+                    android:nextFocusDown="@+id/etMail"
                     android:hint="@string/hint_lastname" />
 
             </android.support.design.widget.TextInputLayout>
@@ -115,6 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
+                android:nextFocusDown="@+id/etPassword"
                 android:hint="@string/hint_email" />
 
         </android.support.design.widget.TextInputLayout>
@@ -144,6 +149,7 @@
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:nextFocusDown="@+id/etConfirmPassword"
                     android:hint="@string/hint_password" />
 
             </android.support.design.widget.TextInputLayout>

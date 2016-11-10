@@ -95,7 +95,30 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         lvOrderItems = (ListView) findViewById(R.id.lvOrderItems);
         lvOrderMeals = (ListView) findViewById(R.id.lvOrderMeals);
 
-        lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, order.getItems()));
+        List<OrderedItem> orderedItems = new ArrayList<>();
+        for (Item it: order.getItems()){
+            OrderedItem toBeAdded = new OrderedItem();
+            toBeAdded.setTitle(it.getTitle());
+            toBeAdded.setId(it.getId());
+            toBeAdded.setPrice(it.getPrice());
+
+            if (orderedItems.contains(toBeAdded)){
+                for (OrderedItem ot: orderedItems){
+                    if (ot.getId() == toBeAdded.getId()){
+                        int qty = ot.getQty();
+                        qty++;
+                        ot.setQty(qty);
+                    }
+                }
+
+            }else{
+                orderedItems.add(toBeAdded);
+            }
+
+        }
+
+
+        lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, orderedItems));
         lvOrderMeals.setAdapter(mealsAdapter = new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
 
         fabPay = (FloatingActionButton) findViewById(R.id.fabPay);
@@ -212,17 +235,17 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
      *
      * @param <T>
      */
-    private class OrderItemsAdapter<T> extends ArrayAdapter<Item> {
+    private class OrderItemsAdapter<T> extends ArrayAdapter<OrderedItem> {
 
         private int layout;
-        private List<Item> items;
+        private List<OrderedItem> items;
 
         /**
          * @param context the ui context
          * @param layout  the layout for one row
          * @param items   the list of the data
          */
-        public OrderItemsAdapter(Context context, int layout, List<Item> items) {
+        public OrderItemsAdapter(Context context, int layout, List<OrderedItem> items) {
             super(context, layout, items);
             this.layout = layout;
             this.items = items;
@@ -242,6 +265,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 holder = new ViewHolder();
                 holder.tvOrderItemTitle = (TextView) convertView.findViewById(R.id.tvOrderItemTitle);
                 holder.tvOrderItemPrice = (TextView) convertView.findViewById(R.id.tvOrderItemPrice);
+                holder.tvQty = (TextView) convertView.findViewById(R.id.tvQty);
                 holder.imgBtnRemoveItem = (ImageButton) convertView.findViewById(R.id.imgBtnRemoveItem);
                 holder.imgBtnRemoveItem.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -254,8 +278,16 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 order.setPayment(order.getPayment() - items.get(position).getPrice());
-                                                // Remove the item from the adapter
-                                                OrderItemsAdapter.this.remove(items.get(position));
+                                                if (items.get(position).getQty() == 1) {
+                                                    // Remove the item from the adapter
+                                                    removeItemFromList(items.get(position));
+                                                    OrderItemsAdapter.this.remove(items.get(position));
+                                                    lvOrderItems.invalidateViews();
+                                                } else{
+                                                    items.get(position).setQty((items.get(position).getQty())-1);
+                                                    removeItemFromList(items.get(position));
+                                                    lvOrderItems.invalidateViews();
+                                                }
                                                 // Refresh the UI
                                                 itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
                                             }
@@ -268,6 +300,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                             }
                                         }).create().show();
                     }
+
                 });
                 // keep as tag of the row the vars that match its components
                 convertView.setTag(holder);
@@ -280,8 +313,21 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
             holder.tvOrderItemTitle.setText(items.get(position).getTitle());
             holder.tvOrderItemPrice.setText(bd + " " + nis.getSymbol());
+            holder.tvQty.setText(""+items.get(position).getQty());
 
             return convertView;
+        }
+
+        private void removeItemFromList(OrderedItem item) {
+            Item toDelete = (Item) item;
+            for (Item it: order.getItems()){
+                if (it.getId() == item.getId()){
+                    toDelete = it;
+                    break;
+                }
+            }
+
+            order.getItems().remove(toDelete);
         }
 
         private class ViewHolder {
@@ -289,6 +335,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
             ImageButton imgBtnRemoveItem;
             TextView tvOrderItemPrice;
             ImageButton imgBtnEditItem;
+            TextView tvQty;
         }
 
     }
@@ -425,6 +472,19 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
             db.insertOrder(order);
             return null;
         }
+    }
+
+    private class OrderedItem extends Item{
+        int qty = 1;
+
+        public int getQty() {
+            return qty;
+        }
+
+        public void setQty(int qty) {
+            this.qty = qty;
+        }
+
     }
 
 }

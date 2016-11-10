@@ -5,33 +5,15 @@
     android:weightSum="10"
     android:padding="10dp">
 
-        <TextView
-            android:id="@+id/tvOrderItemPrice"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="Price"
-            android:layout_gravity="start"
-            android:gravity="start"/>
-
-        <TextView
-            android:id="@+id/tvOrderItemTitle"
-            android:layout_width="0dp"
-            android:layout_weight="6"
-            android:textSize="@dimen/headLines3"
-            android:layout_height="wrap_content"
-            android:text="ItemTitle"
-            android:gravity="right"
-            android:layout_gravity="right"/>
-
     <ImageButton
         android:id="@+id/imgBtnRemoveItem"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:src="@drawable/remove"
         android:background="@null"
+        android:layout_marginEnd="5dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         />
 
     <ImageButton
@@ -40,8 +22,43 @@
         android:layout_weight="1"
         android:src="@drawable/ic_edit"
         android:background="@null"
+        android:layout_marginEnd="5dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="invisible"
+        />
+
+        <TextView
+            android:id="@+id/tvOrderItemTitle"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:textSize="@dimen/headLines3"
+            android:layout_height="wrap_content"
+            android:text="ItemTitle"
+            android:gravity="start"
+            android:layout_gravity="right"/>
+
+    <TextView
+        android:id="@+id/tvQty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/grid_cell"
+        android:text="1"
+        android:gravity="start"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        />
+
+
+
+    <TextView
+        android:id="@+id/tvOrderItemPrice"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="Price"
+        android:gravity="end"
         />
 
 

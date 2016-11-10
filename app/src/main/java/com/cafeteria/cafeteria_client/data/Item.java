@@ -77,4 +77,25 @@ public class Item implements Serializable {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        return title.equals(item.title);
+
+    }
+
+    @Override
+    public int hashCode() {
+//        int hash = 7;
+//        for (int i=0; i< title.length();i++){
+//            hash = hash*31 + title.charAt(i);
+//        }
+        int hash = title.hashCode();
+        return hash;
+    }
 }

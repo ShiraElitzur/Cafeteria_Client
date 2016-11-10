@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -383,7 +384,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+            final ViewHolder holder;
             Item item = (Item) getItem(position);
 
             if (convertView == null) {
@@ -397,12 +398,43 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                     @Override
                     public void onClick(View v) {
                         Item selectedItem = (Item) getItem(position);
+                        int qty = Integer.parseInt(holder.tvQty.getText().toString());
 
                         Toast.makeText(CategoryItemsActivity.this
                                 ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
                         DataHolder dataHolder = DataHolder.getInstance();
-                        dataHolder.getTheOrder().getItems().add(selectedItem);
+                        for (int i=0; i < qty;i++){
+                            dataHolder.getTheOrder().getItems().add(selectedItem);
+                        }
                         //dataHolder.addOrderdItem(selectedItem);
+                    }
+                });
+                holder.tvQty = (TextView) convertView.findViewById(R.id.tvQty);
+                holder.tvQty.setVisibility(View.VISIBLE);
+
+                holder.imgBtnPlus = (ImageButton) convertView.findViewById(R.id.imgBtnPlus);
+                holder.imgBtnPlus.setVisibility(View.VISIBLE);
+                holder.imgBtnPlus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       int qty = Integer.parseInt(holder.tvQty.getText().toString());
+                        if (qty >= 1) {
+                            qty++;
+                            holder.tvQty.setText(String.valueOf(qty));
+                        }
+                    }
+                });
+
+                holder.imgBtnMinus = (ImageButton) convertView.findViewById(R.id.imgBtnMinus);
+                holder.imgBtnMinus.setVisibility(View.VISIBLE);
+                holder.imgBtnMinus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       int qty = Integer.parseInt(holder.tvQty.getText().toString());
+                        if (qty > 1){
+                            qty--;
+                            holder.tvQty.setText(String.valueOf(qty));
+                        }
                     }
                 });
 
@@ -433,5 +465,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         TextView tvMealName;
         TextView tvTotal;
         ImageButton imgBtnAdd;
+        TextView tvQty;
+        ImageButton imgBtnPlus;
+        ImageButton imgBtnMinus;
     }
 }
