@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Main;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
@@ -124,7 +125,9 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                 Toast.makeText(CategoryItemsActivity.this
                         ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
                 DataHolder dataHolder = DataHolder.getInstance();
-                dataHolder.getTheOrder().getItems().add(selectedItem);
+                OrderedItem orderedItem = new OrderedItem();
+                orderedItem.setParentItem(selectedItem);
+                dataHolder.getTheOrder().getItems().add(orderedItem);
             }
         });
     }
@@ -404,7 +407,10 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                                 ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
                         DataHolder dataHolder = DataHolder.getInstance();
                         for (int i=0; i < qty;i++){
-                            dataHolder.getTheOrder().getItems().add(selectedItem);
+
+                            OrderedItem orderedItem = new OrderedItem();
+                            orderedItem.setParentItem(selectedItem);
+                            dataHolder.getTheOrder().getItems().add(orderedItem);
                         }
                         //dataHolder.addOrderdItem(selectedItem);
                     }

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
+import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.google.gson.Gson;
@@ -148,8 +149,8 @@ public class PayPalActivity extends AppCompatActivity {
         // temporary store in this list
         List<PayPalItem> orderItems = new ArrayList<>();
         PayPalItem payPalItem;
-        for (Item item : order.getItems()){
-            payPalItem = new PayPalItem(item.getTitle(),1,new BigDecimal(item.getPrice()),currency,String.valueOf(item.getId()));
+        for (OrderedItem item : order.getItems()){
+            payPalItem = new PayPalItem(item.getParentItem().getTitle(),1,new BigDecimal(item.getParentItem().getPrice()),currency,String.valueOf(item.getId()));
             orderItems.add(payPalItem);
         }
         for (OrderedMeal meal : order.getMeals()){

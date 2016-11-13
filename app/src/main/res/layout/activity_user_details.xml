@@ -47,6 +47,13 @@
             android:padding="40dp">
 
 
+            <com.cafeteria.cafeteria_client.ui.RoundedImageView
+                android:id="@+id/imgviewUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/user_male"/>
+
+
             <!--  The edit-texts section -->
 
             <android.support.design.widget.TextInputLayout

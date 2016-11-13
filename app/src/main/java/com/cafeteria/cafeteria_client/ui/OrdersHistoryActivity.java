@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.cafeteria.cafeteria_client.LocalDBHandler;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
@@ -146,11 +147,11 @@ public class OrdersHistoryActivity extends DrawerActivity {
             if(order.getItems().size() > 0) {
                 details.append("\n");
                 details.append(getResources().getString(R.string.history_items_title));
-                for(Item item: order.getItems()) {
+                for(OrderedItem item: order.getItems()) {
                     details.append("\n");
-                    details.append("* "+item.getTitle());
+                    details.append("* "+item.getParentItem().getTitle());
                     details.append(" ");
-                    bd = new BigDecimal(item.getPrice());
+                    bd = new BigDecimal(item.getParentItem().getPrice());
                     bd = bd.setScale(1, RoundingMode.HALF_DOWN);
                     details.append(bd + " " + nis.getSymbol());
                 }

@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.LocalDBHandler;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.utils.LocaleHelper;
@@ -95,15 +96,16 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         lvOrderItems = (ListView) findViewById(R.id.lvOrderItems);
         lvOrderMeals = (ListView) findViewById(R.id.lvOrderMeals);
 
-        List<OrderedItem> orderedItems = new ArrayList<>();
-        for (Item it: order.getItems()){
-            OrderedItem toBeAdded = new OrderedItem();
-            toBeAdded.setTitle(it.getTitle());
-            toBeAdded.setId(it.getId());
-            toBeAdded.setPrice(it.getPrice());
+        List<QuantityItem> quantityItems = new ArrayList<>();
+        for (OrderedItem it: order.getItems()){
+            QuantityItem toBeAdded = new QuantityItem();
+            toBeAdded.setParentItem(new Item());
+            toBeAdded.getParentItem().setTitle(it.getParentItem().getTitle());
+            toBeAdded.getParentItem().setId(it.getParentItem().getId());
+            toBeAdded.getParentItem().setPrice(it.getParentItem().getPrice());
 
-            if (orderedItems.contains(toBeAdded)){
-                for (OrderedItem ot: orderedItems){
+            if (quantityItems.contains(toBeAdded)){
+                for (QuantityItem ot: quantityItems){
                     if (ot.getId() == toBeAdded.getId()){
                         int qty = ot.getQty();
                         qty++;
@@ -112,13 +114,13 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 }
 
             }else{
-                orderedItems.add(toBeAdded);
+                quantityItems.add(toBeAdded);
             }
 
         }
 
 
-        lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, orderedItems));
+        lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, quantityItems));
         lvOrderMeals.setAdapter(mealsAdapter = new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
 
         fabPay = (FloatingActionButton) findViewById(R.id.fabPay);
@@ -154,7 +156,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                     db.insertOrder(order);
 
                     DataHolder.getInstance().setTheOrder(new Order());
-                    DataHolder.getInstance().getTheOrder().setItems(new ArrayList<Item>());
+                    DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
                     DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
                     OrderActivity.this.recreate();
                 }
@@ -235,17 +237,17 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
      *
      * @param <T>
      */
-    private class OrderItemsAdapter<T> extends ArrayAdapter<OrderedItem> {
+    private class OrderItemsAdapter<T> extends ArrayAdapter<QuantityItem> {
 
         private int layout;
-        private List<OrderedItem> items;
+        private List<QuantityItem> items;
 
         /**
          * @param context the ui context
          * @param layout  the layout for one row
          * @param items   the list of the data
          */
-        public OrderItemsAdapter(Context context, int layout, List<OrderedItem> items) {
+        public OrderItemsAdapter(Context context, int layout, List<QuantityItem> items) {
             super(context, layout, items);
             this.layout = layout;
             this.items = items;
@@ -277,7 +279,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                order.setPayment(order.getPayment() - items.get(position).getPrice());
+                                                order.setPayment(order.getPayment() - items.get(position).getParentItem().getPrice());
                                                 if (items.get(position).getQty() == 1) {
                                                     // Remove the item from the adapter
                                                     removeItemFromList(items.get(position));
@@ -308,19 +310,19 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 holder = (ViewHolder) convertView.getTag();
             }
             // in both cases sets the ui data to fit the item data
-            BigDecimal bd = new BigDecimal(items.get(position).getPrice());
+            BigDecimal bd = new BigDecimal(items.get(position).getParentItem().getPrice());
             bd = bd.setScale(1, RoundingMode.HALF_DOWN);
 
-            holder.tvOrderItemTitle.setText(items.get(position).getTitle());
+            holder.tvOrderItemTitle.setText(items.get(position).getParentItem().getTitle());
             holder.tvOrderItemPrice.setText(bd + " " + nis.getSymbol());
             holder.tvQty.setText(""+items.get(position).getQty());
 
             return convertView;
         }
 
-        private void removeItemFromList(OrderedItem item) {
-            Item toDelete = (Item) item;
-            for (Item it: order.getItems()){
+        private void removeItemFromList(QuantityItem item) {
+            OrderedItem toDelete = (OrderedItem) item;
+            for (OrderedItem it: order.getItems()){
                 if (it.getId() == item.getId()){
                     toDelete = it;
                     break;
@@ -474,7 +476,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         }
     }
 
-    private class OrderedItem extends Item{
+    private class QuantityItem extends OrderedItem{
         int qty = 1;
 
         public int getQty() {
@@ -485,6 +487,21 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
             this.qty = qty;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            QuantityItem that = (QuantityItem) o;
+
+            return getId() == that.getId();
+
+        }
+
+        @Override
+        public int hashCode() {
+            return getId();
+        }
     }
 
 }

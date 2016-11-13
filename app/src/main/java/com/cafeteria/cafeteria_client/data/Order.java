@@ -33,7 +33,7 @@ public class Order implements Serializable{
     /**
      * The items that this order contains
      */
-    private List<Item> items;
+    private List<OrderedItem> items;
 
     /**
      * The date and time when this order created
@@ -117,7 +117,7 @@ public class Order implements Serializable{
      * Returns the items that this order contains
      * @return the items that this order contains
      */
-    public List<Item> getItems() {
+    public List<OrderedItem> getItems() {
         return items;
     }
 
@@ -125,7 +125,7 @@ public class Order implements Serializable{
      * Sets list of items for this order
      * @param items
      */
-    public void setItems(List<Item> items) {
+    public void setItems(List<OrderedItem> items) {
         this.items = items;
     }
 
@@ -167,8 +167,8 @@ public class Order implements Serializable{
             payment += meal.getTotalPrice();
         }
 
-        for( Item item : getItems() ) {
-            payment += item.getPrice();
+        for( OrderedItem item : getItems() ) {
+            payment += item.getParentItem().getPrice();
         }
 
         return payment;

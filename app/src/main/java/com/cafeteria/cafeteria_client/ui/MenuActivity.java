@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
@@ -61,7 +62,7 @@ public class MenuActivity extends DrawerActivity {
 //            Order order = new Order();
 //            order.setCustomer(c);
             DataHolder.getInstance().setTheOrder(new Order());
-            DataHolder.getInstance().getTheOrder().setItems(new ArrayList<Item>());
+            DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
             DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
         }
     }

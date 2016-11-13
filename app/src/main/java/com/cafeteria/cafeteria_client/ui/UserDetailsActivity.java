@@ -1,15 +1,31 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.Application;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +35,9 @@ import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -36,6 +55,18 @@ public class UserDetailsActivity extends DrawerActivity {
     private EditText etEmail;
     private TextView tvEditPassword;
     private Button btnEditUser;
+    private ImageView imgViewUser;
+    private Uri imgUri;
+    public static final int CAMERA_REQUEST_CODE = 1;
+
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +137,75 @@ public class UserDetailsActivity extends DrawerActivity {
                 customer.setFirstName(etFirstName.getText().toString());
                 customer.setLastName(etLastName.getText().toString());
                 customer.setEmail(etEmail.getText().toString());
+                Log.e("DEBUG","Pic : " + customer.getImagePath());
                 new UpdateUserTask().execute();
             }
         });
 
+        imgViewUser = (ImageView)findViewById(R.id.imgviewUser);
+
+        if( customer.getImagePath() != null ) {
+            com.squareup.picasso.Picasso.with(this).
+                    load("http://" + ApplicationConstant.SERVER_IP +customer.getImagePath()).
+                    into(imgViewUser);
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.RGB_565;
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(
+//                    customer.getImage() , 0, customer.getImage().length,options);
+//            imgViewUser.setImageBitmap(bitmap);
+        }
+        imgViewUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int permission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+                if (permission != PackageManager.PERMISSION_GRANTED) {
+                    // We don't have permission so prompt the user
+                    requestPermissions(
+                            PERMISSIONS_STORAGE,
+                            REQUEST_EXTERNAL_STORAGE
+                    );
+                } else {
+                    takePicture();
+                }
+            }
+        });
+
+    }
 
 
+    private void takePicture() {
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            File img = null;
+            try {
+                img = File.createTempFile("temp", ".jpg", Environment.getExternalStorageDirectory());
+                Log.e("delete file", "file delete: " + img.delete());
+            } catch (IOException e) {
+                Log.e("debug", "IOException- failed to create temporary file");
+                e.printStackTrace();
+            }
+
+            imgUri = Uri.fromFile(img);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    takePicture();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(UserDetailsActivity.this, "Picture taking Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     private class UpdateUserTask extends AsyncTask<Void,Void,Boolean> {
@@ -166,17 +260,66 @@ public class UserDetailsActivity extends DrawerActivity {
                 e.printStackTrace();
             }
             return result;
-
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
             if (result != null && result) {
+
+                // update the customer in the shared preferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Gson gson = new Gson();
+                String customerJSON = gson.toJson(customer);
+                editor.putString("customer", customerJSON);
+                editor.apply();
+
                 Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_success), Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_failed), Toast.LENGTH_LONG).show();
             }
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if( requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK ) {
+
+//            Bitmap bitmap = null;
+//
+//            byte[] byteArray = null;
+//            // get the bitmap from the uri that it was stored in
+//
+//            try {
+//                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imgUri);
+//            } catch (FileNotFoundException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//
+            File file = new File( imgUri.getPath());
+//            file.delete();
+
+            com.squareup.picasso.Picasso.with(this).
+                    load(file).
+                    into(imgViewUser);
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//
+//
+//            if( bitmap != null ) {
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+//                byteArray = stream.toByteArray();
+//            }
+//
+//            customer.setImage(byteArray);
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.RGB_565;
+//            imgViewUser.setImageBitmap(BitmapFactory.decodeByteArray(
+//                    byteArray , 0, byteArray.length,options));
         }
     }
 }

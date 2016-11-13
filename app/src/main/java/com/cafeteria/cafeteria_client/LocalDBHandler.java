@@ -12,6 +12,7 @@ import com.cafeteria.cafeteria_client.data.Extra;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.Order;
+import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 
@@ -149,11 +150,11 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         }
 
         // loop through the items of this order
-        for(Item item : order.getItems()){
+        for(OrderedItem item : order.getItems()){
             // insert new record to the items table
             values = new ContentValues();
-            values.put(TITLE_COL, item.getTitle());
-            values.put(PRICE_COL, item.getPrice());
+            values.put(TITLE_COL, item.getParentItem().getTitle());
+            values.put(PRICE_COL, item.getParentItem().getPrice());
             db.insert(ITEMS_TABLE_NAME, null, values);
             itemId = getLastId(ITEMS_TABLE_NAME);
 
@@ -217,14 +218,14 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                 mealCursor.close();
                 order.setMeals(meals);
 
-                List<Item> items = new ArrayList<>();
-                Item item;
+                List<OrderedItem> items = new ArrayList<>();
+                OrderedItem item;
                 Cursor itemCursor = db.rawQuery("SELECT * FROM " +ITEMS_TABLE_NAME+ " WHERE Id IN (" +
                         " SELECT " + ITEM_ID_COL + " FROM " + ORDER_ITEM_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
                 while (itemCursor.moveToNext()) {
-                    item = new Item();
-                    item.setTitle(itemCursor.getString(1));
-                    item.setPrice(itemCursor.getDouble(2));
+                    item = new OrderedItem();
+                    item.getParentItem().setTitle(itemCursor.getString(1));
+                    item.getParentItem().setPrice(itemCursor.getDouble(2));
                     items.add(item);
                 }
                 itemCursor.close();

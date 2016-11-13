@@ -19,7 +19,7 @@ public class ApplicationConstant {
      * Shira IP
      */
     public final static String SERVER_IP = "192.168.43.231";
-
+//    public final static String SERVER_IP = "35.162.198.159";
     /**
      * Moshe IP
      */

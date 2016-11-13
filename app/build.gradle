@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.cafeteria.cafeteria_client"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 24
         multiDexEnabled true
         versionCode 1
@@ -40,4 +40,7 @@ dependencies {
 
     // Required for geotagging
     compile "com.google.android.gms:play-services-location:+"
+
+    // Picasso - image loader
+    compile 'com.squareup.picasso:picasso:2.4.0'
 }

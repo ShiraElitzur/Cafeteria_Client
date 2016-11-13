@@ -85,7 +85,7 @@ public class Item implements Serializable {
 
         Item item = (Item) o;
 
-        return title.equals(item.title);
+        return item.getId() == getId();
 
     }
 

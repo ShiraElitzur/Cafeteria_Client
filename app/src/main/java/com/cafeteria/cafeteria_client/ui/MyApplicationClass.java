@@ -1,8 +1,11 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
