@@ -18,38 +18,67 @@ public class ApplicationConstant {
     /**
      * Shira IP
      */
-    public final static String SERVER_IP = "192.168.43.231";
+//    public final static String SERVER_IP = "192.168.43.231";
 //    public final static String SERVER_IP = "35.162.198.159";
     /**
      * Moshe IP
      */
     //public final static String SERVER_IP = "10.0.0.146";
 
+    /**
+     * Global Server
+     */
+    public static final String SERVER_IP = "cafeteriaserver.eu-gb.mybluemix.net";
 
 
     public static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
     public static final String DATE_FORMAT = "dd-MM-yyyy";
+
+//    public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +
+//            ":8080/CafeteriaServer/rest/data/getCategories";
+//
+//    public final static String GET_DRINKS_URL = "http://" + SERVER_IP +
+//            ":8080/CafeteriaServer/rest/data/getDrinks";
+//
+//    public final static String USER_REGISTRATION_URL = "http://" + SERVER_IP +
+//            ":8080/CafeteriaServer/rest/users/insertUser";
+//
+//    public final static String UPDATE_USER_URL = "http://" + SERVER_IP +
+//            ":8080/CafeteriaServer/rest/users/updateUser";
+//
+//    public final static String USER_VALIDATION_URL = "http://" + SERVER_IP +
+//            ":8080/CafeteriaServer/rest/users/isUserExist";
+//
+//    public final static String GET_TOKEN = "http://" + SERVER_IP +
+//            ":8080/CafeteriaServer/rest/push/getToken";
+//
+//    public final static String SET_TOKEN = "http://" + SERVER_IP +
+//            ":8080/CafeteriaServer/rest/push/attachPushIdToUser";
+//
+//    public final static String SEND_ORDER = "http://" + SERVER_IP +
+//            ":8080/CafeteriaServer/rest/data/insertOrder";
+
     public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +
-            ":8080/CafeteriaServer/rest/data/getCategories";
+            "/rest/data/getCategories";
 
     public final static String GET_DRINKS_URL = "http://" + SERVER_IP +
-            ":8080/CafeteriaServer/rest/data/getDrinks";
+            "/rest/data/getDrinks";
 
     public final static String USER_REGISTRATION_URL = "http://" + SERVER_IP +
-            ":8080/CafeteriaServer/rest/users/insertUser";
+            "/rest/users/insertUser";
 
     public final static String UPDATE_USER_URL = "http://" + SERVER_IP +
-            ":8080/CafeteriaServer/rest/users/updateUser";
+            "/rest/users/updateUser";
 
     public final static String USER_VALIDATION_URL = "http://" + SERVER_IP +
-            ":8080/CafeteriaServer/rest/users/isUserExist";
+            "/rest/users/isUserExist";
 
     public final static String GET_TOKEN = "http://" + SERVER_IP +
-            ":8080/CafeteriaServer/rest/push/getToken";
+            "/rest/push/getToken";
 
     public final static String SET_TOKEN = "http://" + SERVER_IP +
-            ":8080/CafeteriaServer/rest/push/attachPushIdToUser";
+            "/rest/push/attachPushIdToUser";
 
     public final static String SEND_ORDER = "http://" + SERVER_IP +
-            ":8080/CafeteriaServer/rest/data/insertOrder";
+            "/rest/data/insertOrder";
 }
