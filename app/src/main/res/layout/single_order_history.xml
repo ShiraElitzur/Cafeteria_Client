@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp">
@@ -9,6 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="10">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_action_calendar_day"
+            android:id="@+id/imageView2"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tvOrderHistoryDate"
@@ -20,10 +29,11 @@
             android:gravity="right"
             android:layout_gravity="right"/>
 
+
         <TextView
             android:id="@+id/tvOrderHistoryPrice"
             android:layout_width="0dp"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:text="Price"
@@ -33,6 +43,7 @@
     </LinearLayout>
 
     <TextView
+        android:layout_marginStart="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
