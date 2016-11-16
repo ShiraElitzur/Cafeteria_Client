@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager facebookCallbackManager;
     private LoginButton facebookLoginBtn;
     private ProfileTracker profileTracker;
+    private Customer customer;
 
     /**
      *  The Id of tbe user that this class logs in - PK for primary key
@@ -84,23 +85,16 @@ public class LoginActivity extends AppCompatActivity {
 
         // get email string from shared preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String customer = sharedPreferences.getString("customer", "");
+        String customerJSON = sharedPreferences.getString("customer", "");
         // if the email found - it's not the first time opening this app
         // automatically redirect to home screen
-        if (customer != null && !customer.equals("")) {
+        if (customerJSON != null && !customerJSON.equals("")) {
             // before the redirect... get the userId and execute the task that checks if this user
             // has this device token in the db
-            Gson gson = new Gson();
-            Customer c = gson.fromJson(customer, Customer.class);
-            userPKId = c.getId();
-            new RefreshTokenTask().execute();
-            finish();
-            Intent homeScreen = new Intent(this, MenuActivity.class);
-            startActivity(homeScreen);
+            setTokenAndStartHomeActivity();
         }
 
         facebookLoginBtn.registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {
-            Customer customer;
 
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -147,13 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                         customer.setPassword(facebookData.getString("birthday"));
                         facebookData.getString("gender");
 
-                        Gson gson = new Gson();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        String customerJSON = gson.toJson(customer);
-                        editor.putString("customer", customerJSON);
-                        editor.apply();
-
-                        new validateOrSignUpTask(customer).execute();
+                        new validateOrSignUpTask().execute();
                     }
                 });
                 Bundle parameters = new Bundle();
@@ -254,16 +242,12 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Gson gson = new Gson();
                 Customer toSave = gson.fromJson(response, Customer.class);
-                // ***********
-                userPKId = toSave.getId();
-                // ***********
+
                 String customerJSON = gson.toJson(toSave);
                 editor.putString("customer", customerJSON);
                 editor.apply();
-                new RefreshTokenTask().execute();
-                Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                startActivity(intent);
-                LoginActivity.this.finish();
+                setTokenAndStartHomeActivity();
+
             } else {
                 Toast.makeText(LoginActivity.this, getResources().getString(R.string.login_error), Toast.LENGTH_LONG).show();
             }
@@ -312,14 +296,13 @@ public class LoginActivity extends AppCompatActivity {
 
     // FACEBOOK LOGIN TASK
     private class validateOrSignUpTask extends AsyncTask<Void, Void, Boolean> {
-        Customer facebookCustomer;
         String emailTxt;
         String passwordTxt;
+        boolean success = false;
 
-        public validateOrSignUpTask(Customer customer){
-            this.facebookCustomer = customer;
-            emailTxt = facebookCustomer.getEmail();
-            passwordTxt = facebookCustomer.getPassword();
+        public validateOrSignUpTask(){
+            emailTxt = customer.getEmail();
+            passwordTxt = customer.getPassword();
         }
 
         @Override
@@ -329,7 +312,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            Boolean isExist = false;
             Boolean result = false;
 
             Log.d("FACEBOOK","Log in validation in process for.. " + emailTxt + " " + passwordTxt);
@@ -360,19 +342,26 @@ public class LoginActivity extends AppCompatActivity {
                 return null;
             }
 
+            String responseString = response.toString().trim();
+            Log.e("FACEBOOK","user response : "+ responseString);
+
             Log.d("FACEBOOK","after validation result is: " +response );
 
             if (!response.toString().trim().equals("null")) {
+                success = true;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("customer", response.toString());
+                editor.apply();
                 return false;
             } else{
                 Log.d("FACEBOOK","Sign up process starting..");
 
                 // Request - send the customer as json to the server for insertion
                 Gson gson = new Gson();
-                String jsonUser = gson.toJson(facebookCustomer, Customer.class);
+                String jsonUser = gson.toJson(customer, Customer.class);
                 URL url = null;
                 try {
-                    url = new URL(ApplicationConstant.USER_REGISTRATION_URL);
+                    url = new URL(ApplicationConstant.USER_FACEBOOK_REGISTRATION_URL);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setDoOutput(true);
                     con.setDoInput(true);
@@ -403,14 +392,14 @@ public class LoginActivity extends AppCompatActivity {
                     con.disconnect();
 
                     Log.d("FACEBOOK","after sign up result is: " +response );
+                    success = true;
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("customer", response.toString());
+                    editor.apply();
 
-
-                    if (response.toString().trim().equals("OK")) {
+                    if (response.toString().trim().equals("null") || response == null) {
                         result = true;
                     }
-//                JsonObject objectRes = new JsonParser().parse(response.toString()).getAsJsonObject();
-//                JsonElement elementRes = objectRes.get("result");
-//                result = elementRes.getAsBoolean();
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -432,10 +421,9 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 Log.d("FACEBOOK","Client is already exist or signup is failed");
             }
-            new RefreshTokenTask().execute();
-            finish();
-            Intent homeScreen = new Intent(LoginActivity.this, MenuActivity.class);
-            startActivity(homeScreen);
+            if (success){
+                setTokenAndStartHomeActivity();
+            }
 
         }
     }
@@ -475,8 +463,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 // now comparing this old token with the device token (= 'userId' in the overridden method)
                 OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-                        @Override
-                        public void idsAvailable(String userId, String registrationId) {
+                    @Override
+                    public void idsAvailable(String userId, String registrationId) {
                         Log.d("debug", "Device Token:" + userId);
                         // if there is no saved token or token is different from device token
                         if(userOldToken == null || !userOldToken.equals(userId)) {
@@ -524,5 +512,17 @@ public class LoginActivity extends AppCompatActivity {
         if (profileTracker != null) {
             profileTracker.stopTracking();
         }
+    }
+
+    private void setTokenAndStartHomeActivity(){
+        Gson gson = new Gson();
+        String customerJSON = sharedPreferences.getString("customer", "");
+        customer = gson.fromJson(customerJSON, Customer.class);
+
+        userPKId = customer.getId();
+        new RefreshTokenTask().execute();
+        finish();
+        Intent homeScreen = new Intent(LoginActivity.this, MenuActivity.class);
+        startActivity(homeScreen);
     }
 }

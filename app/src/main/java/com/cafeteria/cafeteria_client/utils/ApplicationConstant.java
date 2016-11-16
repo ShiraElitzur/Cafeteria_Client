@@ -13,7 +13,7 @@ public class ApplicationConstant {
     /**
      * Anael IP
      */
-    //public final static String SERVER_IP = "192.168.43.91";
+    public final static String SERVER_IP = "192.168.1.19";
 
     /**
      * Shira IP
@@ -28,57 +28,62 @@ public class ApplicationConstant {
     /**
      * Global Server
      */
-    public static final String SERVER_IP = "cafeteriaserver.eu-gb.mybluemix.net";
+//    public static final String SERVER_IP = "time2eat.eu-gb.mybluemix.net";
 
 
     public static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
     public static final String DATE_FORMAT = "dd-MM-yyyy";
 
-//    public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/data/getCategories";
-//
-//    public final static String GET_DRINKS_URL = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/data/getDrinks";
-//
-//    public final static String USER_REGISTRATION_URL = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/users/insertUser";
-//
-//    public final static String UPDATE_USER_URL = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/users/updateUser";
-//
-//    public final static String USER_VALIDATION_URL = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/users/isUserExist";
-//
-//    public final static String GET_TOKEN = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/push/getToken";
-//
-//    public final static String SET_TOKEN = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/push/attachPushIdToUser";
-//
-//    public final static String SEND_ORDER = "http://" + SERVER_IP +
-//            ":8080/CafeteriaServer/rest/data/insertOrder";
-
     public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +
-            "/rest/data/getCategories";
+            ":8080/CafeteriaServer/rest/data/getCategories";
 
     public final static String GET_DRINKS_URL = "http://" + SERVER_IP +
-            "/rest/data/getDrinks";
+            ":8080/CafeteriaServer/rest/data/getDrinks";
 
     public final static String USER_REGISTRATION_URL = "http://" + SERVER_IP +
-            "/rest/users/insertUser";
+            ":8080/CafeteriaServer/rest/users/insertUser";
+
+    public final static String USER_FACEBOOK_REGISTRATION_URL = "http://" + SERVER_IP +
+            ":8080/CafeteriaServer/rest/users/insertFacebookUser";
 
     public final static String UPDATE_USER_URL = "http://" + SERVER_IP +
-            "/rest/users/updateUser";
+            ":8080/CafeteriaServer/rest/users/updateUser";
 
     public final static String USER_VALIDATION_URL = "http://" + SERVER_IP +
-            "/rest/users/isUserExist";
+            ":8080/CafeteriaServer/rest/users/isUserExist";
 
     public final static String GET_TOKEN = "http://" + SERVER_IP +
-            "/rest/push/getToken";
+            ":8080/CafeteriaServer/rest/push/getToken";
 
     public final static String SET_TOKEN = "http://" + SERVER_IP +
-            "/rest/push/attachPushIdToUser";
+            ":8080/CafeteriaServer/rest/push/attachPushIdToUser";
 
     public final static String SEND_ORDER = "http://" + SERVER_IP +
-            "/rest/data/insertOrder";
+            ":8080/CafeteriaServer/rest/data/insertOrder";
+//
+//    public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +
+//            "/rest/data/getCategories";
+//
+//    public final static String GET_DRINKS_URL = "http://" + SERVER_IP +
+//            "/rest/data/getDrinks";
+//
+//    public final static String USER_REGISTRATION_URL = "http://" + SERVER_IP +
+//            "/rest/users/insertUser";
+//
+//public final static String USER_FACEBOOK_REGISTRATION_URL = "http://" + SERVER_IP +
+//        "/rest/users/insertFacebookUser";
+//    public final static String UPDATE_USER_URL = "http://" + SERVER_IP +
+//            "/rest/users/updateUser";
+//
+//    public final static String USER_VALIDATION_URL = "http://" + SERVER_IP +
+//            "/rest/users/isUserExist";
+//
+//    public final static String GET_TOKEN = "http://" + SERVER_IP +
+//            "/rest/push/getToken";
+//
+//    public final static String SET_TOKEN = "http://" + SERVER_IP +
+//            "/rest/push/attachPushIdToUser";
+//
+//    public final static String SEND_ORDER = "http://" + SERVER_IP +
+//            "/rest/data/insertOrder";
 }
