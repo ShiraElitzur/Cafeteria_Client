@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,13 +48,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class CategoryItemsActivity extends AppCompatActivity implements OnDialogResultListener{
+public class CategoryItemsActivity extends AppCompatActivity implements OnDialogResultListener
+    ,SearchView.OnQueryTextListener {
 
     private ExpandableListView explvCategoryItems;
     private ListView lvCategoryItems;
     private CategoryItemsAdapter categoryItemsAdapter;
     private CategoryStandAloneItemsAdapter categoryStandAloneItemsAdapter;
     private Currency nis;
+    private SearchView searchView;
+    private List<Item> backup;
+    private boolean explvList;
+    private boolean list;
+    private List<Main> backupMain;
+
 
     /**
      * Holds the name of the item and a list of the meal names
@@ -99,11 +107,16 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
         if (category.getMeals() != null && category.getMeals().size() > 0) {
             initExpandableList();
+            explvList = true;
         }
         if (category.getItems() != null && category.getItems().size() > 0){
             Log.e("LIST","normal list");
             initList();
+            list = true;
         }
+
+        searchView = (SearchView) findViewById(R.id.search); // inititate a search view
+        searchView.setOnQueryTextListener(this);
 
     }
 
@@ -247,6 +260,22 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         dataHolder.getTheOrder().getMeals().add(orderedMeal);
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (explvList){
+            categoryItemsAdapter.filter(newText);
+        }
+        if (list){
+            categoryStandAloneItemsAdapter.filter(newText);
+        }
+        return false;
+    }
+
     private class CategoryItemsAdapter extends BaseExpandableListAdapter{
 
         private Context context;
@@ -258,6 +287,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
             this.context = context;
             this.itemsDetails = itemsDetails;
             this.mains = mains;
+            backupMain = new ArrayList<>();
+            backupMain.addAll(mains);
         }
 
         @Override
@@ -357,6 +388,22 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         public boolean isChildSelectable(int i, int i1) {
             return true;
         }
+
+        public void filter(String charText) {
+            charText = charText.toLowerCase(Locale.getDefault());
+            mains.clear();
+
+            if (charText.length() == 0){
+                mains.addAll(backupMain);
+            } else {
+                for (Main main : backupMain) {
+                    if (main.getTitle().toLowerCase(Locale.getDefault()).contains(charText)) {
+                        mains.add(main);
+                    }
+                }
+            }
+            notifyDataSetChanged();
+        }
     }
 
     public class CategoryStandAloneItemsAdapter extends BaseAdapter {
@@ -368,6 +415,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
             this.context = context;
             this.layout = layout;
             this.items = items;
+            backup = new ArrayList<>();
+            backup.addAll(items);
         }
 
         @Override
@@ -460,12 +509,29 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
             return convertView;
         }
 
+        public void filter(String charText) {
+            charText = charText.toLowerCase(Locale.getDefault());
+            items.clear();
+
+            if (charText.length() == 0){
+                items.addAll(backup);
+            } else {
+                for (Item it : backup) {
+                    if (it.getTitle().toLowerCase(Locale.getDefault()).contains(charText)) {
+                        items.add(it);
+                    }
+                }
+            }
+            notifyDataSetChanged();
+        }
+
     }
 
     private class ViewHolderPrimary {
         TextView tvItemName;
 
     }
+
 
     private class ViewHolder {
         TextView tvMealName;
