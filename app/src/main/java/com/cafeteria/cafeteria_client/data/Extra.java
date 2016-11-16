@@ -24,6 +24,11 @@ public class Extra implements Serializable {
     private Double price;
 
     /**
+     * Represent if this item is in stock
+     */
+    private boolean inStock;
+
+    /**
      * Returns the id of this extra
      * @return the id of this extra
      */
@@ -70,4 +75,13 @@ public class Extra implements Serializable {
     public void setPrice(Double price) {
         this.price = price;
     }
+
+    public boolean isInStock() {
+        return inStock;
+    }
+
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
+    }
+
 }

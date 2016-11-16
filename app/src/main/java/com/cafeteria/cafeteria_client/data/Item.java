@@ -29,6 +29,10 @@ public class Item implements Serializable {
      */
     private double price;
 
+    /**
+     * Represent if this item is in stock
+     */
+    private boolean inStock;
 
     /**
      * Returns the id of this item
@@ -91,11 +95,17 @@ public class Item implements Serializable {
 
     @Override
     public int hashCode() {
-//        int hash = 7;
-//        for (int i=0; i< title.length();i++){
-//            hash = hash*31 + title.charAt(i);
-//        }
         int hash = title.hashCode();
         return hash;
     }
+
+    public boolean isInStock() {
+        return inStock;
+    }
+
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
+    }
+
+
 }

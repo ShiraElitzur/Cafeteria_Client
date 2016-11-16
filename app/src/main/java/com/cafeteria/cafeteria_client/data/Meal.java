@@ -49,6 +49,12 @@ public class Meal implements Serializable {
     private double price;
 
     /**
+     * The serving form of the meal
+     * For example : Baguette
+     */
+    private ServingForm serving;
+
+    /**
      * Returns the id of this meal
      * @return the id of this meal
      */
@@ -143,6 +149,14 @@ public class Meal implements Serializable {
      */
     public void setExtraAmount(int extraAmount) {
         this.extraAmount = extraAmount;
+    }
+
+    public ServingForm getServing() {
+        return serving;
+    }
+
+    public void setServing(ServingForm serving) {
+        this.serving = serving;
     }
 
 }
