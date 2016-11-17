@@ -55,6 +55,11 @@ public class Meal implements Serializable {
     private ServingForm serving;
 
     /**
+     * Is this meal included drink in the price
+     */
+    private boolean includesDrink;
+
+    /**
      * Returns the id of this meal
      * @return the id of this meal
      */
@@ -151,12 +156,35 @@ public class Meal implements Serializable {
         this.extraAmount = extraAmount;
     }
 
+    /**
+     * Returns the serving form of this meal
+     * @return the serving form
+     */
     public ServingForm getServing() {
         return serving;
     }
 
+    /**
+     * Sets the serving in this meal
+     * @param serving
+     */
     public void setServing(ServingForm serving) {
         this.serving = serving;
     }
 
+    /**
+     * Returns whether this meal includes a drink in the price
+     * @return a boolean represent if this meal includes a drink in the price
+     */
+    public boolean isIncludesDrink() {
+        return includesDrink;
+    }
+
+    /**
+     * Sets if this meal includes drink in the price
+     * @param includesDrink
+     */
+    public void setIncludesDrink(boolean includesDrink) {
+        this.includesDrink = includesDrink;
+    }
 }

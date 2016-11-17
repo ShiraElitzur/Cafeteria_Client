@@ -168,8 +168,8 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     @Override
     public void onBackPressed() {
         finish();
-        Intent menuActivtiyInent = new Intent(OrderActivity.this, MenuActivity.class);
-        startActivity(menuActivtiyInent);
+        Intent menuActivtiyIntent = new Intent(OrderActivity.this, MenuActivity.class);
+        startActivity(menuActivtiyIntent);
     }
 
     /**

@@ -339,4 +339,11 @@ public class UserDetailsActivity extends DrawerActivity {
 //                    byteArray , 0, byteArray.length,options));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent userDetailsIntent = new Intent(UserDetailsActivity.this, MenuActivity.class);
+        startActivity(userDetailsIntent);
+    }
 }

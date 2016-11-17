@@ -50,6 +50,7 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
+                android:launchMode="singleTop"
                 android:value=".ui.MenuActivity" />
         </activity>
         <activity

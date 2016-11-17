@@ -112,8 +112,8 @@
     <string name="dialog_spinner_default_text">Select Drink</string>
     <string name="dialog_no_extra_left">Addition of %1$d extra added to total</string>
     <string name="dialog_btn_keep_shopping_pressed">Order added to shopping bascket</string>
-
-
+    <string name="dialog_tv_includes_drink">This meal includes a drink</string>
+    <string name="dialog_tv_not_includes_drink">This meal does not includes a drink</string>
     <!--MealDetails Dialog End-->
 
     <!--AboutApp Dialog-->

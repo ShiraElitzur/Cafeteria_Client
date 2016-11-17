@@ -103,6 +103,8 @@
     <string name="dialog_spinner_default_text">בחר משקה</string>
     <string name="dialog_no_extra_left">%1$d תוספות נוספו לתשלום</string>
     <string name="dialog_btn_keep_shopping_pressed">ההזמנה נוספה לסל הקניות</string>
+    <string name="dialog_tv_includes_drink">ארוחה זו כוללת שתייה</string>
+    <string name="dialog_tv_not_includes_drink">ארוחה זו אינה כוללת שתייה</string>
     <!--MealDetails Dialog End-->
 
     <!--AboutApp Activity -->

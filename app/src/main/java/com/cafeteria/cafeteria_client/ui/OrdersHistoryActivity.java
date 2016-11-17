@@ -183,4 +183,11 @@ public class OrdersHistoryActivity extends DrawerActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent orderHistoryIntent = new Intent(OrdersHistoryActivity.this, MenuActivity.class);
+        startActivity(orderHistoryIntent);
+    }
+
 }

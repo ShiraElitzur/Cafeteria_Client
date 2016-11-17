@@ -42,18 +42,19 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
     private Button btnExtras;
     private TextView tvMealName;
     private TextView tvExtrasAmount;
+    private TextView tvIncludesDrink;
     private EditText etComment;
     private TextView tvTotal;
     private Button btnOrder;
     private Button btnKeepShopping;
     private Dialog dialog;
-    private Currency nis;
     private View view;
 
     // Data Objects
     private Drink chosenDrink;
     private List<Extra> chosenExtra = new ArrayList<>();
     private OrderedMeal orderedMeal;
+    private Currency nis;
 
     private OnDialogResultListener mListener;
     private double drinkPrice = 0;
@@ -165,13 +166,18 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 chosenDrink = (Drink) parent.getItemAtPosition(position);
-                drinkPrice = chosenDrink.getPrice();
-                BigDecimal bd = new BigDecimal(orderedMeal.getParentMeal().getPrice() + drinkPrice + extraPrice);
-                bd = bd.setScale(2, RoundingMode.HALF_UP);
+                if (orderedMeal.getParentMeal().isIncludesDrink()){ // if this meal NOT includes drink
+                    drinkPrice = 0;
+                } else{
+                    drinkPrice = chosenDrink.getPrice();
+                    BigDecimal bd = new BigDecimal(orderedMeal.getParentMeal().getPrice() + drinkPrice + extraPrice);
+                    bd = bd.setScale(2, RoundingMode.HALF_UP);
 
-                String total = String.format(getResources().getString(R.string.dialog_tv_total)
-                        , bd.doubleValue(), nis.getSymbol());
-                tvTotal.setText(total);
+                    String total = String.format(getResources().getString(R.string.dialog_tv_total)
+                            , bd.doubleValue(), nis.getSymbol());
+                    tvTotal.setText(total);
+                }
+
             }
 
             @Override
@@ -256,6 +262,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         btnExtras = (Button) view.findViewById(R.id.btnExtras);
         tvMealName = (TextView) view.findViewById(R.id.tvMealName);
         tvExtrasAmount = (TextView) view.findViewById(R.id.tvExtrasAmount);
+        tvIncludesDrink = (TextView) view.findViewById(R.id.tvIncludesDrink);
         etComment = (EditText) view.findViewById(R.id.etComment);
         tvTotal = (TextView) view.findViewById(R.id.tvTotal);
         btnOrder = (Button) view.findViewById(R.id.btnOrder);
@@ -300,6 +307,12 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         }
 
         tvExtrasAmount.setText(extrasAmount);
+
+        if (orderedMeal.getParentMeal().isIncludesDrink()){
+            tvIncludesDrink.setText(getResources().getString(R.string.dialog_tv_includes_drink));
+        }else{
+            tvIncludesDrink.setText(getResources().getString(R.string.dialog_tv_not_includes_drink));
+        }
 
 
         tvMealName.setText(orderedMeal.getParentMeal().getTitle());

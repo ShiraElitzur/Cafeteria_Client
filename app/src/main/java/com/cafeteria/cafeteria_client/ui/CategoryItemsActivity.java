@@ -360,19 +360,20 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                 holder.tvMealName = (TextView) convertView.findViewById(R.id.tvMealName);
                 holder.tvTotal = (TextView) convertView.findViewById(R.id.tvTotal);
                 holder.imgBtnAdd = (ImageButton) convertView.findViewById(R.id.imgBtnAdd);
-                holder.imgBtnAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Meal meal = (Meal) getChild(parentPosition,childPosition);
-                        initMealDetailsDialog(meal);
-                    }
-                });
 
                 convertView.setTag(holder);
 
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+
+            holder.imgBtnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Meal meal = (Meal) getChild(parentPosition,childPosition);
+                    initMealDetailsDialog(meal);
+                }
+            });
 
             holder.tvMealName.setTypeface(null, Typeface.BOLD);
             holder.tvMealName.setText(meal.getTitle());
