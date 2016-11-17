@@ -1,5 +1,6 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,8 +39,15 @@ import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
@@ -53,6 +61,8 @@ import java.util.Locale;
  */
 public class OrderActivity extends DrawerActivity implements OnDialogResultListener {
 
+    private static final int ORDER_REQ = 1;
+
     /**
      * The UI list that displays the items
      */
@@ -63,7 +73,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     // temp vars
     private List<OrderedMeal> orderedMeals;
     private List<Item> orderedItems;
-    ArrayAdapter mealsAdapter;
+    private ArrayAdapter mealsAdapter;
 
     /**
      * The ActionBar MenuItem that displays the amount to pay
@@ -78,7 +88,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
      * The Order object that this activity displays its details
      */
     private Order order;
-    View layout;
+    private View layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,20 +154,8 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                     Intent payPalIntent = new Intent(OrderActivity.this, PayPalActivity.class);
                     payPalIntent.putExtra("language", LocaleHelper.getLanguage(OrderActivity.this));
                     payPalIntent.putExtra("order", order);
-                    startActivity(payPalIntent);
+                    startActivityForResult(payPalIntent,ORDER_REQ);
 
-                    // here, before clearing the order we need to save the order
-                    //new SaveOrderLocallyTask().execute();
-                    Log.e("DATE",Calendar.getInstance().getTime().toString());
-                    order.setDate(Calendar.getInstance().getTime());
-                    MyApplicationClass app = (MyApplicationClass)getApplication();
-                    LocalDBHandler db = app.getLocalDB();
-                    db.insertOrder(order);
-
-                    DataHolder.getInstance().setTheOrder(new Order());
-                    DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
-                    DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
-                    OrderActivity.this.recreate();
                 }
             }
         });
@@ -167,8 +165,86 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == ORDER_REQ)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                Log.e("DATE",Calendar.getInstance().getTime().toString());
+                order.setDate(Calendar.getInstance().getTime());
+                MyApplicationClass app = (MyApplicationClass)getApplication();
+                LocalDBHandler db = app.getLocalDB();
+                db.insertOrder(order);
+
+                new SendOrderToServer().execute();
 
 
+                DataHolder.getInstance().setTheOrder(new Order());
+                DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
+                DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
+                OrderActivity.this.recreate();
+            }
+        }
+    }
+
+    private class SendOrderToServer extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            boolean result = false;
+            Log.e("DEBUG","inside do in background of SendOrderToServer");
+
+            // Request - send the order as json to the server for insertion
+            Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy HH:mm:ss.SSSZ").create();
+            String jsonOrder = gson.toJson(order, Order.class);
+            URL url = null;
+            try {
+                url = new URL(ApplicationConstant.SEND_ORDER);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                con.setRequestProperty("Content-Type", "text/plain");
+                con.setRequestProperty("Accept", "text/plain");
+                con.setRequestMethod("POST");
+
+                OutputStream os = con.getOutputStream();
+                os.write(jsonOrder.getBytes("UTF-8"));
+                os.flush();
+
+                if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return null;
+                }
+
+                // Response
+                StringBuilder response = new StringBuilder();
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(con.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                con.disconnect();
+
+                if (response.toString().trim().equals("OK")) {
+                    result = true;
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }  catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+    }
 
     @Override
     public void onBackPressed() {

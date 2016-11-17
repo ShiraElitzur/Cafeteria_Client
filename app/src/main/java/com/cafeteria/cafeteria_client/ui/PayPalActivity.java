@@ -61,6 +61,8 @@ import java.util.Set;
  */
 public class PayPalActivity extends AppCompatActivity {
     private static final String TAG = "paymentExample";
+    private Intent resultIntent = getIntent();
+
     /**
      * - Set to PayPalConfiguration.ENVIRONMENT_PRODUCTION to move real money.
      *
@@ -131,14 +133,6 @@ public class PayPalActivity extends AppCompatActivity {
 
 
         startActivityForResult(intent, REQUEST_CODE_PAYMENT);
-        // TODO: 04/11/2016 Remove the excexution of the task from here. right now the paypal payment is not always working properly and i want to work on the order insertion to the db. but later should be only after payment
-        /*
-
-        Should be in other place!
-
-        */
-        Log.d("DEBUG","back. invoking sendOrderToServer");
-        new SendOrderToServer().execute();
 
     }
 
@@ -250,8 +244,7 @@ public class PayPalActivity extends AppCompatActivity {
                                 "PaymentConfirmation info received from PayPalActivity", Toast.LENGTH_LONG)
                                 .show();
 
-                        // ************************ send to db
-                        new SendOrderToServer().execute();
+                        setResult(Activity.RESULT_OK,resultIntent);
                     } catch (JSONException e) {
                         Log.e(TAG, "an extremely unlikely failure occurred: ", e);
                     }
@@ -259,6 +252,7 @@ public class PayPalActivity extends AppCompatActivity {
                 finish();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.i(TAG, "The user canceled.");
+                setResult(Activity.RESULT_CANCELED,resultIntent);
                 finish();
             } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
                 Log.i(
@@ -281,8 +275,8 @@ public class PayPalActivity extends AppCompatActivity {
                                 getApplicationContext(),
                                 "Future Payment code received from PayPalActivity", Toast.LENGTH_LONG)
                                 .show();
-                        // ************************ send to db
-                        new SendOrderToServer().execute();
+                        setResult(Activity.RESULT_OK,resultIntent);
+
                     } catch (JSONException e) {
                         Log.e("FuturePaymentExample", "an extremely unlikely failure occurred: ", e);
                     }
@@ -291,6 +285,7 @@ public class PayPalActivity extends AppCompatActivity {
 
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.i("FuturePaymentExample", "The user canceled.");
+                setResult(Activity.RESULT_CANCELED,resultIntent);
                 finish();
             } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
                 Log.i(
@@ -329,61 +324,6 @@ public class PayPalActivity extends AppCompatActivity {
                 .show();
     }
 
-    private class SendOrderToServer extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            boolean result = false;
-            Log.e("DEBUG","inside do in background of SendOrderToServer");
-
-            // Request - send the order as json to the server for insertion
-            Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy HH:mm:ss.SSSZ").create();
-            String jsonOrder = gson.toJson(order, Order.class);
-            URL url = null;
-            try {
-                url = new URL(ApplicationConstant.SEND_ORDER);
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setDoOutput(true);
-                con.setDoInput(true);
-                con.setRequestProperty("Content-Type", "text/plain");
-                con.setRequestProperty("Accept", "text/plain");
-                con.setRequestMethod("POST");
-
-                OutputStream os = con.getOutputStream();
-                os.write(jsonOrder.getBytes("UTF-8"));
-                os.flush();
-
-                if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    return null;
-                }
-
-                // Response
-                StringBuilder response = new StringBuilder();
-                BufferedReader input = new BufferedReader(
-                        new InputStreamReader(con.getInputStream()));
-
-                String line;
-                while ((line = input.readLine()) != null) {
-                    response.append(line + "\n");
-                }
-
-                input.close();
-
-                con.disconnect();
-
-                if (response.toString().trim().equals("OK")) {
-                    result = true;
-                }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }  catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-    }
 
     @Override
     public void onDestroy() {
