@@ -162,14 +162,19 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
             }
         });
 
+        //set checked item on drawer
+        navigationView.setCheckedItem(R.id.navigation_item_cart);
+
     }
+
+
 
 
     @Override
     public void onBackPressed() {
         finish();
-        Intent menuActivtiyIntent = new Intent(OrderActivity.this, MenuActivity.class);
-        startActivity(menuActivtiyIntent);
+        Intent menuIntent = new Intent(OrderActivity.this, MenuActivity.class);
+        startActivity(menuIntent);
     }
 
     /**

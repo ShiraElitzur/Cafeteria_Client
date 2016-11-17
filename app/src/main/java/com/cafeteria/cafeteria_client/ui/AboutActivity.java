@@ -1,7 +1,6 @@
 package com.cafeteria.cafeteria_client.ui;
 
-import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,9 +29,19 @@ public class AboutActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+//                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent menuIntent = new Intent(AboutActivity.this, MenuActivity.class);
+        startActivity(menuIntent);
+
+    }
+
 }

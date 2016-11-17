@@ -1,13 +1,10 @@
 package com.cafeteria.cafeteria_client.utils;
 
 
-import android.util.Log;
-
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Extra;
 import com.cafeteria.cafeteria_client.data.Item;
-import com.cafeteria.cafeteria_client.data.Main;
 import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.Order;
 

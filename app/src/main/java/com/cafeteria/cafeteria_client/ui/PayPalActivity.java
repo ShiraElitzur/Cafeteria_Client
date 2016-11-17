@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;

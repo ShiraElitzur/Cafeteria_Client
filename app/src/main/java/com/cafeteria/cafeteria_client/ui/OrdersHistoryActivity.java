@@ -2,43 +2,24 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.LocalDBHandler;
 import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
-import com.cafeteria.cafeteria_client.utils.DataHolder;
-import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
-import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -71,6 +52,9 @@ public class OrdersHistoryActivity extends DrawerActivity {
         }
         //new HistoryListTask().execute();
         lvOrdersHistory.setAdapter(new OrdersHistoryAdapter(this,R.layout.single_order_history,orders));
+
+        //set checked item on drawer
+        navigationView.setCheckedItem(R.id.navigation_item_history);
     }
 
     public class OrdersHistoryAdapter extends BaseAdapter {
@@ -186,8 +170,8 @@ public class OrdersHistoryActivity extends DrawerActivity {
     @Override
     public void onBackPressed() {
         finish();
-        Intent orderHistoryIntent = new Intent(OrdersHistoryActivity.this, MenuActivity.class);
-        startActivity(orderHistoryIntent);
+        Intent menuIntent = new Intent(OrdersHistoryActivity.this, MenuActivity.class);
+        startActivity(menuIntent);
     }
 
 }

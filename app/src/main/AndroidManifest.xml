@@ -24,8 +24,10 @@
 
         <activity
             android:name=".ui.MenuActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".ui.LoginActivity" />
+            android:launchMode="singleTask" >
+    </activity>
+
+    <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.SignUpActivity" />
         <activity
             android:name=".ui.CategoryItemsActivity"
@@ -45,12 +47,11 @@
         <activity
             android:name=".ui.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".ui.MenuActivity">
+            android:parentActivityName=".ui.MenuActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:launchMode="singleTop"
                 android:value=".ui.MenuActivity" />
         </activity>
         <activity

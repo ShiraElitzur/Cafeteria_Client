@@ -1,12 +1,9 @@
 package com.cafeteria.cafeteria_client.ui;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -15,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
@@ -37,6 +33,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Intent intent;
     private TextView tvHeaderTitle;
+    NavigationView navigationView;
 
     protected void onCreateDrawer() {
 
@@ -46,6 +43,9 @@ public abstract class DrawerActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+
         // Sets the title as empty string because the default behavior is to display as title the app name.
         // Right now we have a background image on the action bar that contains the app name -
         // Need to think about that point.
@@ -54,7 +54,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
         //getSupportActionBar().setBackgroundDrawable(ContextCompat.getDrawable(this,R.drawable.main_logo));
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
         View headerView = navigationView.getHeaderView(0);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -73,6 +73,8 @@ public abstract class DrawerActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 //menuItem.setChecked(true);
+                menuItem.setChecked(true);
+
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_item_cafeteria_menu:
@@ -101,7 +103,6 @@ public abstract class DrawerActivity extends AppCompatActivity {
                         if (LoginManager.getInstance() != null){
                             LoginManager.getInstance().logOut();
                         }
-
                         intent = new Intent(DrawerActivity.this,LoginActivity.class);
                         startActivity(intent);
                         DrawerActivity.this.finish();
@@ -151,6 +152,7 @@ public abstract class DrawerActivity extends AppCompatActivity {
 
 
                 }
+
                 return true;
             }
         });
@@ -167,7 +169,6 @@ public abstract class DrawerActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.navigation_item_cafeteria_menu:
 
         }
 

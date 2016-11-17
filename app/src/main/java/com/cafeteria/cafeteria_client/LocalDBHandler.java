@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Extra;
-import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
@@ -19,7 +18,6 @@ import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**

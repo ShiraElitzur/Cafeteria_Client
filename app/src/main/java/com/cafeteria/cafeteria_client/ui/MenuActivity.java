@@ -2,7 +2,6 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,13 +11,10 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 
 import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
-import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;

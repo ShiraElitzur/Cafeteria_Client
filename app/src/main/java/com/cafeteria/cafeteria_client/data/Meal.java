@@ -1,7 +1,6 @@
 package com.cafeteria.cafeteria_client.data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 

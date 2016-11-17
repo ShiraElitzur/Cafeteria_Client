@@ -1,17 +1,10 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Path;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -37,9 +30,7 @@ import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -187,6 +178,9 @@ public class UserDetailsActivity extends DrawerActivity {
 
             }
         });
+
+        //set checked item on drawer
+        navigationView.setCheckedItem(R.id.navigation_item_personal_details);
 
     }
 
@@ -343,7 +337,7 @@ public class UserDetailsActivity extends DrawerActivity {
     @Override
     public void onBackPressed() {
         finish();
-        Intent userDetailsIntent = new Intent(UserDetailsActivity.this, MenuActivity.class);
-        startActivity(userDetailsIntent);
+        Intent menuIntent = new Intent(UserDetailsActivity.this, MenuActivity.class);
+        startActivity(menuIntent);
     }
 }
