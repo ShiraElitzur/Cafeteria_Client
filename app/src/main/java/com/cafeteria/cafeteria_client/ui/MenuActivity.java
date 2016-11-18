@@ -41,7 +41,6 @@ public class MenuActivity extends DrawerActivity {
         // Adding to the adapter the three fragments and their titlesAnimation
         adapter.addFragment(new CategoriesFragment(), getResources().getString(R.string.categories_tab_title));
         adapter.addFragment(new FavoritesFragment(), getResources().getString(R.string.favorites_tab_title));
-        adapter.addFragment(new SpecialsFragment(), getResources().getString(R.string.specials_tab_title));
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);

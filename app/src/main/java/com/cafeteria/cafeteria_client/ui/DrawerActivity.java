@@ -142,12 +142,9 @@ public abstract class DrawerActivity extends AppCompatActivity {
                         break;
 
                     case R.id.navigation_item_personal_details:
-                        if( DrawerActivity.this instanceof UserDetailsActivity){
-                            return false;
-                        }
                         intent = new Intent(DrawerActivity.this,UserDetailsActivity.class);
                         startActivity(intent);
-                        DrawerActivity.this.finish();
+                        //DrawerActivity.this.finish();
                         break;
 
 

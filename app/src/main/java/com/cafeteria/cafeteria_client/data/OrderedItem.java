@@ -38,10 +38,9 @@ public class OrderedItem implements Serializable {
 //	@JoinColumn( name = "Order_Id" )
 //	private Order order;
 
-    /**
-     *
-     */
-    private OrderedMeal meal;
+    public OrderedItem() {
+        setParentItem(new Item());
+    }
 
     /**
      * Returns the id of this ordered item

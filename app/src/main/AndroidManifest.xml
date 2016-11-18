@@ -64,8 +64,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MenuActivity" />
         </activity>
-        <activity android:name=".ui.UserDetailsActivity"
-                  android:label="@string/title_activity_user_details">
+        <activity
+            android:name=".ui.UserDetailsActivity"
+            android:label="@string/title_activity_user_details"
+            android:parentActivityName=".ui.MenuActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MenuActivity" />
         </activity>
     </application>
 

@@ -5,18 +5,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.PermissionChecker;
+import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,9 +34,13 @@ import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -39,7 +49,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-public class UserDetailsActivity extends DrawerActivity {
+public class UserDetailsActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private Customer customer;
@@ -65,7 +75,10 @@ public class UserDetailsActivity extends DrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_details);
-        super.onCreateDrawer();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(this.getTitle());
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -74,11 +87,11 @@ public class UserDetailsActivity extends DrawerActivity {
             Gson gson = new Gson();
             customer = gson.fromJson(customerString, Customer.class);
         }
-        etFirstName = (EditText) findViewById(R.id.etFirstName);
+        etFirstName = (EditText)findViewById(R.id.etFirstName);
         etFirstName.setText(customer.getFirstName());
-        etLastName = (EditText) findViewById(R.id.etLastName);
+        etLastName = (EditText)findViewById(R.id.etLastName);
         etLastName.setText(customer.getLastName());
-        etEmail = (EditText) findViewById(R.id.etEmail);
+        etEmail = (EditText)findViewById(R.id.etEmail);
         etEmail.setText(customer.getEmail());
         tvEditPassword = (TextView) findViewById(R.id.tvEditPassword);
         tvEditPassword.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +111,11 @@ public class UserDetailsActivity extends DrawerActivity {
 
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        oldPassword = (EditText) dialogView.findViewById(R.id.etOldPassword);
-                                        newPassword = (EditText) dialogView.findViewById(R.id.etNewPassword);
-                                        confirmNewPassword = (EditText) dialogView.findViewById(R.id.etConfirmNewPassword);
+                                        oldPassword = (EditText)dialogView.findViewById(R.id.etOldPassword);
+                                        newPassword = (EditText)dialogView.findViewById(R.id.etNewPassword);
+                                        confirmNewPassword = (EditText)dialogView.findViewById(R.id.etConfirmNewPassword);
                                         String toastText = "";
-                                        if (oldPassword.getText().toString().equals(customer.getPassword())) {
+                                        if( oldPassword.getText().toString().equals(customer.getPassword())) {
                                             if (newPassword.getText().toString().equals(
                                                     confirmNewPassword.getText().toString())) {
                                                 // save new password
@@ -117,88 +130,113 @@ public class UserDetailsActivity extends DrawerActivity {
                                             // password not correct
                                             toastText = getResources().getString(R.string.password_incorrect);
                                         }
-                                        Toast.makeText(UserDetailsActivity.this, toastText, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(UserDetailsActivity.this, toastText,Toast.LENGTH_LONG).show();
                                     }
                                 }).create().show();
             }
         });
 
-        btnEditUser = (Button) findViewById(R.id.btnEditUser);
+        btnEditUser = (Button)findViewById(R.id.btnEditUser);
         btnEditUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 customer.setFirstName(etFirstName.getText().toString());
                 customer.setLastName(etLastName.getText().toString());
                 customer.setEmail(etEmail.getText().toString());
-                Log.e("DEBUG", "Pic : " + customer.getImagePath());
+                Log.e("DEBUG","Pic : " + customer.getImage());
                 new UpdateUserTask().execute();
             }
         });
 
-        imgViewUser = (ImageView) findViewById(R.id.imgviewUser);
+        imgViewUser = (ImageView)findViewById(R.id.imgviewUser);
 
-        if (customer.getImagePath() != null) {
-            com.squareup.picasso.Picasso.with(this).
-                    load("http://" + ApplicationConstant.SERVER_IP + customer.getImagePath()).
-                    into(imgViewUser);
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inPreferredConfig = Bitmap.Config.RGB_565;
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(
-//                    customer.getImage() , 0, customer.getImage().length,options);
-//            imgViewUser.setImageBitmap(bitmap);
-        }
-        imgViewUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int permission;
-                if (Build.VERSION.SDK_INT >= 23) {
-                     permission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if( customer.getImage() != null ) {
+            Toast.makeText(this,"Loading Image...",Toast.LENGTH_SHORT).show();
+            class PicTask extends AsyncTask<Object, Object, Void> {
 
-                    if (permission != PackageManager.PERMISSION_GRANTED) {
-                        // We don't have permission so prompt the user
-                        requestPermissions(
-                                PERMISSIONS_STORAGE,
-                                REQUEST_EXTERNAL_STORAGE
-                        );
-                    } else {
-                        takePicture();
+                File img = null;
+                @Override
+                protected Void doInBackground(Object... voids) {
+
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.RGB_565;
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(
+                            customer.getImage(), 0, customer.getImage().length, options);
+
+                    FileOutputStream out;
+
+                    try {
+                        img = File.createTempFile("temp", ".jpg", Environment.getExternalStorageDirectory());
+                        out = new FileOutputStream(img);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } else {
-                     permission = PermissionChecker.checkSelfPermission(UserDetailsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                    if (permission == PermissionChecker.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(UserDetailsActivity.this,
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA},
-                                REQUEST_EXTERNAL_STORAGE);
-                    } else {
-                        takePicture();
-                    }
+                    return null;
                 }
 
+                    @Override
+                protected void onPostExecute(Void aVoid) {
+                        com.squareup.picasso.Picasso.with(UserDetailsActivity.this).
+                                load(img).
+                                into(imgViewUser);
+                    super.onPostExecute(aVoid);
+                }
+            }
+            new PicTask().execute();
+//            com.squareup.picasso.Picasso.with(this).
+//                    load("http://" + ApplicationConstant.SERVER_IP +customer.getImagePath()).
+//                    into(imgViewUser);
+        }
+            imgViewUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int permission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+                if (permission != PackageManager.PERMISSION_GRANTED) {
+                    // We don't have permission so prompt the user
+                    requestPermissions(
+                            PERMISSIONS_STORAGE,
+                            REQUEST_EXTERNAL_STORAGE
+                    );
+                } else {
+                    takePicture();
+                }
             }
         });
 
-        //set checked item on drawer
-        navigationView.setCheckedItem(R.id.navigation_item_personal_details);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
     private void takePicture() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File img = null;
-        try {
-            img = File.createTempFile("temp", ".jpg", Environment.getExternalStorageDirectory());
-            Log.e("delete file", "file delete: " + img.delete());
-        } catch (IOException e) {
-            Log.e("debug", "IOException- failed to create temporary file");
-            e.printStackTrace();
-        }
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            File img = null;
+            try {
+                img = File.createTempFile("temp", ".jpg", Environment.getExternalStorageDirectory());
+                Log.e("delete file", "file delete: " + img.delete());
+            } catch (IOException e) {
+                Log.e("debug", "IOException- failed to create temporary file");
+                e.printStackTrace();
+            }
 
-        imgUri = Uri.fromFile(img);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+            imgUri = Uri.fromFile(img);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
     }
 
     @Override
@@ -219,7 +257,7 @@ public class UserDetailsActivity extends DrawerActivity {
         }
     }
 
-    private class UpdateUserTask extends AsyncTask<Void, Void, Boolean> {
+    private class UpdateUserTask extends AsyncTask<Void,Void,Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -295,49 +333,55 @@ public class UserDetailsActivity extends DrawerActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-
-//            Bitmap bitmap = null;
-//
-//            byte[] byteArray = null;
+        if( requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK ) {
+            Bitmap bitmap = null;
 //            // get the bitmap from the uri that it was stored in
-//
-//            try {
-//                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imgUri);
-//            } catch (FileNotFoundException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//
-            File file = new File(imgUri.getPath());
-//            file.delete();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imgUri);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-            com.squareup.picasso.Picasso.with(this).
-                    load(file).
-                    into(imgViewUser);
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//
-//
-//            if( bitmap != null ) {
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-//                byteArray = stream.toByteArray();
-//            }
-//
-//            customer.setImage(byteArray);
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inPreferredConfig = Bitmap.Config.RGB_565;
-//            imgViewUser.setImageBitmap(BitmapFactory.decodeByteArray(
-//                    byteArray , 0, byteArray.length,options));
+
+
+            class PicTask extends AsyncTask<Void,Void,Void> {
+                File file = new File( imgUri.getPath());
+                Bitmap bit = null;
+                @Override
+                protected Void doInBackground(Void... voids) {
+
+                    try {
+                        bit = Picasso.with(UserDetailsActivity.this).
+                                load(file).get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    byte[] byteArray = null;
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    Log.e("DEBUG", "Bitmap is :" + bit);
+                    if( bit != null ) {
+                        bit.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                        byteArray = stream.toByteArray();
+                    }
+
+                    customer.setImage(byteArray);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    //Set it in the ImageView
+                    imgViewUser.setImageBitmap(bit);
+                    file.delete();
+                    super.onPostExecute(aVoid);
+                }
+            }
+
+            new PicTask().execute();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        Intent menuIntent = new Intent(UserDetailsActivity.this, MenuActivity.class);
-        startActivity(menuIntent);
     }
 }

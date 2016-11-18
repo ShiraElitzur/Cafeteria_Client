@@ -1,44 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:fitsSystemWindows="true">
-    <!-- We use a Toolbar so that our drawer can be displayed
-             in front of the action bar; Added for Material Design -->
-    <android.support.design.widget.AppBarLayout
-        app:elevation="0dp"
-        android:id="@+id/myAppBarLayout"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    android:fitsSystemWindows="true"
+    android:fillViewport="true">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary">
-
-            </android.support.v7.widget.Toolbar>
-
-
-        </RelativeLayout>
-
-
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <!-- We use a Toolbar so that our drawer can be displayed
+          in front of the action bar; Added for Material Design -->
+        <android.support.design.widget.AppBarLayout
+            app:elevation="0dp"
+            android:id="@+id/myAppBarLayout"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary">
+
+                </android.support.v7.widget.Toolbar>
+
+
+            </RelativeLayout>
+
+
+
+        </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -140,14 +143,8 @@
 
         </LinearLayout>
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navigation_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:headerLayout="@layout/drawer_header"
-            app:menu="@menu/drawer"/>
 
-    </android.support.v4.widget.DrawerLayout>
+    </LinearLayout>
 
-</LinearLayout>
+
+</ScrollView>

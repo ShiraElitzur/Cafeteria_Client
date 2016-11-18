@@ -46,7 +46,7 @@ public class Customer implements Serializable {
     /**
      * The image of this customer
      */
-    private String imagePath;
+    private byte[] image;
 
     /**
      * Returns the id of the customer
@@ -148,16 +148,16 @@ public class Customer implements Serializable {
      * Returns the image of this customer
      * @return the image of this customer
      */
-    public String getImagePath() {
-        return imagePath;
+    public byte[] getImage() {
+        return image;
     }
 
     /**
      * Sets the image of this customer
-     * @param imagePath
+     * @param image
      */
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
 }

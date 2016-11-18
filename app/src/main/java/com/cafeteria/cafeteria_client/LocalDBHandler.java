@@ -83,6 +83,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                 "FOREIGN KEY ("+ORDER_ID_COL+") REFERENCES "+ORDERS_TABLE_NAME+"("+ID_COL+")," +
                 "FOREIGN KEY ("+ITEM_ID_COL+") REFERENCES "+ITEMS_TABLE_NAME+"("+ID_COL+") );";
 
+
     public LocalDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         getWritableDatabase();
