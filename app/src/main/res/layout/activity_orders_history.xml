@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     android:fitsSystemWindows="true">
     <!-- We use a Toolbar so that our drawer can be displayed
              in front of the action bar; Added for Material Design -->
@@ -47,6 +48,7 @@
         <ListView
             android:id="@+id/lvordersHistory"
             android:layout_width="match_parent"
+            android:divider="@null"
             android:layout_height="match_parent" />
 
     </LinearLayout>

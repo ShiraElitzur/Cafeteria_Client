@@ -129,7 +129,9 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             for(Extra extra: meal.getChosenExtras()) {
                 extras += extra.getTitle() + " ,";
             }
-            extras = extras.substring(0, extras.length()-1);
+            if (!extras.equals("")){
+                extras = extras.substring(0, extras.length()-1);
+            }
             // insert new record to the meals table
             values = new ContentValues();
             values.put(TITLE_COL, meal.getTitle());

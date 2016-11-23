@@ -2,12 +2,15 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -55,6 +58,7 @@ public class OrdersHistoryActivity extends DrawerActivity {
 
         //set checked item on drawer
         navigationView.setCheckedItem(R.id.navigation_item_history);
+
     }
 
     public class OrdersHistoryAdapter extends BaseAdapter {
@@ -85,7 +89,7 @@ public class OrdersHistoryActivity extends DrawerActivity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+            final ViewHolder holder;
             Order order = (Order) getItem(position);
 
             if (convertView == null) {
@@ -95,6 +99,8 @@ public class OrdersHistoryActivity extends DrawerActivity {
                 holder.tvOrderHistoryDate = (TextView) convertView.findViewById(R.id.tvOrderHistoryDate);
                 holder.tvOrderHistoryPrice = (TextView) convertView.findViewById(R.id.tvOrderHistoryPrice);
                 holder.tvOrderDetails = (TextView) convertView.findViewById(R.id.tvOrderDetails);
+                holder.imgViewDate = (ImageView) convertView.findViewById(R.id.imgViewDate);
+                holder.imgViewMore = (ImageView) convertView.findViewById(R.id.imgViewMore);
                 convertView.setTag(holder);
 
             } else {
@@ -141,7 +147,44 @@ public class OrdersHistoryActivity extends DrawerActivity {
                 }
             }
 
+            holder.imgViewDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.tvOrderDetails.performClick();
+                }
+            });
+
+            holder.imgViewMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.tvOrderDetails.performClick();
+                }
+            });
+
+            holder.tvOrderHistoryDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.tvOrderDetails.performClick();
+                }
+            });
+            holder.tvOrderHistoryPrice.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.tvOrderDetails.performClick();
+                }
+            });
+
             holder.tvOrderDetails.setText(details.toString());
+            holder.tvOrderDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   if (holder.tvOrderDetails.getVisibility() == View.VISIBLE){
+                       holder.tvOrderDetails.setVisibility(View.GONE);
+                   } else{
+                       holder.tvOrderDetails.setVisibility(View.VISIBLE);
+                   }
+                }
+            });
             return convertView;
         }
 
@@ -149,6 +192,8 @@ public class OrdersHistoryActivity extends DrawerActivity {
             TextView tvOrderHistoryPrice;
             TextView tvOrderHistoryDate;
             TextView tvOrderDetails;
+            ImageView imgViewDate;
+            ImageView imgViewMore;
         }
 
     }
