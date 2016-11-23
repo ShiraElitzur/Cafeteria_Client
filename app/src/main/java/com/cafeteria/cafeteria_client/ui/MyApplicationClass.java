@@ -3,17 +3,20 @@ package com.cafeteria.cafeteria_client.ui;
 import android.app.Application;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.cafeteria.cafeteria_client.LocalDBHandler;
-import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
 
 import org.json.JSONObject;
 
-public class MyApplicationClass extends Application {
+import java.util.Locale;
 
+public class MyApplicationClass extends Application {
+    private static Configuration configuration;
+    public static  String language = "iw";
     private LocalDBHandler db;
 
     @Override
@@ -23,14 +26,43 @@ public class MyApplicationClass extends Application {
         // initialize OneSignal for handling push notifications
         OneSignal.startInit(this).setNotificationOpenedHandler(new MyNotificationOpenedHandler()).init();
         db = new LocalDBHandler(this);
+
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+
     }
 
     // when oriention changes, keep the default language = hebrew
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        LocaleHelper.onCreate(this);
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+    }
 
+    public static void changeLocale(Resources res, String locale){
+        configuration = res.getConfiguration();
+        switch (locale){
+            case "iw":
+                configuration.setLocale(new Locale("iw"));
+                language = "iw";
+                break;
+            case "en":
+                configuration.setLocale(Locale.ENGLISH);
+                language = "en";
+                break;
+            default:
+                configuration.setLocale(new Locale("iw"));
+                language = "iw";
+                break;
+        }
+        res.updateConfiguration(configuration,res.getDisplayMetrics());
     }
 
     public LocalDBHandler getLocalDB() {
@@ -82,6 +114,4 @@ public class MyApplicationClass extends Application {
   }
 }
 
-
-//jjj
 }

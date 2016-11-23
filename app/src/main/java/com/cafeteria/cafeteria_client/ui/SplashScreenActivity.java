@@ -26,7 +26,6 @@ import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Drink;
-import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hanks.htextview.HTextView;
@@ -63,7 +62,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         printKeyHash();
         // set default language to hebrew
-        LocaleHelper.onCreate(this, "iw");
+        MyApplicationClass.changeLocale(this.getResources(),"iw");
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setProgress(0);

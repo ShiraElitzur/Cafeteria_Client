@@ -11,26 +11,19 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
-import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
+
+import static com.cafeteria.cafeteria_client.ui.MyApplicationClass.language;
 
 /**
  * An activity with Navigation Drawer
@@ -133,13 +126,12 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         break;
                     case R.id.navigation_item_langauge:
 
-                        String language = LocaleHelper.getLanguage(DrawerActivity.this);
                         if (language.equals("en")){
-                            LocaleHelper.setLocale(DrawerActivity.this, "iw");
+                            MyApplicationClass.changeLocale(DrawerActivity.this.getResources(),"iw");
                             DrawerActivity.this.recreate();
 
                         } else if (language.equals("iw")){
-                            LocaleHelper.setLocale(DrawerActivity.this, "en");
+                            MyApplicationClass.changeLocale(DrawerActivity.this.getResources(),"en");
                             DrawerActivity.this.recreate();
 
                         }

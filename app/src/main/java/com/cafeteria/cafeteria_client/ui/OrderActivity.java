@@ -1,6 +1,5 @@
 package com.cafeteria.cafeteria_client.ui;
 
-import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,7 +29,6 @@ import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
-import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Item;
@@ -152,7 +150,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
 
                     Intent payPalIntent = new Intent(OrderActivity.this, PayPalActivity.class);
-                    payPalIntent.putExtra("language", LocaleHelper.getLanguage(OrderActivity.this));
+                    payPalIntent.putExtra("language", MyApplicationClass.language);
                     payPalIntent.putExtra("order", order);
                     startActivityForResult(payPalIntent,ORDER_REQ);
 
