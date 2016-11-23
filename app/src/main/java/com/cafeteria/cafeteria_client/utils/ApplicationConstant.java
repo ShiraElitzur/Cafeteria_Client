@@ -1,5 +1,7 @@
 package com.cafeteria.cafeteria_client.utils;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 /**
  * Created by anael on 09/10/16.
  */

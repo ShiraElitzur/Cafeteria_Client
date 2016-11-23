@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -19,6 +21,15 @@ import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.LocaleHelper;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
 
 /**
@@ -28,7 +39,7 @@ import com.google.gson.Gson;
  * 2. ToolBar - activity_menu
  * 3. NavigationView - navigation_view
  */
-public abstract class DrawerActivity extends AppCompatActivity {
+public abstract class DrawerActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private DrawerLayout drawerLayout;
     private Intent intent;
@@ -98,6 +109,8 @@ public abstract class DrawerActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = mySPrefs.edit();
                         editor.remove("customer");
                         editor.apply();
+
+                        LoginActivity.googleSignOut();
 
                         FacebookSdk.sdkInitialize(getApplicationContext());
                         if (LoginManager.getInstance() != null){
@@ -170,5 +183,10 @@ public abstract class DrawerActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,16 @@ import com.facebook.ProfileTracker;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
 import com.onesignal.OneSignal;
 
@@ -49,7 +60,7 @@ import java.net.URL;
 import static com.cafeteria.cafeteria_client.utils.ApplicationConstant.SERVER_IP;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private SharedPreferences sharedPreferences;
     private EditText etMail;
@@ -59,7 +70,12 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager facebookCallbackManager;
     private LoginButton facebookLoginBtn;
     private ProfileTracker profileTracker;
-    private Customer customer;
+    private Customer customer = new Customer();
+    private static final int RC_SIGN_IN = 9001;
+    private SignInButton googleLoginBtn;
+    private static final String TAG = "GoogleLogin";
+    public static GoogleApiClient mGoogleApiClient;
+
 
     /**
      *  The Id of tbe user that this class logs in - PK for primary key
@@ -180,6 +196,56 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginAndValidationTask().execute();
             }
         });
+
+        // Google Login
+
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        // Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        googleLoginBtn = (SignInButton) findViewById(R.id.googleLoginBtn);
+        // Set the dimensions of the sign-in button.
+        googleLoginBtn.setSize(SignInButton.SIZE_WIDE);
+        googleLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+//        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+//        if (opr.isDone()) {
+//            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+//            // and the GoogleSignInResult will be available instantly.
+//            Log.d(TAG, "Got cached sign-in");
+//            GoogleSignInResult result = opr.get();
+//            handleSignInResult(result);
+//        } else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+
+//            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+//                @Override
+//                public void onResult(GoogleSignInResult googleSignInResult) {
+//                    handleSignInResult(googleSignInResult);
+//                }
+//            });
+//        }
     }
 
     private Bundle getFacebookData(JSONObject object) {
@@ -212,24 +278,44 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from
+        //   GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }else {
+
+            facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            customer.setEmail(acct.getEmail());
+            customer.setFirstName(acct.getGivenName());
+            customer.setLastName(acct.getFamilyName());
+            customer.setPassword("123");
+
+            new GoogleValidateOrSignUpTask().execute();
+
+        } else {
+            Log.d(TAG,"Couldn't sign in");
+            // Signed out, show unauthenticated UI.
+
+        }
+    }
+
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(getString(R.string.exit_dialog_title))
-                .setMessage(getString(R.string.exit_dialog_message))
-                .setPositiveButton(getString(R.string.exit_dialog_postive), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-
-                })
-                .setNegativeButton(getString(R.string.exit_dialog_negavtive), null)
-                .show();
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
     private class LoginAndValidationTask extends AsyncTask<String, Void, String> {
@@ -426,6 +512,131 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    //Google login task
+    private class GoogleValidateOrSignUpTask extends AsyncTask<Void, Void, Boolean> {
+        boolean success = false;
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            Boolean result = false;
+
+            Log.d("GOOGLE","Log in validation in process for.. " + customer.getEmail()
+                    + " " + customer.getPassword());
+
+            StringBuilder response;
+            try {
+                URL url = new URL(ApplicationConstant.USER_VALIDATION_URL + "?email=" +
+                        customer.getEmail() + "&pass=" + customer.getPassword());
+                response = new StringBuilder();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return null;
+                }
+
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                conn.disconnect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            String responseString = response.toString().trim();
+            Log.e("GOOGLE","user response : "+ responseString);
+
+            Log.d("GOOGLE","after validation result is: " +response );
+
+            if (!response.toString().trim().equals("null")) {
+                success = true;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("customer", response.toString());
+                editor.apply();
+                return false;
+            } else{
+                Log.d("GOOGLE","Sign up process starting..");
+
+                // Request - send the customer as json to the server for insertion
+                Gson gson = new Gson();
+                String jsonUser = gson.toJson(customer, Customer.class);
+                URL url = null;
+                try {
+                    url = new URL(ApplicationConstant.USER_FACEBOOK_REGISTRATION_URL);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    con.setDoOutput(true);
+                    con.setDoInput(true);
+                    con.setRequestProperty("Content-Type", "text/plain");
+                    con.setRequestProperty("Accept", "text/plain");
+                    con.setRequestMethod("POST");
+
+                    OutputStream os = con.getOutputStream();
+                    os.write(jsonUser.getBytes("UTF-8"));
+                    os.flush();
+
+                    if (con.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                        return null;
+                    }
+
+                    // Response
+                    response = new StringBuilder();
+                    BufferedReader input = new BufferedReader(
+                            new InputStreamReader(con.getInputStream()));
+
+                    String line;
+                    while ((line = input.readLine()) != null) {
+                        response.append(line + "\n");
+                    }
+
+                    input.close();
+
+                    con.disconnect();
+
+                    Log.d("GOOGLE","after sign up result is: " +response );
+                    success = true;
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("customer", response.toString());
+                    editor.apply();
+
+                    if (response.toString().trim().equals("null") || response == null) {
+                        result = true;
+                    }
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (ProtocolException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return result;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result != null && result) {
+                Log.d("GOOGLE","Succesful sign up");
+
+            } else {
+                Log.d("GOOGLE","Client is already exist or signup is failed");
+            }
+            if (success){
+                setTokenAndStartHomeActivity();
+            }
+
+        }
+    }
+
+
     private class RefreshTokenTask extends AsyncTask<Void,Void,Void> {
         // to compare with the device token
         String userOldToken;
@@ -522,5 +733,35 @@ public class LoginActivity extends AppCompatActivity {
         finish();
         Intent homeScreen = new Intent(LoginActivity.this, MenuActivity.class);
         startActivity(homeScreen);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(getString(R.string.exit_dialog_title))
+                .setMessage(getString(R.string.exit_dialog_message))
+                .setPositiveButton(getString(R.string.exit_dialog_postive), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.exit_dialog_negavtive), null)
+                .show();
+    }
+
+    public static void googleSignOut(){
+        if ( mGoogleApiClient.isConnected()) {
+            Log.d("GOOGLE","cliend is connected");
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            Log.d("GOOGLE","cliend signed out");
+                        }
+                    });
+        }
     }
 }

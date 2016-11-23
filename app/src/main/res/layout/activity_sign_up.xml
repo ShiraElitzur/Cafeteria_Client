@@ -186,6 +186,7 @@
         android:text="@string/signUpBtnText"
         android:id="@+id/signUpBtn"
         android:background="@color/colorPrimaryDark"
+        android:textColor="@color/common_google_signin_btn_text_dark"
         />
 
     <TextView
