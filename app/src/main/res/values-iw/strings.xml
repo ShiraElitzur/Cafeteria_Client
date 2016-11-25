@@ -136,6 +136,7 @@
     <string name="order_ready_text">ההזמנה שלך מוכנה. גש לקפיטריה, הצג את מספר האישור למוכר ובתיאבון!</string>
     <string name="title_activity_order_ready">ההזמנה שלך מוכנה!</string>
 
+    <string name="snack_bar_action_text">המשך לסל קניות</string>
 
     <string name="title_activity_user_details">פרטי משתמש</string>
     <string name="update_user_btn_txt">עדכן פרטי משתמש</string>

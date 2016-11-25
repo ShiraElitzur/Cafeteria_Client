@@ -2,8 +2,11 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,6 +57,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     private boolean explvList;
     private boolean list;
     private List<Main> backupMain;
+    private View parentLayout;
 
 
     /**
@@ -77,6 +81,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_items);
+        parentLayout = findViewById(R.id.layout);
 
         // Here we get the category object selected by the user from the previous screen
         Intent previousIntent = getIntent();
@@ -127,15 +132,35 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         lvCategoryItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
                 Item selectedItem = (Item) parent.getItemAtPosition(position);
+//
+//                Toast.makeText(CategoryItemsActivity.this
+//                        ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
+                showSnackBar();
 
-                Toast.makeText(CategoryItemsActivity.this
-                        ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
                 DataHolder dataHolder = DataHolder.getInstance();
                 OrderedItem orderedItem = new OrderedItem();
                 orderedItem.setParentItem(selectedItem);
                 dataHolder.getTheOrder().getItems().add(orderedItem);
             }
         });
+    }
+
+    private void showSnackBar(){
+        Snackbar snackbar = Snackbar
+                .make(parentLayout, getString(R.string.dialog_btn_keep_shopping_pressed), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.snack_bar_action_text), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent orderActivityIntent = new Intent(CategoryItemsActivity.this,OrderActivity.class);
+                        startActivity(orderActivityIntent);
+                    }
+                });
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(CategoryItemsActivity.this, android.R.color.white));
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.BLACK);
+        snackbar.show();
     }
 
     private void initExpandableList() {
@@ -248,7 +273,9 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     // btn keep shopping clicked, add the chosen meal
     @Override
     public void onNegativeResult(OrderedMeal orderedMeal) {
-        Toast.makeText(this,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
+        showSnackBar();
+
         DataHolder dataHolder = DataHolder.getInstance();
         dataHolder.getTheOrder().getMeals().add(orderedMeal);
     }
@@ -446,8 +473,11 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                         Item selectedItem = (Item) getItem(position);
                         int qty = Integer.parseInt(holder.tvQty.getText().toString());
 
-                        Toast.makeText(CategoryItemsActivity.this
-                                ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(CategoryItemsActivity.this
+//                                ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
+
+                        showSnackBar();
+
                         DataHolder dataHolder = DataHolder.getInstance();
                         for (int i=0; i < qty;i++){
 
