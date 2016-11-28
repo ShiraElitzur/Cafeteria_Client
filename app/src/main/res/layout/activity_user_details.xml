@@ -5,15 +5,19 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:id="@+id/layout"
     android:fitsSystemWindows="true"
     android:fillViewport="true">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        >
+
 
         <!-- We use a Toolbar so that our drawer can be displayed
           in front of the action bar; Added for Material Design -->
@@ -43,18 +47,41 @@
 
         </android.support.design.widget.AppBarLayout>
 
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
+            android:id="@+id/progressLayout"
+            >
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar2"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/primaryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            android:visibility="visible"
             android:padding="40dp">
 
-
-            <com.cafeteria.cafeteria_client.ui.RoundedImageView
-                android:id="@+id/imgviewUser"
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/user_male"/>
+                app:civ_border_width="0.5dp"
+                app:civ_border_color="#FF000000"
+                android:id="@+id/imgviewUser"
+                android:src="@drawable/user_male"
+                />
 
 
             <!--  The edit-texts section -->
@@ -138,7 +165,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/update_user_btn_txt"
                 android:layout_margin="20dp"
-                android:background="@color/colorPrimaryDark"/>
+                android:textColor="@color/colorHeadlines"
+                android:background="@color/colorPrimary"/>
 
 
         </LinearLayout>

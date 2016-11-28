@@ -14,9 +14,16 @@
     <!--<color name="colorHeadlines">#FFFFFF</color>-->
     <!--<color name="colorMenuBackground">#F5F7F7</color>-->
 
-    <color name="colorPrimary">#d84315</color>
-    <color name="colorPrimaryDark">#bf360c</color>
-    <color name="colorPrimaryLight">#ff6e40</color>
+    <!--<color name="colorPrimary">#d84315</color>-->
+    <!--<color name="colorPrimaryDark">#bf360c</color>-->
+    <!--<color name="colorPrimaryLight">#ff6e40</color>-->
+    <!--<color name="colorAccent">#ff9e80</color>-->
+    <!--<color name="colorHeadlines">#FFFFFF</color>-->
+    <!--<color name="colorBackground">#F5F7F7</color>-->
+
+    <color name="colorPrimary">#d02333</color>
+    <color name="colorPrimaryDark">#851722</color>
+    <color name="colorPrimaryLight">#d18c77</color>
     <color name="colorAccent">#ff9e80</color>
     <color name="colorHeadlines">#FFFFFF</color>
     <color name="colorBackground">#F5F7F7</color>

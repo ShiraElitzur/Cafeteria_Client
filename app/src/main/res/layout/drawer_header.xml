@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:background="@drawable/header_img"
+    android:background="@drawable/header_bg"
     android:gravity="bottom">
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
+            android:padding="10dp"
             android:id="@+id/tvHeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,6 +31,18 @@
             <!--android:layout_height="match_parent"-->
             <!--android:src="@drawable/user_male"-->
             <!--android:layout_above="@id/tvHeaderTitle" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:layout_width="150dp"
+            android:id="@+id/imgviewHeaderImage"
+            android:src="@drawable/user_male"
+            android:layout_height="150dp"
+            app:civ_border_width="0.5dp"
+            app:civ_border_color="#FF000000"
+            android:layout_above="@id/tvHeaderTitle"
+            />
 
     </RelativeLayout>
 

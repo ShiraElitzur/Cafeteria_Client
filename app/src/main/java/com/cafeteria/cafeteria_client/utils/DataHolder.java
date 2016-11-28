@@ -1,6 +1,12 @@
 package com.cafeteria.cafeteria_client.utils;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+import android.widget.ImageView;
+
+import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Extra;
@@ -8,6 +14,9 @@ import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.Order;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +32,23 @@ public class DataHolder {
 
     private Order theOrder;
     private List<Category> categories = new ArrayList<>();
+    private Bitmap bitmap;
+
+    public Bitmap getBitmap() {
+        Log.d("DATAHOLDER-getbitmap","bitmap: " + bitmap);
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public void setImgByte(byte[] imgByte){
+        Bitmap b = BitmapFactory.decodeByteArray(imgByte,0,imgByte.length);
+        Bitmap scaled = Bitmap.createScaledBitmap(b,350,350,false);
+        this.bitmap = scaled;
+        Log.d("DATAHOLDER-setbyte","bitmap: " + bitmap);
+    }
 
     public List<Drink> getDrinksList() {
         return drinksList;

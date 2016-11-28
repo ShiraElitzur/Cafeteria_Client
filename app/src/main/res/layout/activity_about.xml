@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorHeadlines"
+    android:background="@color/colorBackground"
     >
 
     <LinearLayout
@@ -29,9 +29,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="40"
-                android:src="@drawable/main_logo"
-                android:paddingTop="20dp"
+                android:src="@drawable/time2eat_icon_big"
                 android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/tvAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/headLines3"
+                android:paddingBottom="10dp"
+                 />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,6 +71,22 @@
                 android:text="@string/dialog_tv_description"
                 android:layout_marginTop="10dp"
                 android:textAlignment="viewStart"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/appCredits"
+                android:textSize="@dimen/headLines3"
+                android:textAlignment="viewStart"
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:gravity="start"
+                android:id="@+id/tvCredits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/tvCredits" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -24,7 +24,7 @@
 
         <activity
             android:name=".ui.MenuActivity"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTop" >
     </activity>
 
     <activity android:name=".ui.LoginActivity" />

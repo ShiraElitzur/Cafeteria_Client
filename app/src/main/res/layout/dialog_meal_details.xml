@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:background="@color/colorPrimaryLight" />
+            android:background="@color/colorPrimary" />
 
         <TextView
             android:paddingTop="8dp"
@@ -62,7 +62,7 @@
             android:padding="10dp"
             android:text="@string/dialog_btn_extras"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimary" />
 
 
         <com.cafeteria.cafeteria_client.ui.MultiSpinner
@@ -88,7 +88,7 @@
             android:gravity="center_vertical"
             android:text="@string/dialog_btn_drink"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimary" />
 
         <Spinner
             android:id="@+id/spinnerDrink"
@@ -134,7 +134,7 @@
                 android:layout_gravity="bottom"
                 android:layout_weight="5"
                 android:text="@string/dialog_btn_keep_shopping"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/btnOrder"
@@ -144,7 +144,7 @@
                 android:layout_gravity="bottom"
                 android:layout_weight="5"
                 android:text="@string/dialog_btn_order"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimary" />
 
 
 

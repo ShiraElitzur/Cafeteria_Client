@@ -115,6 +115,8 @@
     <string name="developersNames">אנאל שומראי ושירה אליצור</string>
     <string name="appDescriptionTitle">תיאור:</string>
     <string name="appVersionTitle">גרסה:</string>
+    <string name="appCredits">קרדיטים:</string>
+    <string name="tvCredits">אייקונים: Freepik - www.flaticon.com </string>
     <!--AboutApp Activity End-->
 
     <string name="guest_user">שלום אורח</string>
@@ -145,10 +147,10 @@
     <string name="old_password">סיסמה ישנה</string>
     <string name="new_password">סיסמה חדשה</string>
     <string name="change_password">שנה סיסמה</string>
-    <string name="password_change_success">Password successfully changed</string>
-    <string name="password_incorrect">Password is incorrect</string>
-    <string name="update_user_success">Details updated successfully</string>
-    <string name="update_user_failed">Details update failed</string>
+    <string name="password_change_success">הסיסמא שונתה בהצלחה</string>
+    <string name="password_incorrect">הסיסמא שגויה</string>
+    <string name="update_user_success">הפרטים עודכנו בהצלחה</string>
+    <string name="update_user_failed">עידכון הפרטים נכשל</string>
 
 
 </resources>

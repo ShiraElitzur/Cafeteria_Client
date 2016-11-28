@@ -33,7 +33,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:src="@drawable/main_logo"
+                android:src="@drawable/time2eat_icon_small"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:id="@+id/imageView" />

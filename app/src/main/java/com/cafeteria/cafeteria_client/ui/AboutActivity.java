@@ -1,20 +1,27 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 
 public class AboutActivity extends AppCompatActivity {
+    private TextView tvAppName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        tvAppName = (TextView) findViewById(R.id.tvAppName);
+        Typeface type = Typeface.DEFAULT.createFromAsset(getAssets(),"fonts/PatuaOne-Regular.ttf");
+        tvAppName.setTypeface(type);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -29,8 +36,9 @@ public class AboutActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-                onBackPressed();
+                finish();
+                Intent intent = new Intent(AboutActivity.this, MenuActivity.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

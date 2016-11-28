@@ -2,6 +2,8 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -11,17 +13,22 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
+
+import java.io.ByteArrayOutputStream;
 
 import static com.cafeteria.cafeteria_client.ui.MyApplicationClass.language;
 
@@ -73,10 +80,17 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
         Customer c = gson.fromJson(customerJSON,Customer.class);;
         tvHeaderTitle.setText(c.getFirstName() + " " + c.getLastName());
 
+        ImageView imgviewHeaderImage = (ImageView) headerView.findViewById(R.id.imgviewHeaderImage);
+        DataHolder dataHolder = DataHolder.getInstance();
+        Bitmap b = dataHolder.getBitmap();
+        if (b != null) {
+            imgviewHeaderImage.setImageBitmap(b);
+        }
+
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                //menuItem.setChecked(true);
                 menuItem.setChecked(true);
 
                 drawerLayout.closeDrawers();
@@ -149,7 +163,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                     case R.id.navigation_item_personal_details:
                         intent = new Intent(DrawerActivity.this,UserDetailsActivity.class);
                         startActivity(intent);
-                        //DrawerActivity.this.finish();
+                        DrawerActivity.this.finish();
                         break;
 
 
@@ -169,9 +183,9 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
 
         switch (id) {
             case android.R.id.home:
+                Log.d("BACKPRESSED","back pressed");
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
-
         }
 
         return super.onOptionsItemSelected(item);

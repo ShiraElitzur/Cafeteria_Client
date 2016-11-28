@@ -1,6 +1,8 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,13 +10,18 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -22,17 +29,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -60,7 +70,10 @@ public class UserDetailsActivity extends AppCompatActivity {
     private Button btnEditUser;
     private ImageView imgViewUser;
     private Uri imgUri;
+    private DataHolder dataHolder = DataHolder.getInstance();
+    private View view;
     public static final int CAMERA_REQUEST_CODE = 1;
+
 
     // Storage Permissions
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -81,17 +94,20 @@ public class UserDetailsActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(this.getTitle());
 
+        view = findViewById(R.id.layout);
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String customerString = sharedPreferences.getString("customer", "");
         if (customerString != null && !customerString.equals("")) {
             Gson gson = new Gson();
             customer = gson.fromJson(customerString, Customer.class);
+            Log.e("DEBUG", "cutomer: " + customerString);
         }
-        etFirstName = (EditText)findViewById(R.id.etFirstName);
+        etFirstName = (EditText) findViewById(R.id.etFirstName);
         etFirstName.setText(customer.getFirstName());
-        etLastName = (EditText)findViewById(R.id.etLastName);
+        etLastName = (EditText) findViewById(R.id.etLastName);
         etLastName.setText(customer.getLastName());
-        etEmail = (EditText)findViewById(R.id.etEmail);
+        etEmail = (EditText) findViewById(R.id.etEmail);
         etEmail.setText(customer.getEmail());
         tvEditPassword = (TextView) findViewById(R.id.tvEditPassword);
         tvEditPassword.setOnClickListener(new View.OnClickListener() {
@@ -111,11 +127,11 @@ public class UserDetailsActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        oldPassword = (EditText)dialogView.findViewById(R.id.etOldPassword);
-                                        newPassword = (EditText)dialogView.findViewById(R.id.etNewPassword);
-                                        confirmNewPassword = (EditText)dialogView.findViewById(R.id.etConfirmNewPassword);
+                                        oldPassword = (EditText) dialogView.findViewById(R.id.etOldPassword);
+                                        newPassword = (EditText) dialogView.findViewById(R.id.etNewPassword);
+                                        confirmNewPassword = (EditText) dialogView.findViewById(R.id.etConfirmNewPassword);
                                         String toastText = "";
-                                        if( oldPassword.getText().toString().equals(customer.getPassword())) {
+                                        if (oldPassword.getText().toString().equals(customer.getPassword())) {
                                             if (newPassword.getText().toString().equals(
                                                     confirmNewPassword.getText().toString())) {
                                                 // save new password
@@ -124,88 +140,110 @@ public class UserDetailsActivity extends AppCompatActivity {
                                             } else {
                                                 // passwords dont match
                                                 // TODO: 09/11/2016 need some other handling. some error msg without dismiss dialog
-                                                toastText = "New passwords don't match\nPassword didn't changed";
+                                                toastText = getResources().getString(R.string.passwords_no_match_error);;
                                             }
                                         } else {
                                             // password not correct
                                             toastText = getResources().getString(R.string.password_incorrect);
                                         }
-                                        Toast.makeText(UserDetailsActivity.this, toastText,Toast.LENGTH_LONG).show();
+                                        Toast.makeText(UserDetailsActivity.this, toastText, Toast.LENGTH_LONG).show();
                                     }
                                 }).create().show();
             }
         });
 
-        btnEditUser = (Button)findViewById(R.id.btnEditUser);
+        btnEditUser = (Button) findViewById(R.id.btnEditUser);
         btnEditUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 customer.setFirstName(etFirstName.getText().toString());
                 customer.setLastName(etLastName.getText().toString());
                 customer.setEmail(etEmail.getText().toString());
-                Log.e("DEBUG","Pic : " + customer.getImage());
+                Log.e("DEBUG", "Pic : " + customer.getImage());
+                btnEditUser.setEnabled(false);
                 new UpdateUserTask().execute();
             }
         });
 
-        imgViewUser = (ImageView)findViewById(R.id.imgviewUser);
-
-        if( customer.getImage() != null ) {
-            Toast.makeText(this,"Loading Image...",Toast.LENGTH_SHORT).show();
-            class PicTask extends AsyncTask<Object, Object, Void> {
-
-                File img = null;
-                @Override
-                protected Void doInBackground(Object... voids) {
-
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inPreferredConfig = Bitmap.Config.RGB_565;
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(
-                            customer.getImage(), 0, customer.getImage().length, options);
-
-                    FileOutputStream out;
-
-                    try {
-                        img = File.createTempFile("temp", ".jpg", Environment.getExternalStorageDirectory());
-                        out = new FileOutputStream(img);
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        imgViewUser = (ImageView) findViewById(R.id.imgviewUser);
+        Bitmap b = dataHolder.getBitmap();
+        if (b != null) {
+            imgViewUser.setImageBitmap(b);
+        }
 
 
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-
-                    @Override
-                protected void onPostExecute(Void aVoid) {
-                        com.squareup.picasso.Picasso.with(UserDetailsActivity.this).
-                                load(img).
-                                into(imgViewUser);
-                    super.onPostExecute(aVoid);
-                }
-            }
-            new PicTask().execute();
+//        imgBytes = dataHolder.getBitmap();
+//
+//        if(imgBytes != null) {
+//            Toast.makeText(this,"Loading Image...",Toast.LENGTH_SHORT).show();
+//            class PicTask extends AsyncTask<Object, Object, Void> {
+//
+//                File img = null;
+//                @Override
+//                protected Void doInBackground(Object... voids) {
+//
+//                    BitmapFactory.Options options = new BitmapFactory.Options();
+//                    options.inPreferredConfig = Bitmap.Config.RGB_565;
+//                    Bitmap bitmap = BitmapFactory.decodeByteArray(
+//                            imgBytes, 0, imgBytes.length, options);
+//
+//                    FileOutputStream out;
+//
+//                    try {
+//                        img = File.createTempFile("temp", ".jpg", Environment.getExternalStorageDirectory());
+//                        out = new FileOutputStream(img);
+//                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+//
+//
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    return null;
+//                }
+//
+//                    @Override
+//                protected void onPostExecute(Void aVoid) {
+//                        com.squareup.picasso.Picasso.with(UserDetailsActivity.this).
+//                                load(img).
+//                                into(imgViewUser);
+//                    super.onPostExecute(aVoid);
+//                }
+//            }
+//            new PicTask().execute();
 //            com.squareup.picasso.Picasso.with(this).
 //                    load("http://" + ApplicationConstant.SERVER_IP +customer.getImagePath()).
 //                    into(imgViewUser);
-        }
-            imgViewUser.setOnClickListener(new View.OnClickListener() {
+
+        imgViewUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int permission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                int permission;
 
-                if (permission != PackageManager.PERMISSION_GRANTED) {
-                    // We don't have permission so prompt the user
-                    requestPermissions(
-                            PERMISSIONS_STORAGE,
-                            REQUEST_EXTERNAL_STORAGE
-                    );
-                } else {
-                    takePicture();
+                if(Build.VERSION.SDK_INT < 23 ){
+                    permission = PermissionChecker.checkSelfPermission(UserDetailsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (permission == PermissionChecker.PERMISSION_GRANTED) {
+                        takePicture();
+                    } else{
+                        ActivityCompat.requestPermissions(UserDetailsActivity.this,new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.CAMERA,
+                        },REQUEST_EXTERNAL_STORAGE);
+                    }
+                } else{ //api 23 and above
+                    permission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (permission != PackageManager.PERMISSION_GRANTED) {
+                        // We don't have permission so prompt the user
+                        requestPermissions(
+                                PERMISSIONS_STORAGE,
+                                REQUEST_EXTERNAL_STORAGE
+                        );
+                    } else {
+                        takePicture();
+                    }
                 }
+
             }
         });
 
@@ -216,7 +254,9 @@ public class UserDetailsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                finish();
+                Intent intent = new Intent(UserDetailsActivity.this, MenuActivity.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -316,15 +356,18 @@ public class UserDetailsActivity extends AppCompatActivity {
             if (result != null && result) {
 
                 // update the customer in the shared preferences
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Gson gson = new Gson();
-                String customerJSON = gson.toJson(customer);
-                editor.putString("customer", customerJSON);
-                editor.apply();
-
-                Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_success), Toast.LENGTH_LONG).show();
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                Gson gson = new Gson();
+//                String customerJSON = gson.toJson(customer);
+//                editor.putString("customer", customerJSON);
+//                editor.apply();
+                btnEditUser.setEnabled(true);
+                showSnackBar(getResources().getString(R.string.update_user_success));
+//                Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_success), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_failed), Toast.LENGTH_LONG).show();
+                btnEditUser.setEnabled(true);
+                showSnackBar(getResources().getString(R.string.update_user_failed));
+//                Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_failed), Toast.LENGTH_LONG).show();
             }
 
         }
@@ -346,8 +389,8 @@ public class UserDetailsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
-
+            final LinearLayout l1 = (LinearLayout) findViewById(R.id.primaryLayout);
+            final LinearLayout l2 = (LinearLayout) findViewById(R.id.progressLayout);
             class PicTask extends AsyncTask<Void,Void,Void> {
                 File file = new File( imgUri.getPath());
                 Bitmap bit = null;
@@ -367,7 +410,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                         bit.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                         byteArray = stream.toByteArray();
                     }
-
+                    dataHolder.setImgByte(byteArray);
                     customer.setImage(byteArray);
                     return null;
                 }
@@ -375,13 +418,30 @@ public class UserDetailsActivity extends AppCompatActivity {
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     //Set it in the ImageView
-                    imgViewUser.setImageBitmap(bit);
+                    imgViewUser.setImageBitmap(dataHolder.getBitmap());
                     file.delete();
+                    l1.setVisibility(View.VISIBLE);
+                    l2.setVisibility(View.GONE);
                     super.onPostExecute(aVoid);
                 }
             }
 
+            l1.setVisibility(View.GONE);
+            l2.setVisibility(View.VISIBLE);
             new PicTask().execute();
+            Log.d("uri","IMG URI: " + imgUri);
         }
+    }
+
+
+    private void showSnackBar(String text){
+        Snackbar snackbar = Snackbar
+                .make(view, text, Snackbar.LENGTH_LONG);
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(UserDetailsActivity.this, android.R.color.white));
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.BLACK);
+        snackbar.show();
     }
 }

@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -11,6 +12,7 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
+import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Drink;
@@ -30,11 +33,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hanks.htextview.HTextView;
 import com.hanks.htextview.HTextViewType;
+import com.onesignal.OneSignal;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -55,6 +61,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private HTextView htvTitle;
     private getCategoriesTask getCategoriesTask;
     private GetDrinksTask getDrinksTask;
+    private int userPKId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +79,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         titlesAnimation = getResources().getStringArray(R.array.titleAnimation);
 
-        htvTitle.setTextColor(Color.BLACK);
+        htvTitle.setTextColor(Color.WHITE);
         //htvTitle.setBackgroundColor(Color.WHITE);
         Typeface type = Typeface.DEFAULT.createFromAsset(getAssets(),"fonts/PoiretOne-Regular.ttf");
         htvTitle.setTypeface(type);
@@ -113,8 +120,92 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         alertDialog = alertDialogBuilder.create();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean logged = sharedPreferences.getBoolean("logged", false);
+        if (logged){
+            new GetImage().execute();
+        }
+
         new ProgressBarTask().execute();
+
     }
+
+    private class GetImage extends AsyncTask<String, Void, String> {
+        String passwordTxt;
+        String emailTxt;
+
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null && !response.equals("null")) {
+                Log.e("DEBUG",response);
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Gson gson = new Gson();
+                Customer toSave = gson.fromJson(response, Customer.class);
+                if (toSave.getImage()!= null && !toSave.getImage().equals("") && toSave.getImage().length > 0) {
+                    DataHolder dataHolder = DataHolder.getInstance();
+                    byte[] bytes = toSave.getImage();
+                    dataHolder.setImgByte(bytes);
+                    toSave.setImage(null);
+                    userPKId = toSave.getId();
+                    intent = new Intent(SplashScreenActivity.this,MenuActivity.class);
+
+                    new RefreshTokenTask().execute();
+                }
+                String customerJSON = gson.toJson(toSave);
+                editor.putString("customer", customerJSON);
+                editor.apply();
+            } else {
+                Toast.makeText(SplashScreenActivity.this, getResources().getString(R.string.login_error), Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            StringBuilder response;
+            try {
+                URL url = new URL(ApplicationConstant.USER_VALIDATION_URL + "?email=" + emailTxt + "&pass=" + passwordTxt);
+                response = new StringBuilder();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return null;
+                }
+
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                conn.disconnect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            String responseString = response.toString().trim();
+            Log.e("DEBUG","user response : "+ responseString);
+            return responseString;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String customerJSON = sharedPreferences.getString("customer", "");
+            if (customerJSON != null && !customerJSON.equals("")) {
+                Customer c = new Gson().fromJson(customerJSON,Customer.class);
+                emailTxt = c.getEmail();
+                passwordTxt = c.getPassword();
+            }
+        }
+    }
+
 
     private void printKeyHash(){
         // Add code to print out the key hash
@@ -242,7 +333,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     }
                 }
             }else{
-                Toast.makeText(SplashScreenActivity.this,"Server is down on client side at least..",Toast.LENGTH_LONG).show();
+                Toast.makeText(SplashScreenActivity.this,"Server is down",Toast.LENGTH_LONG).show();
             }
 
         }
@@ -319,6 +410,84 @@ public class SplashScreenActivity extends AppCompatActivity {
                 drinksList = new Gson().fromJson(response.toString(), listType);
                 DataHolder.getInstance().setDrinksList(drinksList);
                 Log.e("DRINKS",drinksList.get(0).getTitle());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            return null;
+        }
+    }
+
+    private class RefreshTokenTask extends AsyncTask<Void,Void,Void> {
+        // to compare with the device token
+        String userOldToken;
+        StringBuilder response;
+        URL url;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                // http request to get the old token of the current user
+                url = new URL(ApplicationConstant.GET_TOKEN+"?user="+userPKId);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                Log.e("GET TOKEN",conn.getResponseCode()+"");
+                if (conn.getResponseCode() < HttpURLConnection.HTTP_OK) {
+                    Log.e("GET TOKEN",conn.getResponseMessage());
+                    return null;
+                }
+
+                // get the response data
+                response = new StringBuilder();
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+                // and get the token out of it as a clean string
+                userOldToken = response.toString().trim();
+                Log.e("TOKEN","old token : " + userOldToken);
+                conn.disconnect();
+
+                // now comparing this old token with the device token (= 'userId' in the overridden method)
+                OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+                    @Override
+                    public void idsAvailable(String userId, String registrationId) {
+                        Log.d("debug", "Device Token:" + userId);
+                        // if there is no saved token or token is different from device token
+                        if(userOldToken == null || !userOldToken.equals(userId)) {
+                            try {
+                                // request the server to attach the device token (userId) to the right user (with the id userPKId)
+                                url = new URL(ApplicationConstant.SET_TOKEN+"?userId="+userPKId+"&pushId="+userId);
+                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                Log.e("SET TOKEN", conn.getResponseCode() + "");
+                                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                                    Log.e("SET TOKEN", conn.getResponseMessage());
+                                }
+                            }catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (registrationId != null)
+                            Log.d("debug", "registrationId:" + registrationId);
+                    }
+                });
+
+                // ******* SEND THE NOTIFICATION ***********
+                // trigger the server to send the notification, shouldn't be here but i want to keep the code
+//                url = new URL(ApplicationConstant.SEND_NOTI_URL+"?userId="+userPKId);
+//                conn = (HttpURLConnection) url.openConnection();
+//                Log.e("DEBUG",conn.getResponseCode()+"");
+//                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+//                    Log.e("DEBUG",conn.getResponseMessage());
+//                    return null;
+//                }
+//                conn.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

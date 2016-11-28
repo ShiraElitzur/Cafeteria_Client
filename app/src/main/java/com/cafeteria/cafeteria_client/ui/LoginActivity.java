@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -93,6 +95,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         setContentView(R.layout.activity_login);
 
+        TextView loginAppTitle = (TextView) findViewById(R.id.loginAppTitle);
+        Typeface type = Typeface.DEFAULT.createFromAsset(getAssets(),"fonts/PatuaOne-Regular.ttf");
+        loginAppTitle.setTypeface(type);
+
         facebookCallbackManager = CallbackManager.Factory.create();
         facebookLoginBtn = (LoginButton) findViewById(R.id.facebookLoginBtn);
         facebookLoginBtn.setReadPermissions("email");
@@ -100,7 +106,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // get email string from shared preferences
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String customerJSON = sharedPreferences.getString("customer", "");
-        // if the email found - it's not the first time opening this app
+        // if the email found - it's not the first time opening  this app
         // automatically redirect to home screen
         if (customerJSON != null && !customerJSON.equals("")) {
             // before the redirect... get the userId and execute the task that checks if this user
@@ -326,7 +332,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Gson gson = new Gson();
                 Customer toSave = gson.fromJson(response, Customer.class);
-
+                if (toSave.getImage()!= null) {
+                    toSave.setImage(null);
+                }
                 String customerJSON = gson.toJson(toSave);
                 editor.putString("customer", customerJSON);
                 editor.apply();
@@ -728,6 +736,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         String customerJSON = sharedPreferences.getString("customer", "");
         customer = gson.fromJson(customerJSON, Customer.class);
 
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("logged", true);
+        editor.apply();
+
         userPKId = customer.getId();
         new RefreshTokenTask().execute();
         finish();
@@ -752,16 +764,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .show();
     }
 
-    public static void googleSignOut(){
-        if ( mGoogleApiClient.isConnected()) {
-            Log.d("GOOGLE","cliend is connected");
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                    new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(Status status) {
-                            Log.d("GOOGLE","cliend signed out");
-                        }
-                    });
+    public static void googleSignOut() {
+        if (mGoogleApiClient != null) {
+            if (mGoogleApiClient.isConnected()) {
+                Log.d("GOOGLE", "cliend is connected");
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                Log.d("GOOGLE", "cliend signed out");
+                            }
+                        });
+            }
         }
     }
 }

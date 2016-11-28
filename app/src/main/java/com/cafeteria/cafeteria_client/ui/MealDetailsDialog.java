@@ -80,10 +80,10 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialog_meal_details, container);
 
-        if(getArguments().getSerializable("meal") instanceof  Meal) {
+        if(getArguments().getSerializable("meal") instanceof  Meal) { //new meal
             orderedMeal = new OrderedMeal();
             orderedMeal.setParentMeal((Meal) getArguments().getSerializable("meal"));
-        } else if (getArguments().getSerializable("meal") instanceof OrderedMeal) {
+        } else if (getArguments().getSerializable("meal") instanceof OrderedMeal) { //ordeared meal
             orderedMeal = (OrderedMeal) getArguments().getSerializable("meal");
             if (orderedMeal.getChosenExtras() != null){
                 if (orderedMeal.getChosenExtras().size() > orderedMeal.getParentMeal().getExtraAmount()){
@@ -120,9 +120,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         initSpinnerAndButtonDrink();
 
         // Init extras spinner
-        if ( orderedMeal.getParentMeal().getExtras() != null) {
-            initExtrasSpinner();
-        }
+        initExtrasSpinner();
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,10 +208,12 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
 
     private void initExtrasSpinner() {
         List<String> extrasTitle = new ArrayList<>();
-        for (Extra extra : orderedMeal.getParentMeal().getExtras()) {
-            extrasTitle.add(extra.getTitle());
+        if ( orderedMeal.getParentMeal().getExtras() != null) {
+            for (Extra extra : orderedMeal.getParentMeal().getExtras()) {
+                extrasTitle.add(extra.getTitle());
+            }
         }
-        if( edit && orderedMeal.getChosenExtras().size() > 0) {
+        if( edit && orderedMeal.getChosenExtras() != null && orderedMeal.getChosenExtras().size() > 0) {
             StringBuffer spinnerBuffer = new StringBuffer();
             boolean [] selections = new boolean[orderedMeal.getParentMeal().getExtras().size()];
             for( int i = 0; i < selections.length; i++) {
@@ -250,7 +250,9 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
             orderedMeal.setChosenDrink(chosenDrink);
             Log.e("DRINK",chosenDrink.getTitle() +": "+chosenDrink.getId()+"");
         }
-        orderedMeal.setChosenExtras(chosenExtra);
+        if (chosenExtra != null && chosenExtra.size() > 0){
+            orderedMeal.setChosenExtras(chosenExtra);
+        }
         orderedMeal.setTotalPrice(orderedMeal.getParentMeal().getPrice() + drinkPrice + extraPrice);
     }
 
@@ -274,7 +276,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
                 chosenDrink = orderedMeal.getChosenDrink();
             }
 
-            if(orderedMeal.getChosenExtras().size() > 0) {
+            if(orderedMeal.getChosenExtras()!= null && orderedMeal.getChosenExtras().size() > 0) {
                 spinnerExtras.setVisibility(View.VISIBLE);
 
             }
@@ -292,7 +294,7 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
 
         String extrasAmount = "";
         // in case this is an update of existing order
-        if (orderedMeal.getChosenExtras() != null){
+        if (orderedMeal.getChosenExtras() != null && orderedMeal.getChosenExtras().size() > 0){
             int extrasLeft = orderedMeal.getParentMeal().getExtraAmount() - orderedMeal.getChosenExtras().size();
             if (extrasLeft == 0){
                 extrasAmount = String.format(getResources().getString(R.string.dialog_tv_extras_amount)

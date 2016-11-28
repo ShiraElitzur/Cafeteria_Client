@@ -126,8 +126,10 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         // loop through the meals of this order
         for(OrderedMeal meal : order.getMeals()){
             String extras = "";
-            for(Extra extra: meal.getChosenExtras()) {
-                extras += extra.getTitle() + " ,";
+            if (meal.getChosenExtras() != null) {
+                for (Extra extra : meal.getChosenExtras()) {
+                    extras += extra.getTitle() + " ,";
+                }
             }
             if (!extras.equals("")){
                 extras = extras.substring(0, extras.length()-1);

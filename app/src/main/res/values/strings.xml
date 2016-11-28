@@ -124,6 +124,8 @@
     <string name="developersNames"><![CDATA[Anael Shomrai & Shira Elitzur]]></string>
     <string name="appDescriptionTitle">Description:</string>
     <string name="appVersionTitle">Version:</string>
+    <string name="appCredits">Credits:</string>
+    <string name="tvCredits">icons: Freepik from www.flaticon.com </string>
     <!--AboutApp Dialog End-->
 
     <string name="guest_user">Hello Guest</string>

@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.MenuItem;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
@@ -60,6 +61,8 @@ public class MenuActivity extends DrawerActivity {
             DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
             DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
         }
+
+        navigationView.setCheckedItem(R.id.navigation_item_cafeteria_menu);
     }
 
     @Override
@@ -139,6 +142,4 @@ public class MenuActivity extends DrawerActivity {
             fragmentTitleList.add(title);
         }
     }
-
-
 }
