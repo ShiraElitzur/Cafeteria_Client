@@ -1,4 +1,4 @@
-package com.cafeteria.cafeteria_client;
+package com.cafeteria.cafeteria_client.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -186,7 +186,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         List<Order> orderList = new ArrayList<Order>();
-        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME;
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + " ORDER BY " + DATE_COL + " DESC";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {

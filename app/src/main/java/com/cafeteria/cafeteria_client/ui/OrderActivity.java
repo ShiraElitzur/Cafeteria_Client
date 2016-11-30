@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.cafeteria.cafeteria_client.LocalDBHandler;
+import com.cafeteria.cafeteria_client.utils.LocalDBHandler;
 import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;

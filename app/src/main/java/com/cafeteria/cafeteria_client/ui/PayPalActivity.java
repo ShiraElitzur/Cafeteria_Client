@@ -75,7 +75,7 @@ public class PayPalActivity extends AppCompatActivity {
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
 
     // note that these credentials will differ between live & sandbox environments.
-    private static final String CONFIG_CLIENT_ID = "ATm6THPvgXnCT5iJcpsPdentCjT2leJJ7Hn_EcXr8ICiybIo6C8O4i8Nsc94j1hxevtDGfnoUJKcQsk2";
+    private static final String CONFIG_CLIENT_ID = "AefDDZZI-nSbEGIRzmSE7bMSYdp1ka7IY6DbCQOcsrdHqylFyAeYLkEbvY0vdwVTCnLVmoHrlQOlmLfc";
 
     private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
