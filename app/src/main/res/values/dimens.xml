@@ -5,6 +5,7 @@
     <dimen name="headLines1">40dp</dimen>
     <dimen name="headLines2">30dp</dimen>
     <dimen name="headLines3">20dp</dimen>
+    <dimen name="headLines4">15dp</dimen>
     <dimen name="formsText">12dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>

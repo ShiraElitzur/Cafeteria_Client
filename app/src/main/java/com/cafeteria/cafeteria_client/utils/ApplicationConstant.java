@@ -15,12 +15,12 @@ public class ApplicationConstant {
     /**
      * Anael IP
      */
-    public final static String SERVER_IP = "192.168.1.19";
+    //public final static String SERVER_IP = "192.168.1.19";
 
     /**
      * Shira IP
      */
-//    public final static String SERVER_IP = "192.168.43.231";
+    public final static String SERVER_IP = "192.168.43.231";
 //    public final static String SERVER_IP = "35.162.198.159";
     /**
      * Moshe IP
@@ -62,6 +62,10 @@ public class ApplicationConstant {
 
     public final static String SEND_ORDER = "http://" + SERVER_IP +
             ":8080/CafeteriaServer/rest/data/insertOrder";
+
+    public final static String GET_FAVORITES = "http://" + SERVER_IP +
+            ":8080/CafeteriaServer/rest/data/getFavorites";
+
 //
 //    public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +
 //            "/rest/data/getCategories";

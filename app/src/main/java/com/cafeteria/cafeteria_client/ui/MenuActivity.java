@@ -45,6 +45,7 @@ public class MenuActivity extends DrawerActivity {
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
+        //getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
         // On MenuActivity's first launch we create a new Order for this session
         if( firstLaunch ) {

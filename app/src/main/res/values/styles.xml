@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <!--<item name="android:actionBarTabStyle">@style/MyTabPadding</item>-->
     </style>
 
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
@@ -16,5 +17,10 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--<style name="MyTabPadding" parent="@style/Widget.AppCompat.ActionBar.TabView">-->
+        <!--<item name="android:paddingLeft">-12dp</item>-->
+        <!--<item name="android:paddingRight">-12dp</item>-->
+    <!--</style>-->
 
 </resources>

@@ -25,6 +25,14 @@
     <color name="colorPrimaryDark">#851722</color>
     <color name="colorPrimaryLight">#d18c77</color>
     <color name="colorAccent">#ff9e80</color>
+
+    <color name="colorIconBg0">#aa4992b1</color>
+    <color name="colorIconBg1">#aae16098</color>
+    <color name="colorIconBg2">#aa8b0d56</color>
+    <color name="colorIconBg3">#aac90212</color>
+    <color name="colorIconBg4">#aac77637</color>
+
+    <color name="colorCategoryTitleBg">#30ffffff</color>
     <color name="colorHeadlines">#FFFFFF</color>
     <color name="colorBackground">#F5F7F7</color>
 

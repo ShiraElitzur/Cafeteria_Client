@@ -2,6 +2,7 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,15 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +33,11 @@ public class CategoriesFragment extends Fragment {
 
     private GridView grid;
     private List<Category> categories;
-
+    private List<Integer> colors;
+    private int colorIndex = -1;
+    int picColorIndex = 2;
+    String [] pics = {"can","kebab","mixer","pizza","toffee"};
+    int picIndex = -1;
     public CategoriesFragment () {
 
     }
@@ -52,8 +58,15 @@ public class CategoriesFragment extends Fragment {
             initCategories();
         }
 
+        colors = new ArrayList<>();
+        colors.add(R.color.colorIconBg0);
+        colors.add(R.color.colorIconBg1);
+        colors.add(R.color.colorIconBg2);
+        colors.add(R.color.colorIconBg3);
+        colors.add(R.color.colorIconBg4);
 
-        grid.setAdapter(new GridViewAdapter(getActivity(),categories,R.layout.category_grid_cell));
+
+        grid.setAdapter(new GridViewAdapter(getActivity(),categories,R.layout.category_card_item));
 
         return v;
     }
@@ -114,7 +127,14 @@ public class CategoriesFragment extends Fragment {
                 // find the UI components of the cell
                 holder = new ViewHolder();
 
-                holder.categoryBtn = (Button) convertView.findViewById(R.id.categoryBtn);
+                holder.rlCardView = (RelativeLayout) convertView.findViewById(R.id.rlCardView);
+                holder.categoryBtn = (TextView) convertView.findViewById(R.id.categoryBtn);
+                holder.ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
+
+                if( colorIndex == 4 ) {
+                    colorIndex = -1;
+                }
+                holder.rlCardView.setBackgroundColor(getResources().getColor(colors.get(++colorIndex)));
 
                 convertView.setTag(holder);
             } else {
@@ -129,11 +149,23 @@ public class CategoriesFragment extends Fragment {
             if(category.getIcon() != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(category.getIcon() , 0, category.getIcon().length);
                 Drawable image = new BitmapDrawable(getResources(), bitmap);
-                image.setBounds( 0, 0, 60, 60 );
-                holder.categoryBtn.setCompoundDrawables( image, null, null, null );
+                //image.setBounds( 0, 0, 60, 60 );
+                //holder.categoryBtn.setCompoundDrawables( image, null, null, null );
+//                if( picColorIndex == 4 ) {
+//                    picColorIndex = 0;
+//                }
+//                if( picIndex == 4) {
+//                    picIndex = -1;
+//                }
+                holder.ivIcon.setImageDrawable(image);
+//                Resources resources = context.getResources();
+//                final int resourceId = resources.getIdentifier(pics[++picIndex]+(picColorIndex++), "drawable",
+//                        context.getPackageName());
+//                holder.ivIcon.setImageDrawable(getResources().getDrawable(resourceId));
 
             } else {
-                holder.categoryBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.star, 0, 0, 0);
+                //holder.categoryBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.star, 0, 0, 0);
+                //holder.ivIcon.setBackground(getResources().getDrawable(R.drawable.star));
 
             }
             holder.categoryBtn.setOnClickListener(new View.OnClickListener() {
@@ -152,9 +184,9 @@ public class CategoriesFragment extends Fragment {
         private class ViewHolder {
             private TextView title;
             private TextView description;
-            private ImageView image;
-
-            private Button categoryBtn;
+            private ImageView ivIcon;
+            private RelativeLayout rlCardView;
+            private TextView categoryBtn;
         }
     }
 }
