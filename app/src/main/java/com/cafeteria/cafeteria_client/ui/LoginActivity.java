@@ -59,8 +59,6 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-import static com.cafeteria.cafeteria_client.utils.ApplicationConstant.SERVER_IP;
-
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 

@@ -30,6 +30,7 @@ import java.util.List;
  */
 public class DataHolder {
 
+    private String SERVER_IP;
     private Order theOrder;
     private List<Category> categories = new ArrayList<>();
     private Bitmap bitmap;
@@ -147,5 +148,13 @@ public class DataHolder {
                     mealsToRemove = new ArrayList<>();
                 }
             }
+        }
+
+        public String getSERVER_IP() {
+            return SERVER_IP;
+        }
+
+        public void setSERVER_IP(String SERVER_IP) {
+            this.SERVER_IP = SERVER_IP;
         }
     }

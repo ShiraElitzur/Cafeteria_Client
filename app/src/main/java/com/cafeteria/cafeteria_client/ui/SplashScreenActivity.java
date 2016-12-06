@@ -67,6 +67,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        DataHolder.getInstance().setSERVER_IP("192.168.43.91");
+
         printKeyHash();
         // set default language to hebrew
         MyApplicationClass.changeLocale(this.getResources(),"iw");
@@ -123,7 +126,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean logged = sharedPreferences.getBoolean("logged", false);
         if (logged){
-            new GetImage().execute();
+//            new GetImage().execute();
         }
 
         new ProgressBarTask().execute();
@@ -269,10 +272,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             tvStatus.setText(R.string.progressBar_pre_execute);
-            getCategoriesTask = new getCategoriesTask();
-            getCategoriesTask.execute();
-            getDrinksTask = new GetDrinksTask();
-            getDrinksTask.execute();
+            new GetServerAddressTask().execute();
+
         }
 
 
@@ -494,6 +495,51 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
 
             return null;
+        }
+    }
+
+    private class GetServerAddressTask extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            StringBuilder response;
+            try {
+                URL url = new URL(ApplicationConstant.GET_SERVER_ADDRESS);
+                response = new StringBuilder();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                Log.e("DEBUG",conn.getResponseCode()+"");
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Log.e("DEBUG",conn.getResponseMessage());
+                    return null;
+                }
+
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                conn.disconnect();
+
+                DataHolder.getInstance().setSERVER_IP(response.toString().trim());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            getCategoriesTask = new getCategoriesTask();
+            getCategoriesTask.execute();
+            getDrinksTask = new GetDrinksTask();
+            getDrinksTask.execute();
         }
     }
 }
