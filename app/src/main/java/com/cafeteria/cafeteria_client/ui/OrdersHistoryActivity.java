@@ -54,12 +54,14 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         MyApplicationClass app = (MyApplicationClass)getApplication();
         db = app.getLocalDB();
         orders = db.selectOrders();
+
         if(orders == null) {
             orders = new ArrayList<>();
         }
         //new HistoryListTask().execute();
         ordersHistoryAdapter = new OrdersHistoryAdapter(this,R.layout.single_order_history,orders);
         lvOrdersHistory.setAdapter(ordersHistoryAdapter);
+
 
         //set checked item on drawer
         navigationView.setCheckedItem(R.id.navigation_item_history);
@@ -80,8 +82,6 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
                 datePickerDialog.show(getFragmentManager(),"Date Picker Dialog");
             }
         });
-
-
     }
 
     @Override
@@ -113,7 +113,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         if (orders!=null) {
             Log.e("ORDERS", "ORDERS SIZE: " + orders.size());
         }
-       ordersHistoryAdapter.notifyDataSetChanged();
+        ordersHistoryAdapter.notifyDataSetChanged();
 
     }
 
