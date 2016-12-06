@@ -45,6 +45,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:gravity="start"
+            android:text="@string/history_pick_date"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDate"
+            android:layout_margin="10dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
         <ListView
             android:id="@+id/lvordersHistory"
             android:layout_width="match_parent"

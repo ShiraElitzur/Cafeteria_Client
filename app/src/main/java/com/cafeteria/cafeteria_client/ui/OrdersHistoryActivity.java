@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.cafeteria.cafeteria_client.utils.LocalDBHandler;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
@@ -23,15 +25,19 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-public class OrdersHistoryActivity extends DrawerActivity {
+public class OrdersHistoryActivity extends DrawerActivity implements DatePickerDialog.OnDateSetListener{
 
     private ListView lvOrdersHistory;
     private Currency nis;
     private List<Order> orders;
+    private TextView tvDate;
+    private LocalDBHandler db;
+    private OrdersHistoryAdapter ordersHistoryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +52,68 @@ public class OrdersHistoryActivity extends DrawerActivity {
         nis = Currency.getInstance(israel);
         // init Orders list
         MyApplicationClass app = (MyApplicationClass)getApplication();
-        LocalDBHandler db = app.getLocalDB();
+        db = app.getLocalDB();
         orders = db.selectOrders();
         if(orders == null) {
             orders = new ArrayList<>();
         }
         //new HistoryListTask().execute();
-        lvOrdersHistory.setAdapter(new OrdersHistoryAdapter(this,R.layout.single_order_history,orders));
+        ordersHistoryAdapter = new OrdersHistoryAdapter(this,R.layout.single_order_history,orders);
+        lvOrdersHistory.setAdapter(ordersHistoryAdapter);
 
         //set checked item on drawer
         navigationView.setCheckedItem(R.id.navigation_item_history);
+
+        tvDate = (TextView) findViewById(R.id.tvDate);
+        tvDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar now = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                        OrdersHistoryActivity.this,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                datePickerDialog.setStartTitle(getString(R.string.history_start_date));
+                datePickerDialog.setEndTitle(getString(R.string.history_end_date));
+                datePickerDialog.show(getFragmentManager(),"Date Picker Dialog");
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        String dateStartTxt = dayOfMonth + "/"  + (monthOfYear+1) + "/" + yearEnd;
+        String dateEndTxt = dayOfMonthEnd + "/" + (monthOfYearEnd+1) + "/" + yearEnd;
+        tvDate.setText(getResources().getString(R.string.history_show_date) + "\n" +
+                dateStartTxt + " - " + dateEndTxt);
+        Calendar dateStart = Calendar.getInstance();
+        Calendar dateEnd = Calendar.getInstance();
+        dateStart.set(Calendar.YEAR,year);
+        dateStart.set(Calendar.MONTH,monthOfYear);
+        dateStart.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+        dateStart.set(Calendar.HOUR_OF_DAY,0);
+        dateStart.set(Calendar.MINUTE,0);
+        dateStart.set(Calendar.SECOND,0);
+        dateStart.set(Calendar.MILLISECOND,0);
+
+        dateEnd.set(Calendar.YEAR,yearEnd);
+        dateEnd.set(Calendar.MONTH,monthOfYearEnd);
+        dateEnd.set(Calendar.DAY_OF_MONTH,dayOfMonthEnd);
+        dateEnd.set(Calendar.HOUR_OF_DAY,0);
+        dateEnd.set(Calendar.MINUTE,0);
+        dateEnd.set(Calendar.SECOND,0);
+        dateEnd.set(Calendar.MILLISECOND,0);
+
+        orders.clear();
+        orders.addAll(db.selectOrdersByDate(dateStart,dateEnd));
+        if (orders!=null) {
+            Log.e("ORDERS", "ORDERS SIZE: " + orders.size());
+        }
+       ordersHistoryAdapter.notifyDataSetChanged();
 
     }
 

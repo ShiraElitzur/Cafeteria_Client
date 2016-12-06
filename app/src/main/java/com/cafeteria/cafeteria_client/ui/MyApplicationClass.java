@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.cafeteria.cafeteria_client.LocalDBHandler;
+import com.cafeteria.cafeteria_client.utils.LocalDBHandler;
 import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
 
