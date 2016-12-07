@@ -45,8 +45,12 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
     private Intent intent;
     private TextView tvHeaderTitle;
     NavigationView navigationView;
+    private SharedPreferences mySPrefs;
+    private SharedPreferences.Editor editor;
 
     protected void onCreateDrawer() {
+        mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = mySPrefs.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //activity_menu.setElevation(0);
@@ -80,13 +84,13 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
         Customer c = gson.fromJson(customerJSON,Customer.class);;
         tvHeaderTitle.setText(c.getFirstName() + " " + c.getLastName());
 
-        ImageView imgviewHeaderImage = (ImageView) headerView.findViewById(R.id.imgviewHeaderImage);
-        DataHolder dataHolder = DataHolder.getInstance();
-        Bitmap b = dataHolder.getBitmap();
-        if (b != null) {
-            imgviewHeaderImage.setImageBitmap(b);
+        if (c.getImage() != null){
+            ImageView imgviewHeaderImage = (ImageView) headerView.findViewById(R.id.imgviewHeaderImage);
+            Bitmap b = BitmapFactory.decodeByteArray(c.getImage(), 0, c.getImage().length);
+            if (b != null) {
+                imgviewHeaderImage.setImageBitmap(b);
+            }
         }
-
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -112,8 +116,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         DrawerActivity.this.finish();
                         break;
                     case R.id.navigation_item_log_out:
-                        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        SharedPreferences.Editor editor = mySPrefs.edit();
+
                         editor.remove("customer");
                         editor.apply();
 
@@ -128,13 +131,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         DrawerActivity.this.finish();
                         break;
                     case R.id.navigation_item_about:
-//                        final Dialog dialog = new Dialog(DrawerActivity.this);
-//                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                        dialog.setCancelable(true);
-//                        dialog.setCanceledOnTouchOutside(true);
-//                        dialog.setContentView(R.layout.dialog_about_the_app);
-//
-//                        dialog.show();
                         intent = new Intent(DrawerActivity.this,AboutActivity.class);
                         startActivity(intent);
                         break;
@@ -165,7 +161,23 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         startActivity(intent);
                         DrawerActivity.this.finish();
                         break;
+                    case R.id.navigation_item_change_cafeteria:
+                        editor.remove("customer");
+                        editor.remove("serverIp");
+                        editor.apply();
 
+                        LoginActivity.googleSignOut();
+
+                        FacebookSdk.sdkInitialize(getApplicationContext());
+                        if (LoginManager.getInstance() != null){
+                            LoginManager.getInstance().logOut();
+                        }
+                        intent = new Intent(DrawerActivity.this,ChooseCafeteriaActivity.class);
+                        startActivity(intent);
+                        DrawerActivity.this.finish();
+                        break;
+                    default:
+                        break;
 
                 }
 

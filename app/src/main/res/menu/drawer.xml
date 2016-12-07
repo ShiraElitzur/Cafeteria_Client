@@ -11,7 +11,7 @@
             android:title="@string/nav_item_menu" />
         <item
             android:id="@+id/navigation_item_cart"
-            android:icon="@drawable/orderd_history"
+            android:icon="@drawable/ic_shopping_cart"
             android:title="@string/nav_item_cart" />
         <item
             android:id="@+id/navigation_item_history"
@@ -45,6 +45,11 @@
             android:id="@+id/navigation_item_langauge"
             android:icon="@drawable/ic_language"
             android:title="@string/nav_item_language" />
+
+        <item
+            android:id="@+id/navigation_item_change_cafeteria"
+            android:icon="@drawable/ic_action_database"
+            android:title="@string/nav_item_change_cafeteria" />
 
         <item
             android:id="@+id/navigation_item_about"

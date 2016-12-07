@@ -330,9 +330,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 Gson gson = new Gson();
                 Customer toSave = gson.fromJson(response, Customer.class);
-                if (toSave.getImage()!= null) {
-                    toSave.setImage(null);
-                }
+
                 String customerJSON = gson.toJson(toSave);
                 editor.putString("customer", customerJSON);
                 editor.apply();

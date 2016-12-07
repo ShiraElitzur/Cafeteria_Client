@@ -166,11 +166,10 @@ public class UserDetailsActivity extends AppCompatActivity {
         });
 
         imgViewUser = (ImageView) findViewById(R.id.imgviewUser);
-        Bitmap b = dataHolder.getBitmap();
-        if (b != null) {
+        if (customer.getImage() != null) {
+            Bitmap b = BitmapFactory.decodeByteArray(customer.getImage(), 0, customer.getImage().length);
             imgViewUser.setImageBitmap(b);
         }
-
 
 //        imgBytes = dataHolder.getBitmap();
 //
@@ -356,11 +355,11 @@ public class UserDetailsActivity extends AppCompatActivity {
             if (result != null && result) {
 
                 // update the customer in the shared preferences
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                Gson gson = new Gson();
-//                String customerJSON = gson.toJson(customer);
-//                editor.putString("customer", customerJSON);
-//                editor.apply();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                Gson gson = new Gson();
+                String customerJSON = gson.toJson(customer);
+                editor.putString("customer", customerJSON);
+                editor.apply();
                 btnEditUser.setEnabled(true);
                 showSnackBar(getResources().getString(R.string.update_user_success));
 //                Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_success), Toast.LENGTH_LONG).show();
@@ -405,12 +404,11 @@ public class UserDetailsActivity extends AppCompatActivity {
                     }
                     byte[] byteArray = null;
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    Log.e("DEBUG", "Bitmap is :" + bit);
+                    bit = Bitmap.createScaledBitmap(bit,350,350,false);
                     if( bit != null ) {
                         bit.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                         byteArray = stream.toByteArray();
                     }
-                    dataHolder.setImgByte(byteArray);
                     customer.setImage(byteArray);
                     return null;
                 }
@@ -418,7 +416,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 @Override
                 protected void onPostExecute(Void aVoid) {
                     //Set it in the ImageView
-                    imgViewUser.setImageBitmap(dataHolder.getBitmap());
+                    imgViewUser.setImageBitmap(bit);
                     file.delete();
                     l1.setVisibility(View.VISIBLE);
                     l2.setVisibility(View.GONE);

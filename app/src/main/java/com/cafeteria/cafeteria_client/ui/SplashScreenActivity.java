@@ -68,8 +68,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        DataHolder.getInstance().setSERVER_IP("192.168.43.91");
-
         printKeyHash();
         // set default language to hebrew
         MyApplicationClass.changeLocale(this.getResources(),"iw");
@@ -126,89 +124,18 @@ public class SplashScreenActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean logged = sharedPreferences.getBoolean("logged", false);
         if (logged){
-//            new GetImage().execute();
+            String customerJSON = sharedPreferences.getString("customer", "");
+            if (!customerJSON.equals("")){
+                Customer customer = new Gson().fromJson(customerJSON,Customer.class);
+                userPKId = customer.getId();
+                intent = new Intent(SplashScreenActivity.this,MenuActivity.class);
+                new RefreshTokenTask().execute();
+            }
         }
 
         new ProgressBarTask().execute();
 
     }
-
-    private class GetImage extends AsyncTask<String, Void, String> {
-        String passwordTxt;
-        String emailTxt;
-
-        @Override
-        protected void onPostExecute(String response) {
-            if (response != null && !response.equals("null")) {
-                Log.e("DEBUG",response);
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                Gson gson = new Gson();
-                Customer toSave = gson.fromJson(response, Customer.class);
-                if (toSave.getImage()!= null && !toSave.getImage().equals("") && toSave.getImage().length > 0) {
-                    DataHolder dataHolder = DataHolder.getInstance();
-                    byte[] bytes = toSave.getImage();
-                    dataHolder.setImgByte(bytes);
-                    toSave.setImage(null);
-                    userPKId = toSave.getId();
-                    intent = new Intent(SplashScreenActivity.this,MenuActivity.class);
-
-                    new RefreshTokenTask().execute();
-                }
-                String customerJSON = gson.toJson(toSave);
-                editor.putString("customer", customerJSON);
-                editor.apply();
-            } else {
-                Toast.makeText(SplashScreenActivity.this, getResources().getString(R.string.login_error), Toast.LENGTH_LONG).show();
-            }
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            StringBuilder response;
-            try {
-                URL url = new URL(ApplicationConstant.USER_VALIDATION_URL + "?email=" + emailTxt + "&pass=" + passwordTxt);
-                response = new StringBuilder();
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    return null;
-                }
-
-                BufferedReader input = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
-
-                String line;
-                while ((line = input.readLine()) != null) {
-                    response.append(line + "\n");
-                }
-
-                input.close();
-
-                conn.disconnect();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            String responseString = response.toString().trim();
-            Log.e("DEBUG","user response : "+ responseString);
-            return responseString;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            String customerJSON = sharedPreferences.getString("customer", "");
-            if (customerJSON != null && !customerJSON.equals("")) {
-                Customer c = new Gson().fromJson(customerJSON,Customer.class);
-                emailTxt = c.getEmail();
-                passwordTxt = c.getPassword();
-            }
-        }
-    }
-
 
     private void printKeyHash(){
         // Add code to print out the key hash
@@ -272,7 +199,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             tvStatus.setText(R.string.progressBar_pre_execute);
-            new GetServerAddressTask().execute();
+            getCategoriesTask = new SplashScreenActivity.getCategoriesTask();
+            getCategoriesTask.execute();
+            getDrinksTask = new SplashScreenActivity.GetDrinksTask();
+            getDrinksTask.execute();
 
         }
 
@@ -498,48 +428,4 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    private class GetServerAddressTask extends AsyncTask<Void,Void,Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            StringBuilder response;
-            try {
-                URL url = new URL(ApplicationConstant.GET_SERVER_ADDRESS);
-                response = new StringBuilder();
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                Log.e("DEBUG",conn.getResponseCode()+"");
-                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    Log.e("DEBUG",conn.getResponseMessage());
-                    return null;
-                }
-
-                BufferedReader input = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
-
-                String line;
-                while ((line = input.readLine()) != null) {
-                    response.append(line + "\n");
-                }
-
-                input.close();
-
-                conn.disconnect();
-
-                DataHolder.getInstance().setSERVER_IP(response.toString().trim());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            getCategoriesTask = new getCategoriesTask();
-            getCategoriesTask.execute();
-            getDrinksTask = new GetDrinksTask();
-            getDrinksTask.execute();
-        }
-    }
 }
