@@ -49,7 +49,14 @@ public class OrderedMeal implements Serializable {
      */
     private double totalPrice;
 
+    /**
+     * The title of this ordered meal
+     */
     private String title;
+
+    public OrderedMeal() {
+        this.parentMeal = new Meal();
+    }
 
     /**
      * Returns the id of this ordered meal

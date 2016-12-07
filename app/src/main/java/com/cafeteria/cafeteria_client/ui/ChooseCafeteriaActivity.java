@@ -55,49 +55,50 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
         if (!serverIp.equals("")){
             dataHolder.setServerIp(serverIp);
             goToHomeScreen();
-        }
+        } else {
 
-        autoCompleteTvCafeteria = (AutoCompleteTextView)
-                findViewById(R.id.autoCompleteTvCafeteria);
-        btnNext = (Button) findViewById(R.id.btnNext);
+            autoCompleteTvCafeteria = (AutoCompleteTextView)
+                    findViewById(R.id.autoCompleteTvCafeteria);
+            btnNext = (Button) findViewById(R.id.btnNext);
 
-        new GetServers().execute();
+            new GetServers().execute();
 
-        autoCompleteTvCafeteria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               autoCompleteTvCafeteria.showDropDown();
-            }
-        });
-
-        autoCompleteTvCafeteria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                dataHolder.setServerIp(servers.get(i).getAddress());
-                Log.e("SERVERS","server chosen: " + serversNames.get(i) + " in server ip " + servers.get(i).getAddress());
-            }
-        });
-
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (dataHolder.getServerIp().equals("") || !serversNames.contains(autoCompleteTvCafeteria.getText().toString())){
-                    Snackbar snackbar = Snackbar
-                            .make(view, getString(R.string.choose_cafeteria_toast), Snackbar.LENGTH_LONG);
-                    View sbView = snackbar.getView();
-                    sbView.setBackgroundColor(ContextCompat.getColor(ChooseCafeteriaActivity.this, android.R.color.white));
-                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                    textView.setTextColor(Color.BLACK);
-                    snackbar.show();
-                }else {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("serverIp", dataHolder.getServerIp());
-                    editor.apply();
-
-                    goToHomeScreen();
+            autoCompleteTvCafeteria.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    autoCompleteTvCafeteria.showDropDown();
                 }
-            }
-        });
+            });
+
+            autoCompleteTvCafeteria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    dataHolder.setServerIp(servers.get(i).getAddress());
+                    Log.e("SERVERS", "server chosen: " + serversNames.get(i) + " in server ip " + servers.get(i).getAddress());
+                }
+            });
+
+            btnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (dataHolder.getServerIp().equals("") || !serversNames.contains(autoCompleteTvCafeteria.getText().toString())) {
+                        Snackbar snackbar = Snackbar
+                                .make(view, getString(R.string.choose_cafeteria_toast), Snackbar.LENGTH_LONG);
+                        View sbView = snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(ChooseCafeteriaActivity.this, android.R.color.white));
+                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                        textView.setTextColor(Color.BLACK);
+                        snackbar.show();
+                    } else {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("serverIp", dataHolder.getServerIp());
+                        editor.apply();
+
+                        goToHomeScreen();
+                    }
+                }
+            });
+        }
     }
 
     private void goToHomeScreen() {
