@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
-import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -39,7 +38,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.gson.Gson;
@@ -49,7 +47,6 @@ import com.onesignal.OneSignal;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -159,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         customer.setPassword(facebookData.getString("birthday"));
                         facebookData.getString("gender");
 
-                        new validateOrSignUpTask().execute();
+                        new ValidateOrSignUpTask().execute();
                     }
                 });
                 Bundle parameters = new Bundle();
@@ -383,12 +380,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     // FACEBOOK LOGIN TASK
-    private class validateOrSignUpTask extends AsyncTask<Void, Void, Boolean> {
+    private class ValidateOrSignUpTask extends AsyncTask<Void, Void, Boolean> {
         String emailTxt;
         String passwordTxt;
         boolean success = false;
 
-        public validateOrSignUpTask(){
+        public ValidateOrSignUpTask(){
             emailTxt = customer.getEmail();
             passwordTxt = customer.getPassword();
         }
@@ -731,10 +728,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Gson gson = new Gson();
         String customerJSON = sharedPreferences.getString("customer", "");
         customer = gson.fromJson(customerJSON, Customer.class);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("logged", true);
-        editor.apply();
 
         userPKId = customer.getId();
         new RefreshTokenTask().execute();

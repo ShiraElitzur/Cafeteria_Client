@@ -23,6 +23,7 @@
 
     <color name="colorPrimary">#d02333</color>
     <color name="colorPrimaryDark">#851722</color>
+    <color name="colorPrimaryLightOpacity">#d4d02333</color>
     <color name="colorPrimaryLight">#d18c77</color>
     <color name="colorAccent">#ff9e80</color>
 

@@ -6,10 +6,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
+import com.cafeteria.cafeteria_client.utils.DataHolder;
 
 public class AboutActivity extends AppCompatActivity {
     private TextView tvAppName;
@@ -51,5 +53,4 @@ public class AboutActivity extends AppCompatActivity {
         startActivity(menuIntent);
 
     }
-
 }

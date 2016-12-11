@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
     private Currency nis;
     private List<Order> orders;
     private TextView tvDate;
+    private Button btnPickDate;
     private LocalDBHandler db;
     private OrdersHistoryAdapter ordersHistoryAdapter;
 
@@ -53,7 +55,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         // init Orders list
         MyApplicationClass app = (MyApplicationClass)getApplication();
         db = app.getLocalDB();
-        orders = db.selectOrders();
+        orders = db.selectLastOrders();
 
         if(orders == null) {
             orders = new ArrayList<>();
@@ -66,8 +68,8 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         //set checked item on drawer
         navigationView.setCheckedItem(R.id.navigation_item_history);
 
-        tvDate = (TextView) findViewById(R.id.tvDate);
-        tvDate.setOnClickListener(new View.OnClickListener() {
+        btnPickDate = (Button) findViewById(R.id.btnPickDate);
+        btnPickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar now = Calendar.getInstance();
@@ -80,6 +82,14 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
                 datePickerDialog.setStartTitle(getString(R.string.history_start_date));
                 datePickerDialog.setEndTitle(getString(R.string.history_end_date));
                 datePickerDialog.show(getFragmentManager(),"Date Picker Dialog");
+            }
+        });
+
+        tvDate = (TextView) findViewById(R.id.tvDate);
+        tvDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }

@@ -13,7 +13,6 @@ import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
-import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -117,7 +116,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         long itemId;
         // insert new record to the orders table
         ContentValues values = new ContentValues();
-        SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_SQLITE_FORMAT);
         values.put(DATE_COL, sdf.format(order.getDate()));
         values.put(PRICE_COL, order.getPayment());
         db.insert(ORDERS_TABLE_NAME, null, values);
@@ -183,8 +182,6 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     }
 
     public List<Order> selectOrders() {
-
-
         SQLiteDatabase db = this.getReadableDatabase();
         List<Order> orderList = new ArrayList<Order>();
         String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + " ORDER BY " + DATE_COL + " DESC";
@@ -193,7 +190,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Order order = new Order();
-                SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_FORMAT);
+                SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_SQLITE_FORMAT);
                 try {
                     order.setDate(sdf.parse(cursor.getString(1)));
                 } catch (ParseException e) {
@@ -244,25 +241,85 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
     public List<Order> selectOrdersByDate(Calendar dateStart, Calendar dateEnd) {
 
-        dateStart.roll(Calendar.DAY_OF_MONTH,-1);
-        dateEnd.roll(Calendar.DAY_OF_MONTH,1);
-        SimpleDateFormat toDate = new SimpleDateFormat(ApplicationConstant.DATE_TIME_FORMAT);
+        dateStart.add(Calendar.DATE,-1);
+        dateEnd.add(Calendar.DATE,1);
+
+        SimpleDateFormat toDate = new SimpleDateFormat(ApplicationConstant.DATE_TIME_SQLITE_FORMAT);
         String dateStartTxt = toDate.format(dateStart.getTime());
         String dateEndTxt = toDate.format(dateEnd.getTime());
 
         SQLiteDatabase db = this.getReadableDatabase();
         List<Order> orderList = new ArrayList<Order>();
-//        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " + DATE_COL + " LIKE '%" + dateStartTxt + "%'";
-        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " + DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
-                + "'" + dateEndTxt + "'";
+//        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " + DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
+//                + "'" + dateEndTxt + "'";
 
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " + DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
+                 + "'" + dateEndTxt + "'";
         Log.d("Query","orders size: " + selectQuery);
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 Order order = new Order();
-                SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_FORMAT);
+                SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_SQLITE_FORMAT);
+                try {
+                    order.setDate(sdf.parse(cursor.getString(1)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                order.setId(cursor.getInt(0));
+                // payment - needs to fix that
+                order.setPayment(cursor.getDouble(2));
+
+                List<OrderedMeal> meals = new ArrayList<>();
+                OrderedMeal meal;
+                Meal parentMeal;
+                Cursor mealCursor = db.rawQuery("SELECT * FROM " +MEALS_TABLE_NAME+ " WHERE Id IN (" +
+                        " SELECT " + MEAL_ID_COL + " FROM " + ORDER_MEAL_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
+                while (mealCursor.moveToNext()) {
+                    meal = new OrderedMeal();
+                    meal.setTitle(mealCursor.getString(1));
+                    meal.setComment(mealCursor.getString(2)); // chosen extras on one string
+                    Drink drink = new Drink();
+                    drink.setTitle(mealCursor.getString(3));
+                    meal.setChosenDrink(drink);
+                    meal.setTotalPrice(mealCursor.getDouble(4));
+
+                    meals.add(meal);
+                }
+                mealCursor.close();
+                order.setMeals(meals);
+
+                List<OrderedItem> items = new ArrayList<>();
+                OrderedItem item;
+                Cursor itemCursor = db.rawQuery("SELECT * FROM " +ITEMS_TABLE_NAME+ " WHERE Id IN (" +
+                        " SELECT " + ITEM_ID_COL + " FROM " + ORDER_ITEM_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
+                while (itemCursor.moveToNext()) {
+                    item = new OrderedItem();
+                    item.getParentItem().setTitle(itemCursor.getString(1));
+                    item.getParentItem().setPrice(itemCursor.getDouble(2));
+                    items.add(item);
+                }
+                itemCursor.close();
+                order.setItems(items);
+
+                orderList.add(order);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return orderList;
+    }
+
+    public List<Order> selectLastOrders() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Order> orderList = new ArrayList<Order>();
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + " ORDER BY " + DATE_COL + " DESC LIMIT 30";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Order order = new Order();
+                SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_SQLITE_FORMAT);
                 try {
                     order.setDate(sdf.parse(cursor.getString(1)));
                 } catch (ParseException e) {

@@ -140,7 +140,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                 DataHolder dataHolder = DataHolder.getInstance();
                 OrderedItem orderedItem = new OrderedItem();
                 orderedItem.setParentItem(selectedItem);
-                dataHolder.getTheOrder().getItems().add(orderedItem);
+                dataHolder.addItemToOrder(orderedItem);
+//                dataHolder.getTheOrder().getItems().add(orderedItem);
             }
         });
     }
@@ -265,7 +266,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     @Override
     public void onPositiveResult(OrderedMeal orderedMeal) {
         DataHolder dataHolder = DataHolder.getInstance();
-        dataHolder.getTheOrder().getMeals().add(orderedMeal);
+        dataHolder.addMealToOrder(orderedMeal);
+//        dataHolder.getTheOrder().getMeals().add(orderedMeal);
         Intent orderActivityIntent = new Intent(CategoryItemsActivity.this,OrderActivity.class);
         startActivity(orderActivityIntent);
     }
@@ -277,7 +279,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         showSnackBar();
 
         DataHolder dataHolder = DataHolder.getInstance();
-        dataHolder.getTheOrder().getMeals().add(orderedMeal);
+//        dataHolder.getTheOrder().getMeals().add(orderedMeal);
+        dataHolder.addMealToOrder(orderedMeal);
     }
 
     @Override
@@ -483,7 +486,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
 
                             OrderedItem orderedItem = new OrderedItem();
                             orderedItem.setParentItem(selectedItem);
-                            dataHolder.getTheOrder().getItems().add(orderedItem);
+                            dataHolder.addItemToOrder(orderedItem);
+//                            dataHolder.getTheOrder().getItems().add(orderedItem);
                         }
                         //dataHolder.addOrderdItem(selectedItem);
                     }
@@ -565,4 +569,5 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         ImageButton imgBtnPlus;
         ImageButton imgBtnMinus;
     }
+
 }

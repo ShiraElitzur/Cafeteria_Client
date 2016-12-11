@@ -45,15 +45,36 @@ android:fitsSystemWindows="true">
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:gravity="start"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_gravity="start|center"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/history_pick_date"
+            android:id="@+id/btnPickDate"
+            android:background="@color/colorPrimaryLightOpacity"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/colorHeadlines"
+            />
+
+        <TextView
+            android:layout_gravity="start|center"
+            android:text="@string/history_showing"
             android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvDate"
             android:layout_margin="10dp"
+            android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/lvordersHistory"

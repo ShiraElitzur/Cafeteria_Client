@@ -24,15 +24,13 @@
 
         <activity
             android:name=".ui.MenuActivity"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop" />
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.SignUpActivity" />
         <activity
             android:name=".ui.CategoryItemsActivity"
             android:parentActivityName=".ui.MenuActivity" />
-        <activity android:name=".ui.SplashScreenActivity">
-
-        </activity>
+        <activity android:name=".ui.SplashScreenActivity" />
         <activity android:name=".ui.OrderActivity" />
         <activity android:name=".ui.PayPalActivity" />
         <activity
@@ -68,9 +66,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MenuActivity" />
         </activity>
-        <activity android:name=".ui.ChooseCafeteriaActivity"
-            android:windowSoftInputMode="adjustResize"
-            >
+        <activity
+            android:name=".ui.ChooseCafeteriaActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

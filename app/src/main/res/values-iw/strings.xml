@@ -41,14 +41,14 @@
     <string name="signup_title">הרשמה</string>
     <string name="signUpBtnText">הירשם</string>
     <string name="hint_confirm_password">אמת סיסמה</string>
-    <string name="email_address_error">הזן כתובת אימייל חוקית</string>
+    <string name="email_address_error">הזן כתובת דואר אלקטרוני חוקית</string>
     <string name="btn_signup_failed">ההרשמה נכשלה !</string>
     <string name="new_password_error">הסיסמה חייבת להכיל בין 6-20 תווים</string>
     <string name="passwords_no_match_error">הסיסמאות אינן זהות</string>
     <string name="empty_error">שדה זה אינו יכול להישאר ריק</string>
     <string name="hint_firstname">שם פרטי</string>
     <string name="hint_lastname">שם משפחה</string>
-    <string name="hint_email">דוא"ל</string>
+    <string name="hint_email">דואר אלקטרוני</string>
     <string name="hint_password">סיסמה</string>
     <string name="signup_error">חלק מהפרטים לא תקינים</string>
     <string name="login_text">משתמש רשום? התחבר</string>
@@ -139,7 +139,8 @@
     <string name="history_meals_title">ארוחות:</string>
     <string name="history_items_title">פריטים:</string>
     <string name="history_extra_title">תוספות-</string>
-    <string name="history_pick_date">בחר תאריך להצגה</string>
+    <string name="history_pick_date">בחר תאריך</string>
+    <string name="history_showing">מציג 30 הזמנות אחרונות</string>
     <string name="history_show_date">מציג הזמנות מתאריכים </string>
     <string name="history_start_date">תאריך התחלה</string>
     <string name="history_end_date">תאריך סוף</string>

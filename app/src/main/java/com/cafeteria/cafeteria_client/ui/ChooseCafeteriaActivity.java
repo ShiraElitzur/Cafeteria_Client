@@ -156,6 +156,7 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChooseCafeteriaActivity.this,
                         android.R.layout.simple_dropdown_item_1line, serversNames);
                 autoCompleteTvCafeteria.setAdapter(adapter);
+                autoCompleteTvCafeteria.setVisibility(View.VISIBLE);
             }
             Log.e("SERVERS","servers size: " + servers.size());
 

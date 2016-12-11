@@ -36,8 +36,8 @@ public class ApplicationConstant {
     //Primary Server - global
     public final static String GET_SERVERS = "http://time2eat.eu-gb.mybluemix.net/rest/server/getServers";
 
-
     public static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
+    public static final String DATE_TIME_SQLITE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_FORMAT = "dd-MM-yyyy";
 
     public final static String GET_CATEGORIES_URL = "http://" + DataHolder.getInstance().getServerIp() +
@@ -70,31 +70,40 @@ public class ApplicationConstant {
     public final static String GET_FAVORITES = "http://" + DataHolder.getInstance().getServerIp() +
             ":8080/CafeteriaServer/rest/data/getFavorites";
 
+    public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
+            ":8080/CafeteriaServer/rest/users/validateOrSignUpUser";
 
-//
-//    public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +
+
+//    public final static String GET_CATEGORIES_URL = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/data/getCategories";
 //
-//    public final static String GET_DRINKS_URL = "http://" + SERVER_IP +
+//    public final static String GET_DRINKS_URL = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/data/getDrinks";
 //
-//    public final static String USER_REGISTRATION_URL = "http://" + SERVER_IP +
+//    public final static String USER_REGISTRATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/users/insertUser";
 //
-//public final static String USER_FACEBOOK_REGISTRATION_URL = "http://" + SERVER_IP +
-//        "/rest/users/insertFacebookUser";
-//    public final static String UPDATE_USER_URL = "http://" + SERVER_IP +
+//    public final static String USER_FACEBOOK_REGISTRATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
+//            "/rest/users/insertFacebookUser";
+//
+//    public final static String UPDATE_USER_URL = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/users/updateUser";
 //
-//    public final static String USER_VALIDATION_URL = "http://" + SERVER_IP +
+//    public final static String USER_VALIDATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/users/isUserExist";
 //
-//    public final static String GET_TOKEN = "http://" + SERVER_IP +
+//    public final static String GET_TOKEN = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/push/getToken";
 //
-//    public final static String SET_TOKEN = "http://" + SERVER_IP +
+//    public final static String SET_TOKEN = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/push/attachPushIdToUser";
 //
-//    public final static String SEND_ORDER = "http://" + SERVER_IP +
+//    public final static String SEND_ORDER = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/data/insertOrder";
+//
+//    public final static String GET_FAVORITES = "http://" + DataHolder.getInstance().getServerIp() +
+//            "/rest/data/getFavorites";
+//
+//    public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
+//            "/rest/users/validateOrSignUpUser";
 }

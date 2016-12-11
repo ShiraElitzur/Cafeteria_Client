@@ -413,5 +413,4 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
         }
 
     }
-
 }

@@ -9,9 +9,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -67,6 +69,14 @@ public class CategoriesFragment extends Fragment {
 
 
         grid.setAdapter(new GridViewAdapter(getActivity(),categories,R.layout.category_card_item));
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent categoryItemsIntent = new Intent(getContext(),CategoryItemsActivity.class);
+                categoryItemsIntent.putExtra("category",categories.get(i));
+                startActivity(categoryItemsIntent);
+            }
+        });
 
         return v;
     }

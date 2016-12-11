@@ -28,6 +28,7 @@
         android:id="@+id/btnNext"
         android:background="@color/colorHeadlines"
         android:textColor="@color/colorPrimary"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:layout_margin="10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
@@ -42,10 +43,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/autoCompleteTvCafeteria"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="22dp"
-        android:layout_above="@+id/btnNext"
-        android:layout_alignStart="@+id/tvChooseCafeteria" />
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/tvChooseCafeteria"
+        android:visibility="gone"
+        />
+
 
 </RelativeLayout>

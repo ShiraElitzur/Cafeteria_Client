@@ -185,8 +185,9 @@
         android:layout_width="match_parent"
         android:text="@string/signUpBtnText"
         android:id="@+id/signUpBtn"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/common_google_signin_btn_text_dark"
+        android:background="@color/colorPrimaryLightOpacity"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="@color/colorHeadlines"
         />
 
     <TextView

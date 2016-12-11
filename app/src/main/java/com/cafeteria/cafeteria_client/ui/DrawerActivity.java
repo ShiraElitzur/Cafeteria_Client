@@ -162,7 +162,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         DrawerActivity.this.finish();
                         break;
                     case R.id.navigation_item_change_cafeteria:
-                        editor.remove("customer");
+//                        editor.remove("customer");
                         editor.remove("serverIp");
                         editor.apply();
 

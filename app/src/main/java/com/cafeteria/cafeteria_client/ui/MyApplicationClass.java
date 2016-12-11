@@ -1,9 +1,11 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.cafeteria.cafeteria_client.utils.LocalDBHandler;
@@ -13,8 +15,9 @@ import com.onesignal.OneSignal;
 import org.json.JSONObject;
 
 import java.util.Locale;
+import java.util.logging.Handler;
 
-public class MyApplicationClass extends Application {
+public class MyApplicationClass extends Application{
     private static Configuration configuration;
     public static  String language = "iw";
     private LocalDBHandler db;
@@ -32,7 +35,6 @@ public class MyApplicationClass extends Application {
         Configuration config = new Configuration();
         config.setLocale(locale);
         getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-
     }
 
     // when oriention changes, keep the default language = hebrew

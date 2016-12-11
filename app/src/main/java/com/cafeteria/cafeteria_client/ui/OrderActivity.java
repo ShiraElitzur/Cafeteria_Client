@@ -171,8 +171,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         {
             if(resultCode == RESULT_OK)
             {
-                Log.e("DATE",Calendar.getInstance().getTime().toString());
-                order.setDate(Calendar.getInstance().getTime());
+                Calendar calendar = Calendar.getInstance();
+                Log.e("DATE",calendar.getTime().toString());
+                order.setDate(calendar.getTime());
                 MyApplicationClass app = (MyApplicationClass)getApplication();
                 LocalDBHandler db = app.getLocalDB();
                 db.insertOrder(order);
