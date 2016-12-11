@@ -1,49 +1,49 @@
 package com.cafeteria.cafeteria_client.ui;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.graphics.Color;
+        import android.os.AsyncTask;
+        import android.os.Bundle;
+        import android.preference.PreferenceManager;
+        import android.support.design.widget.Snackbar;
+        import android.support.v4.app.Fragment;
+        import android.support.v4.app.FragmentManager;
+        import android.support.v4.content.ContextCompat;
+        import android.support.v7.widget.CardView;
+        import android.support.v7.widget.LinearLayoutManager;
+        import android.support.v7.widget.RecyclerView;
+        import android.util.Log;
+        import android.view.ContextMenu;
+        import android.view.LayoutInflater;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.ArrayAdapter;
+        import android.widget.BaseAdapter;
+        import android.widget.ImageView;
+        import android.widget.LinearLayout;
+        import android.widget.ListView;
+        import android.widget.TextView;
 
-import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.Customer;
-import com.cafeteria.cafeteria_client.data.Meal;
-import com.cafeteria.cafeteria_client.data.OrderedMeal;
-import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
-import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
-import com.cafeteria.cafeteria_client.utils.DataHolder;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+        import com.cafeteria.cafeteria_client.R;
+        import com.cafeteria.cafeteria_client.data.Customer;
+        import com.cafeteria.cafeteria_client.data.Meal;
+        import com.cafeteria.cafeteria_client.data.OrderedMeal;
+        import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
+        import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
+        import com.cafeteria.cafeteria_client.utils.DataHolder;
+        import com.google.gson.Gson;
+        import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+        import java.io.BufferedReader;
+        import java.io.InputStreamReader;
+        import java.lang.reflect.Type;
+        import java.net.HttpURLConnection;
+        import java.net.URL;
+        import java.util.ArrayList;
+        import java.util.List;
 
 /**
  * Created by Shira Elitzur on 08/09/2016.
@@ -52,10 +52,10 @@ public class FavoritesFragment extends Fragment{
 
     private List<Meal> favoriteMeals;
     private RecyclerView rvFavorites;
-//    private ListView lvSpecials;
+    //    private ListView lvSpecials;
     private List<Integer> colors;
     private LinearLayout llFavorites;
-//    private LinearLayout llSpecials;
+    //    private LinearLayout llSpecials;
     private int colorIndex = -1;
 
     public FavoritesFragment () {
@@ -261,3 +261,5 @@ public class FavoritesFragment extends Fragment{
 
 
 }
+
+

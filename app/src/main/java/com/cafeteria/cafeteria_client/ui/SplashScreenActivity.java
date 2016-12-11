@@ -1,52 +1,52 @@
 package com.cafeteria.cafeteria_client.ui;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
-import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.content.Context;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.content.pm.PackageInfo;
+        import android.content.pm.PackageManager;
+        import android.content.pm.Signature;
+        import android.graphics.Color;
+        import android.graphics.Typeface;
+        import android.net.ConnectivityManager;
+        import android.os.AsyncTask;
+        import android.os.Build;
+        import android.preference.PreferenceManager;
+        import android.support.v7.app.AlertDialog;
+        import android.os.Bundle;
+        import android.support.v7.app.AppCompatActivity;
+        import android.util.Base64;
+        import android.util.Log;
+        import android.view.View;
+        import android.widget.ProgressBar;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.Category;
-import com.cafeteria.cafeteria_client.data.Customer;
-import com.cafeteria.cafeteria_client.data.Meal;
-import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
-import com.cafeteria.cafeteria_client.utils.DataHolder;
-import com.cafeteria.cafeteria_client.data.Drink;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.hanks.htextview.HTextView;
-import com.hanks.htextview.HTextViewType;
-import com.onesignal.OneSignal;
+        import com.cafeteria.cafeteria_client.R;
+        import com.cafeteria.cafeteria_client.data.Category;
+        import com.cafeteria.cafeteria_client.data.Customer;
+        import com.cafeteria.cafeteria_client.data.Meal;
+        import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
+        import com.cafeteria.cafeteria_client.utils.DataHolder;
+        import com.cafeteria.cafeteria_client.data.Drink;
+        import com.google.gson.Gson;
+        import com.google.gson.reflect.TypeToken;
+        import com.hanks.htextview.HTextView;
+        import com.hanks.htextview.HTextViewType;
+        import com.onesignal.OneSignal;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
+        import java.io.BufferedReader;
+        import java.io.IOException;
+        import java.io.InputStreamReader;
+        import java.lang.reflect.Type;
+        import java.net.HttpURLConnection;
+        import java.net.MalformedURLException;
+        import java.net.URL;
+        import java.security.MessageDigest;
+        import java.security.NoSuchAlgorithmException;
+        import java.util.ArrayList;
+        import java.util.List;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -93,24 +93,24 @@ public class SplashScreenActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.alert_dialog_no_internet_positive_button,
                         new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        progressBar.setProgress(0);
-                        getDrinksTask.cancel(true);
-                        getCategoriesTask.cancel(true);
-                        new ProgressBarTask().execute();
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                progressBar.setProgress(0);
+                                getDrinksTask.cancel(true);
+                                getCategoriesTask.cancel(true);
+                                new ProgressBarTask().execute();
 
-                    }
-                })
+                            }
+                        })
                 .setNegativeButton(R.string.alert_dialog_no_internet_negative_button,
                         new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                        finish();
-                        startActivity(intent);
-                    }
-                });
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                                finish();
+                                startActivity(intent);
+                            }
+                        });
 
 
 
@@ -207,6 +207,8 @@ public class SplashScreenActivity extends AppCompatActivity {
             getCategoriesTask.execute();
             getDrinksTask = new SplashScreenActivity.GetDrinksTask();
             getDrinksTask.execute();
+            getFavoritesTask = new GetFavoritesTask();
+            getFavoritesTask.execute();
 
         }
 

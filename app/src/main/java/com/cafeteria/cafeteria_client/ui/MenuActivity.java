@@ -1,32 +1,32 @@
 package com.cafeteria.cafeteria_client.ui;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+        import android.content.DialogInterface;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.graphics.Color;
+        import android.support.design.widget.Snackbar;
+        import android.support.design.widget.TabLayout;
+        import android.support.v4.app.Fragment;
+        import android.support.v4.app.FragmentManager;
+        import android.support.v4.app.FragmentStatePagerAdapter;
+        import android.support.v4.content.ContextCompat;
+        import android.support.v4.view.ViewPager;
+        import android.os.Bundle;
+        import android.support.v7.app.AlertDialog;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.widget.LinearLayout;
+        import android.widget.TextView;
 
-import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.OrderedItem;
-import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
-import com.cafeteria.cafeteria_client.utils.DataHolder;
-import com.cafeteria.cafeteria_client.data.Order;
-import com.cafeteria.cafeteria_client.data.OrderedMeal;
+        import com.cafeteria.cafeteria_client.R;
+        import com.cafeteria.cafeteria_client.data.OrderedItem;
+        import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
+        import com.cafeteria.cafeteria_client.utils.DataHolder;
+        import com.cafeteria.cafeteria_client.data.Order;
+        import com.cafeteria.cafeteria_client.data.OrderedMeal;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
 /**
  * Created by Shira Elitzur on 08/09/2016.

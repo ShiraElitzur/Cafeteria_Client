@@ -1,19 +1,19 @@
 package com.cafeteria.cafeteria_client.utils;
 
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
+        import android.graphics.Bitmap;
+        import android.graphics.BitmapFactory;
+        import android.util.Log;
 
-import com.cafeteria.cafeteria_client.data.Category;
-import com.cafeteria.cafeteria_client.data.Drink;
-import com.cafeteria.cafeteria_client.data.Extra;
-import com.cafeteria.cafeteria_client.data.Item;
-import com.cafeteria.cafeteria_client.data.Meal;
-import com.cafeteria.cafeteria_client.data.Order;
+        import com.cafeteria.cafeteria_client.data.Category;
+        import com.cafeteria.cafeteria_client.data.Drink;
+        import com.cafeteria.cafeteria_client.data.Extra;
+        import com.cafeteria.cafeteria_client.data.Item;
+        import com.cafeteria.cafeteria_client.data.Meal;
+        import com.cafeteria.cafeteria_client.data.Order;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
 /**
  * Created by anael on 17/09/16.
@@ -28,7 +28,7 @@ public class DataHolder {
     private String serverIp = "";
     private Order theOrder;
     private List<Category> categories = new ArrayList<>();
-//    private Bitmap bitmap;
+    //    private Bitmap bitmap;
     private Bitmap bitmap;
     private List<Drink> drinksList;
     private List<Meal> favorites;
@@ -118,31 +118,31 @@ public class DataHolder {
                     }
                 }
 
-                    if (extrasToRemove.size() > 0) {
-                        categories.get(i).getMeals().get(j).getExtras().removeAll(extrasToRemove);
-                        extrasToRemove = new ArrayList<>();
-                    }
-                }
-                if (mealsToRemove.size() > 0) {
-                    categories.get(i).getMeals().removeAll(mealsToRemove);
-                    mealsToRemove = new ArrayList<>();
+                if (extrasToRemove.size() > 0) {
+                    categories.get(i).getMeals().get(j).getExtras().removeAll(extrasToRemove);
+                    extrasToRemove = new ArrayList<>();
                 }
             }
-        }
-
-    public String getServerIp() {
-            return serverIp;
-        }
-
-    public void setServerIp(String serverIp) {
-            this.serverIp = serverIp;
-        }
-
-        public List<Meal> getFavorites() {
-            return this.favorites;
-        }
-
-        public void setFavorites( List<Meal> favorites ) {
-            this.favorites = favorites;
+            if (mealsToRemove.size() > 0) {
+                categories.get(i).getMeals().removeAll(mealsToRemove);
+                mealsToRemove = new ArrayList<>();
+            }
         }
     }
+
+    public String getServerIp() {
+        return serverIp;
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
+    }
+
+    public List<Meal> getFavorites() {
+        return this.favorites;
+    }
+
+    public void setFavorites( List<Meal> favorites ) {
+        this.favorites = favorites;
+    }
+}
