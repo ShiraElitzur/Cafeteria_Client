@@ -35,6 +35,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:paddingTop="10dp"
             android:paddingEnd="10dp"
+            android:paddingRight="10dp"
             android:layout_width="150dp"
             android:id="@+id/imgviewHeaderImage"
             android:src="@drawable/user_male"

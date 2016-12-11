@@ -15,6 +15,7 @@
         android:weightSum="10">
 
         <ImageView
+            android:contentDescription="@string/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_action_more"
@@ -22,6 +23,7 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:contentDescription="@string/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_action_calendar_day"
@@ -57,6 +59,7 @@
     <TextView
         android:visibility="gone"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

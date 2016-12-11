@@ -6,23 +6,27 @@
     android:padding="10dp">
 
     <ImageButton
+        android:contentDescription="@string/remove"
         android:id="@+id/imgBtnRemoveItem"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:src="@android:drawable/ic_delete"
         android:background="@null"
         android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         />
 
     <ImageButton
+        android:contentDescription="@string/edit"
         android:id="@+id/imgBtnEditItem"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:src="@drawable/ic_edit"
         android:background="@null"
         android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:layout_height="wrap_content"
         android:visibility="invisible"
         />
@@ -35,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="ItemTitle"
             android:gravity="start"
-            android:layout_gravity="right"/>
+            android:layout_gravity="end"/>
 
     <TextView
         android:id="@+id/tvQty"
@@ -56,7 +60,6 @@
         android:layout_width="0dp"
         android:layout_weight="2"
         android:layout_height="wrap_content"
-        android:inputType="number"
         android:text="Price"
         android:gravity="end"
         />

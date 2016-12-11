@@ -26,6 +26,7 @@
             android:padding="20dp">
 
             <ImageView
+                android:contentDescription="@string/logo"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="40"
@@ -47,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/developedByTitle"
                 android:textSize="@dimen/headLines3"
+                android:layout_gravity="start"
                 android:textAlignment="viewStart" />
 
             <TextView
@@ -54,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/developersNames"
+                android:layout_gravity="start"
                 android:textAlignment="viewStart"/>
 
             <TextView
@@ -61,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/appDescriptionTitle"
                 android:textSize="@dimen/headLines3"
+                android:layout_gravity="start"
                 android:textAlignment="viewStart"
                 android:layout_marginTop="15dp" />
 
@@ -70,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/dialog_tv_description"
                 android:layout_marginTop="10dp"
+                android:layout_gravity="start"
                 android:textAlignment="viewStart"/>
 
             <TextView
@@ -77,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/appCredits"
                 android:textSize="@dimen/headLines3"
+                android:layout_gravity="start"
                 android:textAlignment="viewStart"
                 android:layout_marginTop="15dp" />
 
@@ -93,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/appVersionTitle"
                 android:textSize="@dimen/headLines3"
+                android:layout_gravity="start"
                 android:textAlignment="viewStart"
                 android:layout_marginTop="15dp" />
 
