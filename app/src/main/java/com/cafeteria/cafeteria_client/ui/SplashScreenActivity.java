@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Drink;
@@ -61,6 +62,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private HTextView htvTitle;
     private getCategoriesTask getCategoriesTask;
     private GetDrinksTask getDrinksTask;
+    private GetFavoritesTask getFavoritesTask;
     private int userPKId;
 
     @Override
@@ -68,7 +70,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        DataHolder.getInstance().setSERVER_IP("192.168.43.91");
+        DataHolder.getInstance().setSERVER_IP("192.168.43.231");
 
         printKeyHash();
         // set default language to hebrew
@@ -239,6 +241,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         boolean isConnected;
         boolean getCategoriesTaskFinished = false;
         boolean getDrinksTaskFinished = false;
+        boolean getFavoritesTaskFinished = false;
 
 
         @Override
@@ -252,6 +255,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     } else {
                         getCategoriesTaskFinished = getCategoriesTask.getStatus() == Status.FINISHED;
                         getDrinksTaskFinished = getDrinksTask.getStatus() == Status.FINISHED;
+                        getFavoritesTaskFinished = getFavoritesTask.getStatus() == Status.FINISHED;
                         if (getCategoriesTaskFinished && getDrinksTaskFinished){
                             i+=25;
                             publishProgress(i);
@@ -540,6 +544,71 @@ public class SplashScreenActivity extends AppCompatActivity {
             getCategoriesTask.execute();
             getDrinksTask = new GetDrinksTask();
             getDrinksTask.execute();
+            getFavoritesTask = new GetFavoritesTask();
+            getFavoritesTask.execute();
+        }
+    }
+
+    private class GetFavoritesTask extends AsyncTask<Void,Void,String> {
+
+        Customer customer;
+
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String customerString = sharedPreferences.getString("customer", "");
+            if (customerString != null && !customerString.equals("")) {
+                Gson gson = new Gson();
+                customer = gson.fromJson(customerString, Customer.class);
+                Log.e("DEBUG", "cutomer: " + customerString);
+            }
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            StringBuilder response;
+            try {
+                URL url = new URL(ApplicationConstant.GET_FAVORITES+"?userId="+customer.getId());
+                response = new StringBuilder();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Log.e("DEBUG","getFavorites " +conn.getResponseCode() + " : "+ conn.getResponseMessage() );
+                    return null;
+                }
+
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                conn.disconnect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            return response.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if( response != null ) {
+                Gson gson = new Gson();
+                Type listType = new TypeToken<ArrayList<Meal>>() {
+                }.getType();
+                List<Meal> favorites = (ArrayList<Meal>)gson.fromJson(response, listType);
+                DataHolder.getInstance().setFavorites(favorites);
+                Log.e("FAVORITES", "meals size: "+favorites.size());
+                for( Meal meal : favorites ) {
+                    Log.e("FAVORITES","meal - "+meal.getTitle());
+                }
+
+            }
         }
     }
 }

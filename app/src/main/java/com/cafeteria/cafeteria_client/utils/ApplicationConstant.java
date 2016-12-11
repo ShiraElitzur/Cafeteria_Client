@@ -65,7 +65,7 @@ public class ApplicationConstant {
     public final static String GET_FAVORITES = "http://" + DataHolder.getInstance().getSERVER_IP() +
             ":8080/CafeteriaServer/rest/data/getFavorites";
 
-    public final static String GET_SERVER_ADDRESS = "http://192.168.43.140:8080/CafeteriaServer/rest/server/getServerAddress";
+    public final static String GET_SERVER_ADDRESS = "http://192.168.43.231:8080/CafeteriaServer/rest/server/getServerAddress";
 
 //
 //    public final static String GET_CATEGORIES_URL = "http://" + SERVER_IP +

@@ -34,6 +34,8 @@ public class DataHolder {
     private Order theOrder;
     private List<Category> categories = new ArrayList<>();
     private Bitmap bitmap;
+    private List<Drink> drinksList;
+    private List<Meal> favorites;
 
     public Bitmap getBitmap() {
         Log.d("DATAHOLDER-getbitmap","bitmap: " + bitmap);
@@ -59,9 +61,6 @@ public class DataHolder {
         this.drinksList = drinksList;
     }
 
-    private List<Drink> drinksList;
-
-
     private static DataHolder ourInstance = new DataHolder();
 
     public static DataHolder getInstance() {
@@ -72,27 +71,10 @@ public class DataHolder {
 
     }
 
-//
-//    public void addOrderdMeal(OrderedMeal meal){
-//        orderedMeals.add(meal);
-//    }
-//
-//    public void addOrderdItem(Item item){
-//        orderedItems.add(item);
-//    }
-
     public void setCategories(List<Category> categories) {
         this.categories = categories;
         checkItemsInventory();
     }
-//
-//    public List<Item> getOrderedItems(){
-//        return orderedItems;
-//    }
-//
-//    public List<OrderedMeal> getOrderedMeals(){
-//        return orderedMeals;
-//    }
 
     public List<Category> getCategories() {
         return categories;
@@ -156,5 +138,13 @@ public class DataHolder {
 
         public void setSERVER_IP(String SERVER_IP) {
             this.SERVER_IP = SERVER_IP;
+        }
+
+        public List<Meal> getFavorites() {
+            return this.favorites;
+        }
+
+        public void setFavorites( List<Meal> favorites ) {
+            this.favorites = favorites;
         }
     }

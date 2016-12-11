@@ -1,18 +1,26 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
+import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
@@ -27,9 +35,10 @@ import java.util.List;
  * 1. Sorted by categories 2. 3.
  * This activity extends the DrawerActivity to support the application navigation drawer
  */
-public class MenuActivity extends DrawerActivity {
+public class MenuActivity extends DrawerActivity implements OnDialogResultListener {
     private static boolean firstLaunch = true;
     private SharedPreferences sharedPreferences;
+    private LinearLayout llMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,7 @@ public class MenuActivity extends DrawerActivity {
         setContentView(R.layout.activity_menu); // The layout with the tabs
         super.onCreateDrawer();
 
+        llMenu = (LinearLayout)findViewById(R.id.llmenu);
         CustomPagerAdapter adapter = new CustomPagerAdapter(getSupportFragmentManager());
         ViewPager viewPager = (ViewPager)findViewById(R.id.viewpager);
         // Adding to the adapter the three fragments and their titlesAnimation
@@ -82,6 +92,41 @@ public class MenuActivity extends DrawerActivity {
                 })
                 .setNegativeButton(getString(R.string.exit_dialog_negavtive), null)
                 .show();
+    }
+
+    @Override
+    public void onPositiveResult(OrderedMeal meal) {
+
+        DataHolder dataHolder = DataHolder.getInstance();
+        dataHolder.getTheOrder().getMeals().add(meal);
+        Intent orderActivityIntent = new Intent(this,OrderActivity.class);
+        startActivity(orderActivityIntent);
+    }
+
+    @Override
+    public void onNegativeResult(OrderedMeal meal) {
+        showSnackBar();
+
+        DataHolder dataHolder = DataHolder.getInstance();
+        dataHolder.getTheOrder().getMeals().add(meal);
+    }
+
+    private void showSnackBar(){
+        Snackbar snackbar = Snackbar
+                .make(llMenu, getString(R.string.dialog_btn_keep_shopping_pressed), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.snack_bar_action_text), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent orderActivityIntent = new Intent(MenuActivity.this,OrderActivity.class);
+                        startActivity(orderActivityIntent);
+                    }
+                });
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(MenuActivity.this, android.R.color.white));
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.BLACK);
+        snackbar.show();
     }
 
     /**
