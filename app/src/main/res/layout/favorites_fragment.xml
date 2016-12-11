@@ -4,30 +4,74 @@ android:orientation="vertical" android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:id="@+id/llFavoritesMain">
 
-<LinearLayout
-    android:id="@+id/llFavorites"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorBackground"
-    android:paddingRight="15dp"
-    android:paddingLeft="15dp"
-    android:paddingTop="5dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:textSize="@dimen/headLines4"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFavorites"
+    <RelativeLayout
+        android:id="@+id/rlEmptyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:requiresFadingEdge="vertical"
-        android:fadingEdgeLength="35dp">
-    </android.support.v7.widget.RecyclerView>
+        android:visibility="gone">
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/time2eat_icon_transparent1"
+            android:layout_centerInParent="true"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_favorites"
+            android:layout_centerInParent="true"
+            android:textAlignment="center"
+            android:textSize="@dimen/headLines1"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:textSize="@dimen/headLines4"
+            android:text="פריטים שהזמנת:"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorBackground"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:textSize="@dimen/headLines4"
+            android:text="ארוחות שהזמנת:"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvFavorites"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:requiresFadingEdge="vertical"
+            android:fadingEdgeLength="35dp">
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,47 +1,26 @@
 package com.cafeteria.cafeteria_client.ui;
 
         import android.content.Context;
-        import android.content.Intent;
-        import android.content.SharedPreferences;
-        import android.graphics.Color;
-        import android.os.AsyncTask;
         import android.os.Bundle;
-        import android.preference.PreferenceManager;
-        import android.support.design.widget.Snackbar;
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentManager;
-        import android.support.v4.content.ContextCompat;
-        import android.support.v7.widget.CardView;
         import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.util.Log;
-        import android.view.ContextMenu;
         import android.view.LayoutInflater;
-        import android.view.MenuItem;
         import android.view.View;
         import android.view.ViewGroup;
-        import android.widget.ArrayAdapter;
         import android.widget.BaseAdapter;
         import android.widget.ImageView;
         import android.widget.LinearLayout;
-        import android.widget.ListView;
+        import android.widget.RelativeLayout;
         import android.widget.TextView;
 
         import com.cafeteria.cafeteria_client.R;
-        import com.cafeteria.cafeteria_client.data.Customer;
+        import com.cafeteria.cafeteria_client.data.Item;
         import com.cafeteria.cafeteria_client.data.Meal;
-        import com.cafeteria.cafeteria_client.data.OrderedMeal;
-        import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
-        import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
         import com.cafeteria.cafeteria_client.utils.DataHolder;
-        import com.google.gson.Gson;
-        import com.google.gson.reflect.TypeToken;
 
-        import java.io.BufferedReader;
-        import java.io.InputStreamReader;
-        import java.lang.reflect.Type;
-        import java.net.HttpURLConnection;
-        import java.net.URL;
         import java.util.ArrayList;
         import java.util.List;
 
@@ -51,10 +30,13 @@ package com.cafeteria.cafeteria_client.ui;
 public class FavoritesFragment extends Fragment{
 
     private List<Meal> favoriteMeals;
+    private List<Item> favoriteItems;
     private RecyclerView rvFavorites;
+    private RecyclerView rvItems;
     //    private ListView lvSpecials;
     private List<Integer> colors;
     private LinearLayout llFavorites;
+    private RelativeLayout rlEmptyView;
     //    private LinearLayout llSpecials;
     private int colorIndex = -1;
 
@@ -74,16 +56,24 @@ public class FavoritesFragment extends Fragment{
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.favorites_fragment, container, false);
 
-        favoriteMeals = DataHolder.getInstance().getFavorites();
+        favoriteMeals = DataHolder.getInstance().getFavoriteMeals();
+        favoriteItems = DataHolder.getInstance().getFavoriteItems();
 
         llFavorites = (LinearLayout)v.findViewById(R.id.llFavorites);
 //        llSpecials = (LinearLayout)v.findViewById(R.id.llSpecials);
 //        lvSpecials = (ListView) v.findViewById(R.id.lvSpecials);
         rvFavorites = (RecyclerView) v.findViewById(R.id.rvFavorites);
+        rvItems = (RecyclerView) v.findViewById(R.id.rvItems);
+        rlEmptyView = (RelativeLayout) v.findViewById(R.id.rlEmptyView);
 
         if( favoriteMeals != null ) {
             rvFavorites.setAdapter(new FavoritesRecyclerViewAdapter(getActivity(), favoriteMeals));
             rvFavorites.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
+
+        if ( favoriteItems != null ) {
+            rvItems.setAdapter(new FavoriteItemsRecyclerViewAdapter(getActivity(),favoriteItems));
+            rvItems.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
         }
 
         colors = new ArrayList<>();
@@ -95,13 +85,9 @@ public class FavoritesFragment extends Fragment{
 
 
 //        lvSpecials.setAdapter( new SpecialsListAdapter(getActivity(),fakeSpecials,R.layout.special_card_item));
-        if( favoriteMeals != null ) {
-            Log.e("FAVORITES","favorites size - "+ favoriteMeals.size());
-            if(favoriteMeals.isEmpty() || favoriteMeals.size() < 1 ) {
-                llFavorites.setVisibility(View.GONE);
-            }
-        } else {
-            llFavorites.setVisibility(View.GONE);
+        if( (favoriteMeals == null && favoriteItems == null) ||
+                (favoriteMeals.size() < 1 && favoriteItems.size() < 1) ) {
+            rlEmptyView.setVisibility(View.VISIBLE);
         }
 
 //        if(fakeSpecials.isEmpty() || fakeSpecials.size() < 1){
@@ -125,7 +111,7 @@ public class FavoritesFragment extends Fragment{
 
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorite_card_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorite_meal_card, parent, false);
             CustomViewHolder viewHolder = new CustomViewHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -198,66 +184,125 @@ public class FavoritesFragment extends Fragment{
         }
     }
 
-//    public class SpecialsListAdapter extends BaseAdapter {
-//
-//        List<Meal> meals;
-//        Context context;
-//        int layout;
-//
-//        public SpecialsListAdapter(Context context, List<Meal> meals, int layout){
-//            this.context = context;
-//            this.meals = meals;
-//            this.layout = layout;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            if( meals != null ){
-//                return meals.size();
-//            } else {
-//                return 0;
-//            }
-//        }
-//
-//        @Override
-//        public Object getItem(int i) {
-//            return null;
-//        }
-//
-//        @Override
-//        public long getItemId(int i) {
-//            return 0;
-//        }
-//
-//        @Override
-//        public View getView(int position, View view, ViewGroup viewGroup) {
-//            final ViewHolder holder;
-//            final Meal meal;
-//
-//            if(view == null) {
-//                LayoutInflater inflater = getActivity().getLayoutInflater();
-//                view = inflater.inflate(layout, viewGroup, false);
-//
-//                // find the UI components of the cell
-//                holder = new ViewHolder();
-//                holder.title = (TextView) view.findViewById(R.id.tvSpecialTitle);
-//
-//                view.setTag(holder);
-//            } else {
-//                holder = (ViewHolder)view.getTag();
-//
-//            }
-//
-//            // change the components to fit the current item that the cell should display
-//            meal = meals.get(position);
-//            holder.title.setText(meal.getTitle());
-//            return view;
-//        }
-//
-//        private class ViewHolder {
-//            TextView title;
-//        }
-//    }
+
+    public class FavoriteItemsRecyclerViewAdapter extends RecyclerView.Adapter<FavoriteItemsRecyclerViewAdapter.CustomViewHolder> {
+
+        private Context context;
+        List<Item> favoriteItems;
+
+        public FavoriteItemsRecyclerViewAdapter(Context context, List<Item> favoriteItems) {
+            this.favoriteItems = favoriteItems;
+            this.context = context;
+        }
+
+        @Override
+        public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorite_item_card, parent, false);
+            CustomViewHolder viewHolder = new CustomViewHolder(view);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(CustomViewHolder holder, int position) {
+            Item favorite = favoriteItems.get(position);
+            holder.title.setText(favorite.getTitle());
+        }
+
+
+        @Override
+        public int getItemCount() {
+            return (null != favoriteItems ? favoriteItems.size() : 0);
+        }
+
+        class CustomViewHolder extends RecyclerView.ViewHolder {
+
+            protected TextView title;
+            protected RelativeLayout rlFavoriteItem;
+
+            public CustomViewHolder(View view) {
+                super(view);
+                this.title = (TextView) view.findViewById(R.id.tvFavoriteItem);
+                this.rlFavoriteItem = (RelativeLayout) view.findViewById(R.id.rlFavoriteItem);
+
+                if( colorIndex == 4 ) {
+                    colorIndex = -1;
+                }
+
+                this.title.setTextColor(getResources().getColor(colors.get(++colorIndex)));
+                this.rlFavoriteItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int position = getAdapterPosition();
+                        Item item = favoriteItems.get(position);
+                        Log.e("FAVORITES","Click on item " + item.getTitle());
+
+                    }
+                });
+                view.setTag(this);
+            }
+        }
+    }
+
+    public class ItemsListAdapter extends BaseAdapter {
+
+        List<Item> items;
+        Context context;
+        int layout;
+
+        public ItemsListAdapter(Context context, List<Item> items, int layout){
+            this.context = context;
+            this.items = items;
+            this.layout = layout;
+        }
+
+        @Override
+        public int getCount() {
+            if( items != null ){
+                return items.size();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup viewGroup) {
+            final ViewHolder holder;
+            final Item item;
+
+            if(view == null) {
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                view = inflater.inflate(layout, viewGroup, false);
+
+                // find the UI components of the cell
+                holder = new ViewHolder();
+                holder.title = (TextView) view.findViewById(R.id.tvFavoriteItem);
+
+                view.setTag(holder);
+            } else {
+                holder = (ViewHolder)view.getTag();
+
+            }
+
+            // change the components to fit the current item that the cell should display
+            item = items.get(position);
+            holder.title.setText(item.getTitle());
+            return view;
+        }
+
+        private class ViewHolder {
+            TextView title;
+        }
+    }
 
 
 }

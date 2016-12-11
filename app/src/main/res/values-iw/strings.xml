@@ -166,6 +166,8 @@
     <string name="update_user_success">הפרטים עודכנו בהצלחה</string>
     <string name="update_user_failed">עידכון הפרטים נכשל</string>
 
+    <string name="no_favorites">Time2eaT\nלומדת על ההעדפות שלך כאשר אתה מזמין ארוחות ופריטים...\nאז קדימה, תתחיל להזמין!</string>
+
     <!--Dialog - forgot password -->
     <string name="dialog_forgot_password_title">שיחזור סיסמה</string>
     <string name="dialog_forgot_password_message">דואר אלקטרוני ישלח עם הסיסמה מצורפת.</string>

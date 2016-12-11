@@ -67,8 +67,12 @@ public class ApplicationConstant {
     public final static String SEND_ORDER = "http://" + DataHolder.getInstance().getServerIp() +
             ":8080/CafeteriaServer/rest/data/insertOrder";
 
-    public final static String GET_FAVORITES = "http://" + DataHolder.getInstance().getServerIp() +
-            ":8080/CafeteriaServer/rest/data/getFavorites";
+    public final static String GET_FAVORITE_MEALS = "http://" + DataHolder.getInstance().getServerIp() +
+            ":8080/CafeteriaServer/rest/data/getFavoriteMeals";
+
+    public final static String GET_FAVORITE_ITEMS = "http://" + DataHolder.getInstance().getServerIp() +
+            ":8080/CafeteriaServer/rest/data/getFavoriteItems";
+
 
     public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
             ":8080/CafeteriaServer/rest/users/validateOrSignUpUser";

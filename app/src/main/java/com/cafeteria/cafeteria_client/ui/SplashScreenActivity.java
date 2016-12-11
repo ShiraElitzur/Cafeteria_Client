@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
@@ -77,7 +78,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     private HTextView htvTitle;
     private GetCategoriesTask getCategoriesTask;
     private GetDrinksTask getDrinksTask;
-    private GetFavoritesTask getFavoritesTask;
+    private GetFavoriteMealsTask getFavoriteMealsTask;
+    private GetFavoriteItemsTask getFavoriteItemsTask;
     private ValidateOrSignUpTask validateOrSignUpTask;
     private int userPKId;
     private boolean logged = false;
@@ -183,7 +185,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         boolean isConnected;
         boolean getCategoriesTaskFinished = false;
         boolean getDrinksTaskFinished = false;
-        boolean getFavoritesTaskFinished = false;
+        boolean getFavoriteMealsTaskFinished = false;
+        boolean getFavoriteItemsTaskFinished = false;
 
         boolean validateOrSignUpTaskFinished = false;
 
@@ -198,16 +201,18 @@ public class SplashScreenActivity extends AppCompatActivity {
                     } else {
                         getCategoriesTaskFinished = getCategoriesTask.getStatus() == Status.FINISHED;
                         getDrinksTaskFinished = getDrinksTask.getStatus() == Status.FINISHED;
+                        getFavoriteMealsTaskFinished = getFavoriteMealsTask.getStatus() == Status.FINISHED;
+                        getFavoriteItemsTaskFinished = getFavoriteItemsTask.getStatus() == Status.FINISHED;
                             if (logged) {
-                                getFavoritesTaskFinished = getFavoritesTask.getStatus() == Status.FINISHED;
                                 validateOrSignUpTaskFinished = validateOrSignUpTask.getStatus() == Status.FINISHED;
                                 if (getCategoriesTaskFinished && getDrinksTaskFinished && validateOrSignUpTaskFinished
-                                        && getFavoritesTaskFinished) {
+                                        && getFavoriteMealsTaskFinished && getFavoriteItemsTaskFinished) {
                                     i += 25;
                                     publishProgress(i);
                                 }
                             } else {
-                                if (getCategoriesTaskFinished && getDrinksTaskFinished) {
+                                if (getCategoriesTaskFinished && getDrinksTaskFinished &&
+                                        getFavoriteMealsTaskFinished && getFavoriteItemsTaskFinished) {
                                     i += 25;
                                     publishProgress(i);
                                 }
@@ -230,15 +235,19 @@ public class SplashScreenActivity extends AppCompatActivity {
                 if (logged) {
                     validateOrSignUpTask = new ValidateOrSignUpTask();
                     validateOrSignUpTask.execute();
-                    getFavoritesTask = new GetFavoritesTask();
-                    getFavoritesTask.execute();
+                    getFavoriteMealsTask = new GetFavoriteMealsTask();
+                    getFavoriteMealsTask.execute();
+                    getFavoriteItemsTask = new GetFavoriteItemsTask();
+                    getFavoriteItemsTask.execute();
                 }
                 tvStatus.setText(R.string.progressBar_pre_execute);
                 getCategoriesTask = new GetCategoriesTask();
                 getCategoriesTask.execute();
                 getDrinksTask = new SplashScreenActivity.GetDrinksTask();
                 getDrinksTask.execute();
+
             }
+
 
             @Override
             protected void onPostExecute (Boolean result){
@@ -462,7 +471,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
 
-        private class GetFavoritesTask extends AsyncTask<Void, Void, String> {
+        private class GetFavoriteMealsTask extends AsyncTask<Void, Void, String> {
 
             Customer customer;
 
@@ -481,7 +490,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             protected String doInBackground(Void... voids) {
                 StringBuilder response;
                 try {
-                    URL url = new URL(ApplicationConstant.GET_FAVORITES + "?userId=" + customer.getId());
+                    URL url = new URL(ApplicationConstant.GET_FAVORITE_MEALS + "?userId=" + customer.getId());
                     response = new StringBuilder();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -514,16 +523,79 @@ public class SplashScreenActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     Type listType = new TypeToken<ArrayList<Meal>>() {
                     }.getType();
-                    List<Meal> favorites = (ArrayList<Meal>) gson.fromJson(response, listType);
-                    DataHolder.getInstance().setFavorites(favorites);
-                    Log.e("FAVORITES", "meals size: " + favorites.size());
-                    for (Meal meal : favorites) {
+                    List<Meal> favoriteMeals = (ArrayList<Meal>) gson.fromJson(response, listType);
+                    DataHolder.getInstance().setFavoriteMeals(favoriteMeals);
+                    Log.e("FAVORITES", "meals size: " + favoriteMeals.size());
+                    for (Meal meal : favoriteMeals) {
                         Log.e("FAVORITES", "meal - " + meal.getTitle());
                     }
 
                 }
             }
         }
+
+        private class GetFavoriteItemsTask extends AsyncTask<Void, Void, String> {
+
+        Customer customer;
+
+        @Override
+        protected void onPreExecute() {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String customerString = sharedPreferences.getString("customer", "");
+            if (customerString != null && !customerString.equals("")) {
+                Gson gson = new Gson();
+                customer = gson.fromJson(customerString, Customer.class);
+                Log.e("DEBUG", "cutomer: " + customerString);
+            }
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            StringBuilder response;
+            try {
+                URL url = new URL(ApplicationConstant.GET_FAVORITE_ITEMS + "?userId=" + customer.getId());
+                response = new StringBuilder();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Log.e("DEBUG", "getFavoriteItems " + conn.getResponseCode() + " : " + conn.getResponseMessage());
+                    return null;
+                }
+
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                conn.disconnect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            return response.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if (response != null) {
+                Gson gson = new Gson();
+                Type listType = new TypeToken<ArrayList<Item>>() {
+                }.getType();
+                List<Item> favoriteItems = (ArrayList<Item>) gson.fromJson(response, listType);
+                DataHolder.getInstance().setFavoriteItems(favoriteItems);
+                Log.e("FAVORITES", "items size: " + favoriteItems.size());
+                for (Item item : favoriteItems) {
+                    Log.e("FAVORITES", "item - " + item.getTitle());
+                }
+
+            }
+        }
+    }
 
         private class ValidateOrSignUpTask extends AsyncTask<String, Void, String> {
 

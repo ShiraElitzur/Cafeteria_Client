@@ -29,7 +29,8 @@ public class DataHolder {
     private List<Category> categories = new ArrayList<>();
     private Bitmap bitmap;
     private List<Drink> drinksList;
-    private List<Meal> favorites;
+    private List<Meal> favoriteMeals;
+    private List<Item> favoriteItems;
 
 
     private static DataHolder ourInstance = new DataHolder();
@@ -127,11 +128,20 @@ public class DataHolder {
         this.serverIp = serverIp;
     }
 
-    public List<Meal> getFavorites() {
-        return this.favorites;
+    public List<Meal> getFavoriteMeals() {
+        return this.favoriteMeals;
     }
 
-    public void setFavorites( List<Meal> favorites ) {
-        this.favorites = favorites;
+    public void setFavoriteMeals( List<Meal> favoriteMeals ) {
+        this.favoriteMeals = favoriteMeals;
+    }
+
+
+    public List<Item> getFavoriteItems() {
+        return this.favoriteItems;
+    }
+
+    public void setFavoriteItems( List<Item> favoriteItems ) {
+        this.favoriteItems = favoriteItems;
     }
 }
