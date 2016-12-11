@@ -176,5 +176,12 @@
     <string name="update_user_success">Details updated successfully</string>
     <string name="update_user_failed">Details update failed</string>
 
+    <!--Dialog - forgot password -->
+    <string name="dialog_forgot_password_title">Password Recovery</string>
+    <string name="dialog_forgot_password_message">An email with your password attached will be sent.</string>
+    <string name="dialog_forgot_password_button">Send Email</string>
+    <string name="dialog_forgot_password_success">An email was sent with the password</string>
+    <string name="dialog_forgot_password_fail">Email is not valid</string>
+
 
 </resources>

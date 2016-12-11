@@ -10,10 +10,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +49,7 @@ import com.onesignal.OneSignal;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SharedPreferences sharedPreferences;
     private EditText etMail;
     private EditText etPassword;
+    private TextView tvForgotPassword;
     private String emailTxt;
     private String passwordTxt;
     private CallbackManager facebookCallbackManager;
@@ -89,6 +94,35 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         AppEventsLogger.activateApp(getApplication());
 
         setContentView(R.layout.activity_login);
+
+        tvForgotPassword = (TextView) findViewById(R.id.tvForgotPassword);
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+                LayoutInflater layout = getLayoutInflater();
+                final EditText input = new EditText(LoginActivity.this);
+                input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                alertDialogBuilder.setView(input);
+                alertDialogBuilder
+                        .setTitle(getString(R.string.dialog_forgot_password_title))
+                        .setMessage(getString(R.string.dialog_forgot_password_message))
+                        .setPositiveButton(getResources().getString(R.string.dialog_forgot_password_button),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        String email = input.getText().toString();
+                                        new ForgotPasswordTask(email).execute();
+                                        dialogInterface.dismiss();
+
+                                    }
+                                }).create().show();
+            }
+        });
 
         TextView loginAppTitle = (TextView) findViewById(R.id.loginAppTitle);
         Typeface type = Typeface.DEFAULT.createFromAsset(getAssets(),"fonts/PatuaOne-Regular.ttf");
@@ -767,4 +801,62 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         }
     }
+
+    private class ForgotPasswordTask extends AsyncTask<Boolean, Void, Boolean> {
+        private String email;
+        private boolean result = false;
+
+        public ForgotPasswordTask(String email){
+            this.email = email;
+        }
+
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+            StringBuilder response;
+            try {
+                URL url = new URL(ApplicationConstant.FORGOT_PASSWORD + "?email=" + email);
+                response = new StringBuilder();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return null;
+                }
+
+                BufferedReader input = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream()));
+
+                String line;
+                while ((line = input.readLine()) != null) {
+                    response.append(line + "\n");
+                }
+
+                input.close();
+
+                conn.disconnect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            String responseString = response.toString().trim();
+            Log.e("DEBUG","user response : "+ responseString);
+            if (responseString.trim().equals("OK")) {
+                result = true;
+            }
+            return result;
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean response) {
+            if (result) {
+                Toast.makeText(LoginActivity.this,getString(R.string.dialog_forgot_password_success),Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(LoginActivity.this,getString(R.string.dialog_forgot_password_fail),Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+    }
+
 }

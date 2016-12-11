@@ -31,7 +31,7 @@ public class ApplicationConstant {
 
 
     //Primary Server - local
-//    public final static String GET_SERVERS = "http://192.168.1.11:8080/CafeteriaServer/rest/server/getServers";
+//    public final static String GET_SERVERS = "http://192.168.1.19:8080/CafeteriaServer/rest/server/getServers";
 
     //Primary Server - global
     public final static String GET_SERVERS = "http://time2eat.eu-gb.mybluemix.net/rest/server/getServers";
@@ -73,6 +73,9 @@ public class ApplicationConstant {
     public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
             ":8080/CafeteriaServer/rest/users/validateOrSignUpUser";
 
+    public final static String FORGOT_PASSWORD = "http://" + DataHolder.getInstance().getServerIp() +
+            ":8080/CafeteriaServer/rest/email/forgotPassword";
+
 
 //    public final static String GET_CATEGORIES_URL = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/data/getCategories";
@@ -106,4 +109,7 @@ public class ApplicationConstant {
 //
 //    public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/users/validateOrSignUpUser";
+
+//    public final static String FORGOT_PASSWORD = "http://" + DataHolder.getInstance().getServerIp() +
+//            "/rest/email/forgotPassword";
 }

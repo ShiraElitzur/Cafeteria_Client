@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.cafeteria.cafeteria_client"
-        minSdkVersion 19
-        targetSdkVersion 24
+        minSdkVersion 16
+        targetSdkVersion 25
         multiDexEnabled true
         versionCode 1
         versionName "1.0"
