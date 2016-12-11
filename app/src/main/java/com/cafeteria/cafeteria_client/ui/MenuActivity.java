@@ -79,16 +79,16 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
         if (firstLaunch) {
             firstLaunch = false;
             // get the logged customer from the shared preferences
-//            Gson gson = new Gson();
-//            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//            String customer = sharedPreferences.getString("customer", "");
-//            Customer c = gson.fromJson(customer, Customer.class);
-//            // assign the customer to the order
-//            Order order = new Order();
-//            order.setCustomer(c);
-            DataHolder.getInstance().setTheOrder(new Order());
-            DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
-            DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String order = sharedPreferences.getString("order", "");
+            if (order.isEmpty()){
+                DataHolder.getInstance().setTheOrder(new Order());
+                DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
+                DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
+            } else{
+                DataHolder.getInstance().setTheOrder(new Gson().fromJson(order,Order.class));
+            }
+
         }
 
         navigationView.setCheckedItem(R.id.navigation_item_cafeteria_menu);
@@ -113,9 +113,9 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
 
     @Override
     public void onPositiveResult(OrderedMeal meal) {
-
         DataHolder dataHolder = DataHolder.getInstance();
-        dataHolder.getTheOrder().getMeals().add(meal);
+        dataHolder.addMealToOrder(meal);
+        updateOrderInSharedPreferences();
         Intent orderActivityIntent = new Intent(this, OrderActivity.class);
         startActivity(orderActivityIntent);
     }
@@ -125,7 +125,9 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
         showSnackBar();
 
         DataHolder dataHolder = DataHolder.getInstance();
-        dataHolder.getTheOrder().getMeals().add(meal);
+        dataHolder.addMealToOrder(meal);
+        updateOrderInSharedPreferences();
+
     }
 
     private void showSnackBar() {
@@ -208,5 +210,12 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
             fragmentList.add(fragment);
             fragmentTitleList.add(title);
         }
+    }
+
+    private void updateOrderInSharedPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("order", new Gson().toJson(DataHolder.getInstance().getTheOrder()));
+        editor.apply();
     }
 }

@@ -198,8 +198,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                     } else {
                         getCategoriesTaskFinished = getCategoriesTask.getStatus() == Status.FINISHED;
                         getDrinksTaskFinished = getDrinksTask.getStatus() == Status.FINISHED;
-                        getFavoritesTaskFinished = getFavoritesTask.getStatus() == Status.FINISHED;
                             if (logged) {
+                                getFavoritesTaskFinished = getFavoritesTask.getStatus() == Status.FINISHED;
                                 validateOrSignUpTaskFinished = validateOrSignUpTask.getStatus() == Status.FINISHED;
                                 if (getCategoriesTaskFinished && getDrinksTaskFinished && validateOrSignUpTaskFinished
                                         && getFavoritesTaskFinished) {
@@ -207,7 +207,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                                     publishProgress(i);
                                 }
                             } else {
-                                if (getCategoriesTaskFinished && getDrinksTaskFinished && getFavoritesTaskFinished) {
+                                if (getCategoriesTaskFinished && getDrinksTaskFinished) {
                                     i += 25;
                                     publishProgress(i);
                                 }
@@ -230,17 +230,15 @@ public class SplashScreenActivity extends AppCompatActivity {
                 if (logged) {
                     validateOrSignUpTask = new ValidateOrSignUpTask();
                     validateOrSignUpTask.execute();
+                    getFavoritesTask = new GetFavoritesTask();
+                    getFavoritesTask.execute();
                 }
                 tvStatus.setText(R.string.progressBar_pre_execute);
                 getCategoriesTask = new GetCategoriesTask();
                 getCategoriesTask.execute();
                 getDrinksTask = new SplashScreenActivity.GetDrinksTask();
                 getDrinksTask.execute();
-                getFavoritesTask = new GetFavoritesTask();
-                getFavoritesTask.execute();
-
             }
-
 
             @Override
             protected void onPostExecute (Boolean result){

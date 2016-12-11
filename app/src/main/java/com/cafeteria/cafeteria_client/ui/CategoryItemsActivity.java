@@ -2,8 +2,11 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Main;
@@ -34,6 +38,7 @@ import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Item;
 import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
+import com.google.gson.Gson;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -43,6 +48,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class CategoryItemsActivity extends AppCompatActivity implements OnDialogResultListener
     ,SearchView.OnQueryTextListener {
@@ -141,7 +147,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                 OrderedItem orderedItem = new OrderedItem();
                 orderedItem.setParentItem(selectedItem);
                 dataHolder.addItemToOrder(orderedItem);
-//                dataHolder.getTheOrder().getItems().add(orderedItem);
+                updateOrderInSharedPreferences();
             }
         });
     }
@@ -267,7 +273,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     public void onPositiveResult(OrderedMeal orderedMeal) {
         DataHolder dataHolder = DataHolder.getInstance();
         dataHolder.addMealToOrder(orderedMeal);
-//        dataHolder.getTheOrder().getMeals().add(orderedMeal);
+        updateOrderInSharedPreferences();
         Intent orderActivityIntent = new Intent(CategoryItemsActivity.this,OrderActivity.class);
         startActivity(orderActivityIntent);
     }
@@ -277,10 +283,9 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
     public void onNegativeResult(OrderedMeal orderedMeal) {
 //        Toast.makeText(this,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
         showSnackBar();
-
         DataHolder dataHolder = DataHolder.getInstance();
-//        dataHolder.getTheOrder().getMeals().add(orderedMeal);
         dataHolder.addMealToOrder(orderedMeal);
+        updateOrderInSharedPreferences();
     }
 
     @Override
@@ -487,7 +492,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                             OrderedItem orderedItem = new OrderedItem();
                             orderedItem.setParentItem(selectedItem);
                             dataHolder.addItemToOrder(orderedItem);
-//                            dataHolder.getTheOrder().getItems().add(orderedItem);
+                            updateOrderInSharedPreferences();
+
                         }
                         //dataHolder.addOrderdItem(selectedItem);
                     }
@@ -568,6 +574,13 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         TextView tvQty;
         ImageButton imgBtnPlus;
         ImageButton imgBtnMinus;
+    }
+
+    private void updateOrderInSharedPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("order", new Gson().toJson(DataHolder.getInstance().getTheOrder()));
+        editor.apply();
     }
 
 }

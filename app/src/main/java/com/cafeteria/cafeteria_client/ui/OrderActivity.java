@@ -180,10 +180,14 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
                 new SendOrderToServer().execute();
 
-
                 DataHolder.getInstance().setTheOrder(new Order());
                 DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
                 DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
+                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = mySPrefs.edit();
+                editor.remove("order");
+                editor.apply();
+
                 OrderActivity.this.recreate();
             }
         }
@@ -524,7 +528,8 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         Toast.makeText(this, getString(R.string.succesful_edit_meal), Toast.LENGTH_SHORT).show();
         DataHolder dataHolder = DataHolder.getInstance();
         dataHolder.getTheOrder().getMeals().remove(meal);
-        dataHolder.getTheOrder().getMeals().add(meal);
+        dataHolder.addMealToOrder(meal);
+        updateOrderInSharedPreferences();
 
         mealsAdapter.notifyDataSetChanged();
         itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
@@ -537,7 +542,8 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         Toast.makeText(this, getString(R.string.succesful_edit_meal), Toast.LENGTH_SHORT).show();
         DataHolder dataHolder = DataHolder.getInstance();
         dataHolder.getTheOrder().getMeals().remove(meal);
-        dataHolder.getTheOrder().getMeals().add(meal);
+        dataHolder.addMealToOrder(meal);
+        updateOrderInSharedPreferences();
 
         Intent menuActivityIntent = new Intent(OrderActivity.this, MenuActivity.class);
         startActivity(menuActivityIntent);
@@ -583,4 +589,10 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         }
     }
 
+    private void updateOrderInSharedPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("order", new Gson().toJson(DataHolder.getInstance().getTheOrder()));
+        editor.apply();
+    }
 }
