@@ -28,12 +28,10 @@ public class OrderedItem implements Serializable {
      */
     private String comment;
 
-//	/**
-//	 * The parent-order of this ordered item
-//	 */
-//	@ManyToOne // Bidirectional ManyToOne relationship ( Order has a list of OrderItem )
-//	@JoinColumn( name = "Order_Id" )
-//	private Order order;
+
+    public OrderedItem() {
+        this.parentItem = new Item();
+    }
 
     /**
      * Returns the id of this ordered item

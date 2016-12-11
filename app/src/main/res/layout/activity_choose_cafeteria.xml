@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_choose_cafeteria"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_bg"
+    tools:context="com.cafeteria.cafeteria_client.ui.ChooseCafeteriaActivity"
+    >
+
+    <TextView
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_margin="16dp"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
+        android:text="@string/choose_cafeteria_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvChooseCafeteria"
+        android:textColor="@color/colorHeadlines"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/choose_cafeteria_btn"
+        android:id="@+id/btnNext"
+        android:background="@color/colorHeadlines"
+        android:textColor="@color/colorPrimary"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <AutoCompleteTextView
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="@string/choose_cafeteria_hint"
+        android:textColorHint="@color/colorHeadlines"
+        android:textColor="@color/colorHeadlines"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/autoCompleteTvCafeteria"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="22dp"
+        android:layout_above="@+id/btnNext"
+        android:layout_alignStart="@+id/tvChooseCafeteria" />
+
+</RelativeLayout>
