@@ -119,6 +119,8 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
 
                         editor.remove("customer");
                         editor.apply();
+                        DataHolder.getInstance().setFavoriteMeals(null);
+                        DataHolder.getInstance().setFavoriteItems(null);
 
                         LoginActivity.googleSignOut();
 
