@@ -9,7 +9,7 @@
         android:contentDescription="@string/remove"
         android:id="@+id/imgBtnRemoveItem"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:src="@android:drawable/ic_delete"
         android:background="@null"
         android:layout_marginEnd="5dp"
@@ -53,12 +53,18 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         />
 
-
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="x"
+        android:gravity="end"
+        />
 
     <TextView
         android:id="@+id/tvOrderItemPrice"
         android:layout_width="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1.5"
         android:layout_height="wrap_content"
         android:text="Price"
         android:gravity="end"
