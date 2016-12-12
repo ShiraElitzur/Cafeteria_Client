@@ -13,7 +13,7 @@ android:id="@+id/llFavoritesMain">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/time2eat_icon_transparent1"
+            android:src="@drawable/time2eat_icon_transparent"
             android:layout_centerInParent="true"/>
 
 
