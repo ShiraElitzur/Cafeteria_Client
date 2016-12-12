@@ -184,6 +184,9 @@
     <string name="dialog_forgot_password_success">An email was sent with the password</string>
     <string name="dialog_forgot_password_fail">Email is not valid</string>
 
+    <string name="no_favorites">Time2eaT\nlearns about your favorites while you order...\nSo go on, order!</string>
+
+
     <!-- Image view content description -->
     <string name="add">Add</string>
     <string name="plus">Plus</string>

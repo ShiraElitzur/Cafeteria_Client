@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <!-- A CardView that contains a TextView -->
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="130dp"
+        android:layout_height="160dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardCornerRadius="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!--android:background="@drawable/favorite_item_bg">-->
+
+            <LinearLayout
+                android:id="@+id/rlFavoriteItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivPlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_circle_outline"/>
+                <Space
+                    android:layout_width="7dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvFavoriteItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17dp"
+                    android:textColor="@color/colorHeadlines"
+                    android:textStyle="bold"
+                    android:text="Category"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/tvItemPrice"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15.5"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="bottom"
+            android:background="@color/colorBackground">
+
+            <ImageButton
+                android:contentDescription="@string/plus"
+                android:id="@+id/imgBtnPlus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                android:background="@null"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                />
+
+            <TextView
+                android:id="@+id/tvQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/grid_cell"
+                android:text="1"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+
+            <ImageButton
+                android:contentDescription="@string/minus"
+                android:id="@+id/imgBtnMinus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_remove"
+                android:background="@null"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>

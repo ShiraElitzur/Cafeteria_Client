@@ -1,6 +1,8 @@
 package com.cafeteria.cafeteria_client.ui;
 
         import android.content.Context;
+        import android.graphics.drawable.Drawable;
+        import android.graphics.drawable.ShapeDrawable;
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentManager;
@@ -11,6 +13,7 @@ package com.cafeteria.cafeteria_client.ui;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
+        import android.widget.ImageButton;
         import android.widget.ImageView;
         import android.widget.LinearLayout;
         import android.widget.RelativeLayout;
@@ -137,18 +140,24 @@ public class FavoritesFragment extends Fragment{
         class CustomViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             protected TextView title;
-            protected ImageView symbol;
             protected LinearLayout llFavoriteCard;
 
             public CustomViewHolder(View view) {
                 super(view);
                 this.title = (TextView) view.findViewById(R.id.tvFavoriteTitle);
-                this.symbol = (ImageView) view.findViewById(R.id.ivSymbol);
                 this.llFavoriteCard = (LinearLayout) view.findViewById(R.id.llFavoriteCard);
 
                 if( colorIndex == 4 ) {
                     colorIndex = -1;
                 }
+
+//                Drawable background = this.ivItemBorder.getBackground();
+//
+//                if (background instanceof ShapeDrawable) {
+//                    // cast to 'ShapeDrawable'
+//                    ShapeDrawable shapeDrawable = (ShapeDrawable) background;
+//                    shapeDrawable.getPaint().setColor(getResources().getColor(colors.get(++colorIndex)));
+//                }
 
                 this.title.setTextColor(getResources().getColor(colors.get(++colorIndex)));
                 this.llFavoriteCard.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +215,7 @@ public class FavoritesFragment extends Fragment{
         public void onBindViewHolder(CustomViewHolder holder, int position) {
             Item favorite = favoriteItems.get(position);
             holder.title.setText(favorite.getTitle());
+            holder.tvItemPrice.setText(""+favorite.getPrice());
         }
 
 
@@ -217,16 +227,46 @@ public class FavoritesFragment extends Fragment{
         class CustomViewHolder extends RecyclerView.ViewHolder {
 
             protected TextView title;
-            protected RelativeLayout rlFavoriteItem;
+            protected LinearLayout rlFavoriteItem;
+            protected TextView tvItemPrice;
+            protected TextView tvQty;
+            protected ImageButton imgBtnPlus;
+            protected ImageButton imgBtnMinus;
 
             public CustomViewHolder(View view) {
                 super(view);
                 this.title = (TextView) view.findViewById(R.id.tvFavoriteItem);
-                this.rlFavoriteItem = (RelativeLayout) view.findViewById(R.id.rlFavoriteItem);
+                this.rlFavoriteItem = (LinearLayout) view.findViewById(R.id.rlFavoriteItem);
+                this.tvItemPrice = (TextView) view.findViewById(R.id.tvItemPrice);
 
                 if( colorIndex == 4 ) {
                     colorIndex = -1;
                 }
+
+                this.tvQty = (TextView) view.findViewById(R.id.tvQty);
+                this.imgBtnPlus = (ImageButton) view.findViewById(R.id.imgBtnPlus);
+                this.imgBtnPlus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int qty = Integer.parseInt(CustomViewHolder.this.tvQty.getText().toString());
+                        if (qty >= 1) {
+                            qty++;
+                            CustomViewHolder.this.tvQty.setText(String.valueOf(qty));
+                        }
+                    }
+                });
+
+                this.imgBtnMinus = (ImageButton) view.findViewById(R.id.imgBtnMinus);
+                this.imgBtnMinus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int qty = Integer.parseInt(CustomViewHolder.this.tvQty.getText().toString());
+                        if (qty > 1){
+                            qty--;
+                            CustomViewHolder.this.tvQty.setText(String.valueOf(qty));
+                        }
+                    }
+                });
 
                 this.title.setTextColor(getResources().getColor(colors.get(++colorIndex)));
                 this.rlFavoriteItem.setOnClickListener(new View.OnClickListener() {

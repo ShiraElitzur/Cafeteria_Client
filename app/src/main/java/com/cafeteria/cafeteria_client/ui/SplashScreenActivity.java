@@ -235,16 +235,20 @@ public class SplashScreenActivity extends AppCompatActivity {
                 if (logged) {
                     validateOrSignUpTask = new ValidateOrSignUpTask();
                     validateOrSignUpTask.execute();
-                    getFavoriteMealsTask = new GetFavoriteMealsTask();
-                    getFavoriteMealsTask.execute();
-                    getFavoriteItemsTask = new GetFavoriteItemsTask();
-                    getFavoriteItemsTask.execute();
                 }
                 tvStatus.setText(R.string.progressBar_pre_execute);
                 getCategoriesTask = new GetCategoriesTask();
                 getCategoriesTask.execute();
                 getDrinksTask = new SplashScreenActivity.GetDrinksTask();
                 getDrinksTask.execute();
+                getFavoriteMealsTask = new GetFavoriteMealsTask();
+                getFavoriteMealsTask.execute();
+                getFavoriteItemsTask = new GetFavoriteItemsTask();
+                getFavoriteItemsTask.execute();
+                getFavoriteMealsTask = new GetFavoriteMealsTask();
+                getFavoriteMealsTask.execute();
+                getFavoriteItemsTask = new GetFavoriteItemsTask();
+                getFavoriteItemsTask.execute();
 
             }
 
