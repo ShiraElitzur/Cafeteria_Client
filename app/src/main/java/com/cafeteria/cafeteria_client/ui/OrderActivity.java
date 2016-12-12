@@ -114,7 +114,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
             if (quantityItems.contains(toBeAdded)){
                 for (QuantityItem ot: quantityItems){
-                    if (ot.getId() == toBeAdded.getId()){
+                    if (ot.getParentItem().getId() == toBeAdded.getParentItem().getId()){
                         int qty = ot.getQty();
                         qty++;
                         ot.setQty(qty);
@@ -579,7 +579,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
             QuantityItem that = (QuantityItem) o;
 
-            return getParentItem().getTitle().equals(that.getParentItem().getTitle());
+            return getParentItem().getId() == (that.getParentItem().getId());
 
         }
 

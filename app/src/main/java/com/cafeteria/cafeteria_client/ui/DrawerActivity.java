@@ -166,12 +166,12 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         editor.remove("serverIp");
                         editor.apply();
 
-                        LoginActivity.googleSignOut();
-
                         FacebookSdk.sdkInitialize(getApplicationContext());
                         if (LoginManager.getInstance() != null){
                             LoginManager.getInstance().logOut();
                         }
+
+                        LoginActivity.googleSignOut();
                         intent = new Intent(DrawerActivity.this,ChooseCafeteriaActivity.class);
                         startActivity(intent);
                         DrawerActivity.this.finish();

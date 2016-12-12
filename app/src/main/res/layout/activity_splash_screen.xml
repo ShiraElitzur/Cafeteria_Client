@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Our Amazing Application"
+            android:text="@string/app_name"
             android:textColor="@color/colorHeadlines"
             android:textSize="30sp"
             android:textStyle="bold"
