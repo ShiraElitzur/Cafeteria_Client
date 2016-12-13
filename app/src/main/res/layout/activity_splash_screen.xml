@@ -11,21 +11,18 @@
         android:weightSum="10"
         >
 
-
-        <view
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            class="android.support.v4.widget.Space"
-            android:id="@+id/view"
-            android:layout_weight="3" />
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:src="@drawable/time2eat_icon_big_with_title"
             android:layout_gravity="center"/>
-
+        <view
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="android.support.v4.widget.Space"
+            android:id="@+id/view"
+            android:layout_weight="3" />
 
         <com.hanks.htextview.HTextView
             style="@style/TextAppearance.AppCompat.Display1"

@@ -207,41 +207,48 @@ public class MealDetailsDialog extends DialogFragment implements MultiSpinnerLis
     }
 
     private void initExtrasSpinner() {
-        List<String> extrasTitle = new ArrayList<>();
-        if ( orderedMeal.getParentMeal().getExtras() != null) {
-            for (Extra extra : orderedMeal.getParentMeal().getExtras()) {
-                extrasTitle.add(extra.getTitle());
+        if (orderedMeal.getParentMeal().getExtras() == null || orderedMeal.getParentMeal().getExtras().size() == 0
+                || (edit && (orderedMeal.getChosenExtras() == null || orderedMeal.getChosenExtras().size() == 0) )){
+            btnExtras.setVisibility(View.GONE);
+            spinnerExtras.setVisibility(View.GONE);
+            tvExtrasAmount.setVisibility(View.GONE);
+        } else {
+            List<String> extrasTitle = new ArrayList<>();
+            if (orderedMeal.getParentMeal().getExtras() != null) {
+                for (Extra extra : orderedMeal.getParentMeal().getExtras()) {
+                    extrasTitle.add(extra.getTitle());
+                }
             }
-        }
-        if( edit && orderedMeal.getChosenExtras() != null && orderedMeal.getChosenExtras().size() > 0) {
-            StringBuffer spinnerBuffer = new StringBuffer();
-            boolean [] selections = new boolean[orderedMeal.getParentMeal().getExtras().size()];
-            for( int i = 0; i < selections.length; i++) {
-                for( Extra extra : orderedMeal.getChosenExtras()) {
-                    if( orderedMeal.getParentMeal().getExtras().get(i).getTitle().equals(extra.getTitle())) {
-                        selections[i] = true;
-                        spinnerBuffer.append(extra.getTitle());
-                        spinnerBuffer.append(", ");
-                        break;
+            if (edit && orderedMeal.getChosenExtras() != null && orderedMeal.getChosenExtras().size() > 0) {
+                StringBuffer spinnerBuffer = new StringBuffer();
+                boolean[] selections = new boolean[orderedMeal.getParentMeal().getExtras().size()];
+                for (int i = 0; i < selections.length; i++) {
+                    for (Extra extra : orderedMeal.getChosenExtras()) {
+                        if (orderedMeal.getParentMeal().getExtras().get(i).getTitle().equals(extra.getTitle())) {
+                            selections[i] = true;
+                            spinnerBuffer.append(extra.getTitle());
+                            spinnerBuffer.append(", ");
+                            break;
+                        }
                     }
                 }
+
+                spinnerExtras.setItems(extrasTitle, spinnerBuffer.toString(), this, selections);
+            } else {
+                spinnerExtras.setItems(extrasTitle, getString(R.string.dialog_multi_spinner_default_text), this);
             }
 
-            spinnerExtras.setItems(extrasTitle, spinnerBuffer.toString(), this,selections);
-        } else {
-            spinnerExtras.setItems(extrasTitle, getString(R.string.dialog_multi_spinner_default_text), this);
-        }
-
-        btnExtras.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (spinnerExtras.getVisibility() == View.GONE) {
-                    spinnerExtras.setVisibility(View.VISIBLE);
-                } else {
-                    spinnerExtras.setVisibility(View.GONE);
+            btnExtras.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (spinnerExtras.getVisibility() == View.GONE) {
+                        spinnerExtras.setVisibility(View.VISIBLE);
+                    } else {
+                        spinnerExtras.setVisibility(View.GONE);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void saveOrder() {

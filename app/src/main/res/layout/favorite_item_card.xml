@@ -79,7 +79,6 @@
                 android:src="@drawable/ic_add"
                 android:background="@null"
                 android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
                 />
 
             <TextView
@@ -100,7 +99,6 @@
                 android:src="@drawable/ic_remove"
                 android:background="@null"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
                 />
 
         </LinearLayout>
