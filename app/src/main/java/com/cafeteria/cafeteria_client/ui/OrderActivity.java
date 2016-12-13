@@ -595,4 +595,5 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         editor.putString("order", new Gson().toJson(DataHolder.getInstance().getTheOrder()));
         editor.apply();
     }
+
 }
