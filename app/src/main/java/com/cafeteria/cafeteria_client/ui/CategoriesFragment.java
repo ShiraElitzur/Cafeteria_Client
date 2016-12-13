@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -140,12 +141,18 @@ public class CategoriesFragment extends Fragment {
                 holder.rlCardView = (RelativeLayout) convertView.findViewById(R.id.rlCardView);
                 holder.categoryBtn = (TextView) convertView.findViewById(R.id.categoryBtn);
                 holder.ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
+                holder.ivOvalBg = (ImageView) convertView.findViewById(R.id.ivOvalBg);
 
                 if( colorIndex == 4 ) {
                     colorIndex = -1;
                 }
-                holder.rlCardView.setBackgroundColor(getResources().getColor(colors.get(++colorIndex)));
 
+                int color = ++colorIndex;
+                GradientDrawable bgShape = (GradientDrawable)holder.ivOvalBg.getBackground();
+                bgShape.setColor(getResources().getColor(colors.get(color)));
+//                holder.rlCardView.setBackgroundColor(getResources().getColor(colors.get(++colorIndex)));
+                holder.categoryBtn.setTextColor(getResources().getColor(colors.get(color)));
+//               holder.categoryBtn.setBackgroundColor(getResources().getColor(R.color.colorBackground));
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder)convertView.getTag();
@@ -197,6 +204,7 @@ public class CategoriesFragment extends Fragment {
             private ImageView ivIcon;
             private RelativeLayout rlCardView;
             private TextView categoryBtn;
+            private ImageView ivOvalBg;
         }
     }
 }

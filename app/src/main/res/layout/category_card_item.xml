@@ -8,31 +8,42 @@
         android:layout_width="wrap_content"
         android:layout_height="130dp"
         card_view:cardElevation="5dp"
+    card_view:cardCornerRadius="15dp"
         card_view:cardUseCompatPadding="true">
     <RelativeLayout
         android:id="@+id/rlCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="1dp"
+        android:background="@color/colorBackground">
 
+        <ImageView
+            android:id="@+id/ivOvalBg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/oval_icon_bg"
+            android:layout_centerHorizontal="true"/>
         <ImageView
             android:id="@+id/ivIcon"
             android:layout_width="match_parent"
-            android:paddingTop="20dp"
-            android:layout_height="60dp"/>
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"/>
 
         <TextView
             android:id="@+id/categoryBtn"
             android:layout_width="match_parent"
             android:layout_height="40sp"
             android:textSize="17dp"
+            android:layout_marginTop="5dp"
             android:textColor="@color/colorHeadlines"
             android:textStyle="bold"
             android:text="Category"
             android:layout_alignParentBottom="true"
             android:textAlignment="center"
             android:gravity="center"
-            android:background="@drawable/category_title_bg"/>
+            android:background="@color/colorCategoryTitleBg"/>
 
 
     </RelativeLayout>

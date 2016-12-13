@@ -26,7 +26,7 @@ import java.util.List;
 
 public class LocalDBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cafeteria_local_db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Meals table name and columns
     private static final String MEALS_TABLE_NAME = "meals";
@@ -35,6 +35,17 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     private static final String EXSTRAS_COL = "Extras";
     private static final String DRINK_COL = "Drink";
     private static final String PRICE_COL = "Price";
+    private static final String ORDER_ID_COL = "OrderId";
+
+    // Orders table
+    private static final String ORDERS_TABLE_NAME = "orders";
+    private static final String DATE_COL = "Date";
+    private static final String ORDERS_TABLE_CREATE =
+            "CREATE TABLE " + ORDERS_TABLE_NAME + " (" +
+                    ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    DATE_COL + " TEXT, " +
+                    PRICE_COL + " REAL );";
+
     // Meals table create statement
     private static final String MEALS_TABLE_CREATE =
             "CREATE TABLE " + MEALS_TABLE_NAME + " (" +
@@ -42,7 +53,9 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                 TITLE_COL + " TEXT, " +
                 EXSTRAS_COL + " TEXT, " +
                 DRINK_COL + " TEXT, " +
-                PRICE_COL + " REAL );";
+                ORDER_ID_COL + " INTEGER, " +
+                PRICE_COL + " REAL, " +
+                "FOREIGN KEY ("+ORDER_ID_COL+") REFERENCES "+ORDERS_TABLE_NAME+"("+ID_COL+"));";
 
     // Items table name and columns
     private static final String ITEMS_TABLE_NAME = "items";
@@ -51,37 +64,30 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             "CREATE TABLE " + ITEMS_TABLE_NAME + " (" +
                 ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TITLE_COL + " TEXT, " +
-                PRICE_COL + " REAL );";
-
-    // Orders table
-    private static final String ORDERS_TABLE_NAME = "orders";
-    private static final String DATE_COL = "Date";
-    private static final String ORDERS_TABLE_CREATE =
-            "CREATE TABLE " + ORDERS_TABLE_NAME + " (" +
-                ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                DATE_COL + " TEXT, " +
-                PRICE_COL + " REAL );";
-
-    // Order_meals table
-    private static final String ORDER_MEAL_TABLE_NAME = "order_meal";
-    private static final String ORDER_ID_COL = "OrderId";
-    private static final String MEAL_ID_COL = "MealId";
-    private static final String ORDER_MEAL_TABLE_CREATE =
-            "CREATE TABLE " + ORDER_MEAL_TABLE_NAME + " (" +
                 ORDER_ID_COL + " INTEGER, " +
-                MEAL_ID_COL + " INTEGER, " +
-                "FOREIGN KEY ("+ORDER_ID_COL+") REFERENCES "+ORDERS_TABLE_NAME+"("+ID_COL+")," +
-                "FOREIGN KEY ("+MEAL_ID_COL+") REFERENCES "+MEALS_TABLE_NAME+"("+ID_COL+") );";
+                PRICE_COL + " REAL, " +
+                "FOREIGN KEY ("+ORDER_ID_COL+") REFERENCES "+ORDERS_TABLE_NAME+"("+ID_COL+"));";
 
-    // Order_item table
-    private static final String ORDER_ITEM_TABLE_NAME = "order_item";
-    private static final String ITEM_ID_COL = "ItemId";
-    private static final String ORDER_ITEM_TABLE_CREATE =
-            "CREATE TABLE " + ORDER_ITEM_TABLE_NAME + " (" +
-                ORDER_ID_COL + " INTEGER, " +
-                ITEM_ID_COL + " INTEGER, " +
-                "FOREIGN KEY ("+ORDER_ID_COL+") REFERENCES "+ORDERS_TABLE_NAME+"("+ID_COL+")," +
-                "FOREIGN KEY ("+ITEM_ID_COL+") REFERENCES "+ITEMS_TABLE_NAME+"("+ID_COL+") );";
+//    // Order_meals table
+//    private static final String ORDER_MEAL_TABLE_NAME = "order_meal";
+//    private static final String ORDER_ID_COL = "OrderId";
+//    private static final String MEAL_ID_COL = "MealId";
+//    private static final String ORDER_MEAL_TABLE_CREATE =
+//            "CREATE TABLE " + ORDER_MEAL_TABLE_NAME + " (" +
+//                ORDER_ID_COL + " INTEGER, " +
+//                MEAL_ID_COL + " INTEGER, " +
+//                "FOREIGN KEY ("+ORDER_ID_COL+") REFERENCES "+ORDERS_TABLE_NAME+"("+ID_COL+")," +
+//                "FOREIGN KEY ("+MEAL_ID_COL+") REFERENCES "+MEALS_TABLE_NAME+"("+ID_COL+") );";
+//
+//    // Order_item table
+//    private static final String ORDER_ITEM_TABLE_NAME = "order_item";
+//    private static final String ITEM_ID_COL = "ItemId";
+//    private static final String ORDER_ITEM_TABLE_CREATE =
+//            "CREATE TABLE " + ORDER_ITEM_TABLE_NAME + " (" +
+//                ORDER_ID_COL + " INTEGER, " +
+//                ITEM_ID_COL + " INTEGER, " +
+//                "FOREIGN KEY ("+ORDER_ID_COL+") REFERENCES "+ORDERS_TABLE_NAME+"("+ID_COL+")," +
+//                "FOREIGN KEY ("+ITEM_ID_COL+") REFERENCES "+ITEMS_TABLE_NAME+"("+ID_COL+") );";
 
 
     public LocalDBHandler(Context context) {
@@ -94,18 +100,19 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         db.execSQL(MEALS_TABLE_CREATE);
         db.execSQL(ITEMS_TABLE_CREATE);
         db.execSQL(ORDERS_TABLE_CREATE);
-        db.execSQL(ORDER_MEAL_TABLE_CREATE);
-        db.execSQL(ORDER_ITEM_TABLE_CREATE);
+//        db.execSQL(ORDER_MEAL_TABLE_CREATE);
+//        db.execSQL(ORDER_ITEM_TABLE_CREATE);
         Log.e("SQLITE","OnCreate DB");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        Log.e("SQLITE","DB Upgrade from v."+i+" to v."+i1);
         db.delete(MEALS_TABLE_NAME,null,null);
         db.delete(ITEMS_TABLE_NAME,null,null);
         db.delete(ORDERS_TABLE_NAME,null,null);
-        db.delete(ORDER_MEAL_TABLE_NAME,null,null);
-        db.delete(ORDER_ITEM_TABLE_NAME,null,null);
+//        db.delete(ORDER_MEAL_TABLE_NAME,null,null);
+//        db.delete(ORDER_ITEM_TABLE_NAME,null,null);
         onCreate(db);
     }
 
@@ -142,14 +149,16 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                 values.put(DRINK_COL, meal.getChosenDrink().getTitle());
             }
             values.put(PRICE_COL, meal.getTotalPrice());
-            db.insert(MEALS_TABLE_NAME, null, values);
-            mealId = getLastId(MEALS_TABLE_NAME);
-
-            // insert new record to order_meal table
-            values = new ContentValues();
+            Log.e("SQLITE","Insert Meal - " + meal.getTitle() + " price - "+meal.getTotalPrice());
             values.put(ORDER_ID_COL, orderId);
-            values.put(MEAL_ID_COL, mealId);
-            db.insert(ORDER_MEAL_TABLE_NAME, null, values);
+            db.insert(MEALS_TABLE_NAME, null, values);
+//            mealId = getLastId(MEALS_TABLE_NAME);
+//
+//            // insert new record to order_meal table
+//            values = new ContentValues();
+//            values.put(ORDER_ID_COL, orderId);
+//            values.put(MEAL_ID_COL, mealId);
+//            db.insert(ORDER_MEAL_TABLE_NAME, null, values);
         }
 
         // loop through the items of this order
@@ -158,14 +167,16 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             values = new ContentValues();
             values.put(TITLE_COL, item.getParentItem().getTitle());
             values.put(PRICE_COL, item.getParentItem().getPrice());
-            db.insert(ITEMS_TABLE_NAME, null, values);
-            itemId = getLastId(ITEMS_TABLE_NAME);
-
-            // insert new record to order_item table
-            values = new ContentValues();
+            Log.e("SQLITE","Insert Item - " + item.getParentItem().getTitle() + " price - "+item.getParentItem().getPrice());
             values.put(ORDER_ID_COL, orderId);
-            values.put(ITEM_ID_COL, itemId);
-            db.insert(ORDER_ITEM_TABLE_NAME, null, values);
+            db.insert(ITEMS_TABLE_NAME, null, values);
+//            itemId = getLastId(ITEMS_TABLE_NAME);
+//
+//            // insert new record to order_item table
+//            values = new ContentValues();
+//            values.put(ORDER_ID_COL, orderId);
+//            values.put(ITEM_ID_COL, itemId);
+//            db.insert(ORDER_ITEM_TABLE_NAME, null, values);
         }
         db.close();
     }
@@ -203,8 +214,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                 List<OrderedMeal> meals = new ArrayList<>();
                 OrderedMeal meal;
                 Meal parentMeal;
-                Cursor mealCursor = db.rawQuery("SELECT * FROM " +MEALS_TABLE_NAME+ " WHERE Id IN (" +
-                        " SELECT " + MEAL_ID_COL + " FROM " + ORDER_MEAL_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
+                Cursor mealCursor = db.rawQuery("SELECT * FROM " +MEALS_TABLE_NAME+ " WHERE " +ORDER_ID_COL+ " = "+order.getId(),null);
                 while (mealCursor.moveToNext()) {
                     meal = new OrderedMeal();
                     meal.setTitle(mealCursor.getString(1));
@@ -212,8 +222,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                     Drink drink = new Drink();
                     drink.setTitle(mealCursor.getString(3));
                     meal.setChosenDrink(drink);
-                    meal.setTotalPrice(mealCursor.getDouble(4));
-
+                    meal.setTotalPrice(mealCursor.getDouble(5));
+                    Log.e("SQLITE","Select Meal - " + meal.getTitle() + " price - "+meal.getTotalPrice());
                     meals.add(meal);
                 }
                 mealCursor.close();
@@ -221,12 +231,12 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
                 List<OrderedItem> items = new ArrayList<>();
                 OrderedItem item;
-                Cursor itemCursor = db.rawQuery("SELECT * FROM " +ITEMS_TABLE_NAME+ " WHERE Id IN (" +
-                        " SELECT " + ITEM_ID_COL + " FROM " + ORDER_ITEM_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
+                Cursor itemCursor = db.rawQuery("SELECT * FROM " +ITEMS_TABLE_NAME+ " WHERE " +ORDER_ID_COL+ " = "+order.getId(),null);
                 while (itemCursor.moveToNext()) {
                     item = new OrderedItem();
                     item.getParentItem().setTitle(itemCursor.getString(1));
-                    item.getParentItem().setPrice(itemCursor.getDouble(2));
+                    item.getParentItem().setPrice(itemCursor.getDouble(3));
+                    Log.e("SQLITE","Select Item - " + item.getParentItem().getTitle() + " price - "+item.getParentItem().getPrice());
                     items.add(item);
                 }
                 itemCursor.close();
@@ -274,8 +284,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                 List<OrderedMeal> meals = new ArrayList<>();
                 OrderedMeal meal;
                 Meal parentMeal;
-                Cursor mealCursor = db.rawQuery("SELECT * FROM " +MEALS_TABLE_NAME+ " WHERE Id IN (" +
-                        " SELECT " + MEAL_ID_COL + " FROM " + ORDER_MEAL_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
+                Cursor mealCursor = db.rawQuery("SELECT * FROM " +MEALS_TABLE_NAME+ " WHERE " +ORDER_ID_COL+ " = "+order.getId(),null);
                 while (mealCursor.moveToNext()) {
                     meal = new OrderedMeal();
                     meal.setTitle(mealCursor.getString(1));
@@ -283,8 +292,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                     Drink drink = new Drink();
                     drink.setTitle(mealCursor.getString(3));
                     meal.setChosenDrink(drink);
-                    meal.setTotalPrice(mealCursor.getDouble(4));
-
+                    meal.setTotalPrice(mealCursor.getDouble(5));
+                    Log.e("SQLITE","Select Meal - " + meal.getTitle() + " price - "+meal.getTotalPrice());
                     meals.add(meal);
                 }
                 mealCursor.close();
@@ -292,12 +301,12 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
                 List<OrderedItem> items = new ArrayList<>();
                 OrderedItem item;
-                Cursor itemCursor = db.rawQuery("SELECT * FROM " +ITEMS_TABLE_NAME+ " WHERE Id IN (" +
-                        " SELECT " + ITEM_ID_COL + " FROM " + ORDER_ITEM_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
+                Cursor itemCursor = db.rawQuery("SELECT * FROM " +ITEMS_TABLE_NAME+ " WHERE " +ORDER_ID_COL+ " = "+order.getId(),null);
                 while (itemCursor.moveToNext()) {
                     item = new OrderedItem();
                     item.getParentItem().setTitle(itemCursor.getString(1));
-                    item.getParentItem().setPrice(itemCursor.getDouble(2));
+                    item.getParentItem().setPrice(itemCursor.getDouble(3));
+                    Log.e("SQLITE","Select Item - " + item.getParentItem().getTitle() + " price - "+item.getParentItem().getPrice());
                     items.add(item);
                 }
                 itemCursor.close();
@@ -332,8 +341,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                 List<OrderedMeal> meals = new ArrayList<>();
                 OrderedMeal meal;
                 Meal parentMeal;
-                Cursor mealCursor = db.rawQuery("SELECT * FROM " +MEALS_TABLE_NAME+ " WHERE Id IN (" +
-                        " SELECT " + MEAL_ID_COL + " FROM " + ORDER_MEAL_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
+                Cursor mealCursor = db.rawQuery("SELECT * FROM " +MEALS_TABLE_NAME+ " WHERE " +ORDER_ID_COL+ " = "+order.getId(),null);
                 while (mealCursor.moveToNext()) {
                     meal = new OrderedMeal();
                     meal.setTitle(mealCursor.getString(1));
@@ -341,7 +349,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                     Drink drink = new Drink();
                     drink.setTitle(mealCursor.getString(3));
                     meal.setChosenDrink(drink);
-                    meal.setTotalPrice(mealCursor.getDouble(4));
+                    meal.setTotalPrice(mealCursor.getDouble(5));
 
                     meals.add(meal);
                 }
@@ -350,12 +358,11 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 
                 List<OrderedItem> items = new ArrayList<>();
                 OrderedItem item;
-                Cursor itemCursor = db.rawQuery("SELECT * FROM " +ITEMS_TABLE_NAME+ " WHERE Id IN (" +
-                        " SELECT " + ITEM_ID_COL + " FROM " + ORDER_ITEM_TABLE_NAME +" WHERE " + ORDER_ID_COL + " = "+order.getId()+" )",null);
+                Cursor itemCursor = db.rawQuery("SELECT * FROM " +ITEMS_TABLE_NAME+ " WHERE " +ORDER_ID_COL+ " = "+order.getId(),null);
                 while (itemCursor.moveToNext()) {
                     item = new OrderedItem();
                     item.getParentItem().setTitle(itemCursor.getString(1));
-                    item.getParentItem().setPrice(itemCursor.getDouble(2));
+                    item.getParentItem().setPrice(itemCursor.getDouble(3));
                     items.add(item);
                 }
                 itemCursor.close();

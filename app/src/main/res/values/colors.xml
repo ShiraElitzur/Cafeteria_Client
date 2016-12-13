@@ -30,10 +30,10 @@
     <color name="colorIconBg0">#aa4992b1</color>
     <color name="colorIconBg1">#aae16098</color>
     <color name="colorIconBg2">#aa8b0d56</color>
-    <color name="colorIconBg3">#aac90212</color>
+    <color name="colorIconBg3">#aaf57f17</color>
     <color name="colorIconBg4">#aac77637</color>
 
-    <color name="colorCategoryTitleBg">#30ffffff</color>
+    <color name="colorCategoryTitleBg">#aaffffff</color>
     <color name="colorHeadlines">#FFFFFF</color>
     <color name="colorBackground">#F5F7F7</color>
 
