@@ -10,7 +10,7 @@
 
     <!--Drawer and Navigation-->
     <string name="drawer_header_text">Header Title</string>
-    <string name="nav_item_menu">Menu</string>
+    <string name="nav_item_menu">Home</string>
     <string name="nav_item_history">Orders History</string>
     <string name="nav_item_personal">Personal Details</string>
     <string name="nav_item_points">My Points</string>
