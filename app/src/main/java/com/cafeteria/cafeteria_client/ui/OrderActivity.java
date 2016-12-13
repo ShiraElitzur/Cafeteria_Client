@@ -127,6 +127,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         }
 
 
+        if( quantityItems == null || quantityItems.size() < 1 ) {
+            findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
+        }
         lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, quantityItems));
         lvOrderMeals.setAdapter(mealsAdapter = new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
 

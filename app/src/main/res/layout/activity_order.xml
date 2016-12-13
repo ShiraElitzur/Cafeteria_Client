@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     android:fitsSystemWindows="true">
     <!-- We use a Toolbar so that our drawer can be displayed
              in front of the action bar; Added for Material Design -->
@@ -48,6 +49,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvEmptyList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/empty_cart"
+            android:textSize="@dimen/headLines2"
+            android:gravity="center"
+            android:background="@drawable/online_store"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"

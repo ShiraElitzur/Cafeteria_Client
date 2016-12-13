@@ -61,6 +61,9 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
             orders = new ArrayList<>();
         }
         //new HistoryListTask().execute();
+        if( orders.size() < 1 ) {
+            findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
+        }
         ordersHistoryAdapter = new OrdersHistoryAdapter(this,R.layout.single_order_history,orders);
         lvOrdersHistory.setAdapter(ordersHistoryAdapter);
 
