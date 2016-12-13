@@ -36,5 +36,6 @@
     <color name="colorCategoryTitleBg">#aaffffff</color>
     <color name="colorHeadlines">#FFFFFF</color>
     <color name="colorBackground">#F5F7F7</color>
+    <color name="colorBackgxround">#BAB399</color>
 
 </resources>

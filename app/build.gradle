@@ -25,7 +25,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/gson-2.2.2.jar')
+    compile 'com.google.code.gson:gson:2.2.4'
 
     // Required for OneSignal, even if you have added FCM.
     

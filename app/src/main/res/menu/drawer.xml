@@ -7,7 +7,7 @@
         <item
             android:id="@+id/navigation_item_cafeteria_menu"
             android:checked="true"
-            android:icon="@drawable/cafeteria_menu"
+            android:icon="@drawable/ic_home"
             android:title="@string/nav_item_menu" />
         <item
             android:id="@+id/navigation_item_cart"

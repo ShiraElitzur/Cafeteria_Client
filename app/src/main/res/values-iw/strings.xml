@@ -10,7 +10,7 @@
 
     <!--Drawer and Navigation-->
     <string name="drawer_header_text">כותרת</string>
-    <string name="nav_item_menu">תפריט</string>
+    <string name="nav_item_menu">ראשי</string>
     <string name="nav_item_history">היסטוריית הזמנות</string>
     <string name="nav_item_personal">פרטים אישיים</string>
     <string name="nav_item_points">הנקודות שלי</string>
