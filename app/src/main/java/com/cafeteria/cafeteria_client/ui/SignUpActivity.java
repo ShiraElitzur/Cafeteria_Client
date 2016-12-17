@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,19 +43,12 @@ public class SignUpActivity extends AppCompatActivity {
     private Customer customer;
     private boolean isValid = true;
 
-    String print;
-
-    //private final static String SERVER_IP = "192.168.1.11";
-    private final static String SERVER_IP = "192.168.43.231";
-    private final static String USER_REGISTRATION_URL = "http://" + SERVER_IP + ":8080/CafeteriaServer/rest/users/insertUser";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
 
         /* Get the components from the UI and set listeners to them */
         // The Email EditText - handle events of changes in the focus, validation check
@@ -238,11 +232,11 @@ public class SignUpActivity extends AppCompatActivity {
                     }
 
                 })
-                .setNegativeButton(getString(R.string.exit_dialog_negavtive), null)
+                .setNegativeButton(getString(R.string.exit_dialog_negative), null)
                 .show();
     }
 
-    private class SignUpTask extends AsyncTask<Void, Void, Boolean> {
+    private class SignUpTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -255,10 +249,9 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
-            boolean result = false;
-
+        protected String doInBackground(Void... voids) {
             // Request - send the customer as json to the server for insertion
+            StringBuilder response = new StringBuilder();
             Gson gson = new Gson();
             String jsonUser = gson.toJson(customer, Customer.class);
             URL url = null;
@@ -280,7 +273,6 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 // Response
-                StringBuilder response = new StringBuilder();
                 BufferedReader input = new BufferedReader(
                         new InputStreamReader(con.getInputStream()));
 
@@ -293,13 +285,9 @@ public class SignUpActivity extends AppCompatActivity {
 
                 con.disconnect();
 
-                if (response.toString().trim().equals("OK")) {
-                    result = true;
-                }
 //                JsonObject objectRes = new JsonParser().parse(response.toString()).getAsJsonObject();
 //                JsonElement elementRes = objectRes.get("result");
 //                result = elementRes.getAsBoolean();
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {
@@ -307,18 +295,22 @@ public class SignUpActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return result;
-
+            return response.toString().trim();
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
-            if (result != null && result) {
+        protected void onPostExecute(String result) {
+            if (result != null && result.equals("0")) {
                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
                 SignUpActivity.this.finish();
             } else {
-                Toast.makeText(SignUpActivity.this, getResources().getString(R.string.signup_error), Toast.LENGTH_LONG).show();
+                Log.e("RESONSE","response : " + result);
+                if (result.equals("-1")){
+                    Toast.makeText(SignUpActivity.this, getResources().getString(R.string.email_in_use), Toast.LENGTH_LONG).show();
+                } else if (result.equals("1")){
+                    Toast.makeText(SignUpActivity.this, getResources().getString(R.string.signup_error), Toast.LENGTH_LONG).show();
+                }
             }
 
         }

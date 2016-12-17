@@ -53,6 +53,7 @@
     <string name="hint_password">סיסמה</string>
     <string name="signup_error">חלק מהפרטים לא תקינים</string>
     <string name="login_text">משתמש רשום? התחבר</string>
+    <string name="email_in_use">הדואר האלקטרוני שהוכנס כבר בשימוש</string>
     <!--SignUp Activity End-->
 
     <!--Splash Screen-->
@@ -60,13 +61,13 @@
     <string name="progressBar_post_execute_error">אנא בדוק את חיבור האינטרנט שלך</string>
     <string name="progressBar_post_execute_success">הטעינה הושלמה</string>
     <string name="progressBar_progress_update">טוען רכיבים..</string>
-
+    <string name="server_off">אופס לא הצלחנו להתחבר.\nנסו שוב מאוחר יותר</string>
 
     <!--Exit Alert Dialog-->
     <string name="exit_dialog_title">יציאה מהאפליקציה</string>
     <string name="exit_dialog_message">האם אתה בטוח שאתה רוצה לצאת ?</string>
     <string name="exit_dialog_postive">אישור</string>
-    <string name="exit_dialog_negavtive">ביטול</string>
+    <string name="exit_dialog_negative">ביטול</string>
     <!--Exit ALert Dialog End-->
 
     <!--Alert MealDetailsDialog-->

@@ -73,14 +73,13 @@ public class ApplicationConstant {
     public final static String GET_FAVORITE_ITEMS = "http://" + DataHolder.getInstance().getServerIp() +
             ":8080/CafeteriaServer/rest/data/getFavoriteItems";
 
-
     public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
             ":8080/CafeteriaServer/rest/users/validateOrSignUpUser";
 
     public final static String FORGOT_PASSWORD = "http://" + DataHolder.getInstance().getServerIp() +
             ":8080/CafeteriaServer/rest/email/forgotPassword";
 
-
+//
 //    public final static String GET_CATEGORIES_URL = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/data/getCategories";
 //
@@ -108,12 +107,15 @@ public class ApplicationConstant {
 //    public final static String SEND_ORDER = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/data/insertOrder";
 //
-//    public final static String GET_FAVORITES = "http://" + DataHolder.getInstance().getServerIp() +
-//            "/rest/data/getFavorites";
+//    public final static String GET_FAVORITE_MEALS = "http://" + DataHolder.getInstance().getServerIp() +
+//            "/rest/data/getFavoriteMeals";
+//
+//    public final static String GET_FAVORITE_ITEMS = "http://" + DataHolder.getInstance().getServerIp() +
+//            "/rest/data/getFavoriteItems";
 //
 //    public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/users/validateOrSignUpUser";
-
+//
 //    public final static String FORGOT_PASSWORD = "http://" + DataHolder.getInstance().getServerIp() +
 //            "/rest/email/forgotPassword";
 }

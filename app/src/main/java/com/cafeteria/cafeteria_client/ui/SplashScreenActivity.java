@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -41,8 +42,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -232,6 +235,9 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             protected void onPreExecute () {
                 super.onPreExecute();
+                getCategoriesTask = new GetCategoriesTask();
+                getCategoriesTask.execute();
+                tvStatus.setText(R.string.progressBar_pre_execute);
                 if (logged) {
                     validateOrSignUpTask = new ValidateOrSignUpTask();
                     validateOrSignUpTask.execute();
@@ -240,9 +246,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                     getFavoriteItemsTask = new GetFavoriteItemsTask();
                     getFavoriteItemsTask.execute();
                 }
-                tvStatus.setText(R.string.progressBar_pre_execute);
-                getCategoriesTask = new GetCategoriesTask();
-                getCategoriesTask.execute();
                 getDrinksTask = new SplashScreenActivity.GetDrinksTask();
                 getDrinksTask.execute();
 
@@ -286,22 +289,28 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String response) {
                 if (response != null) {
-                    Log.e("CATEGORIES", response);
-                    Type listType = new TypeToken<ArrayList<Category>>() {
-                    }.getType();
-                    List<Category> categoryList;
-                    categoryList = new Gson().fromJson(response, listType);
-                    if (categoryList != null) {
-                        Log.e("CATEGORIES", "inside if categories not null");
-                        DataHolder.getInstance().setCategories(categoryList);
+                    if (response.equals("-1") || response.equals("-2")){
+                        Toast.makeText(SplashScreenActivity.this,getString(R.string.server_off),Toast.LENGTH_LONG).show();
+                         SplashScreenActivity.this.finishAffinity();
+                        return;
+                    }else{
+                        Log.e("CATEGORIES", response);
+                        Type listType = new TypeToken<ArrayList<Category>>() {
+                        }.getType();
+                        List<Category> categoryList;
+                        categoryList = new Gson().fromJson(response, listType);
+                        if (categoryList != null) {
+                            Log.e("CATEGORIES", "inside if categories not null");
+                            DataHolder.getInstance().setCategories(categoryList);
 
 
-                        for (Category c : categoryList) {
-                            if (c != null) {
-                                Log.d("cat", c.toString());
-                            }
-                            if (c.getMeals() != null) {
-                                Log.d("meal", c.getMeals().toString());
+                            for (Category c : categoryList) {
+                                if (c != null) {
+                                    Log.d("cat", c.toString());
+                                }
+                                if (c.getMeals() != null) {
+                                    Log.d("meal", c.getMeals().toString());
+                                }
                             }
                         }
                     }
@@ -314,11 +323,13 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(String... params) {
                 Log.e("SHIRA", "Second do in background");
-                StringBuilder response;
+                StringBuilder response = null;
                 try {
                     URL url = new URL(ApplicationConstant.GET_CATEGORIES_URL);
                     response = new StringBuilder();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(5000);
+                    conn.setReadTimeout(5000);
                     if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                         Log.e("DEBUG", "getCategories " + conn.getResponseCode() + " : " + conn.getResponseMessage());
                         return null;
@@ -336,6 +347,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                     conn.disconnect();
 
+                }catch (ConnectException ex){
+                    return "-1";
+                } catch (SocketTimeoutException ste) {
+                    return "-2";
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;

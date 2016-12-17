@@ -49,7 +49,6 @@ import com.onesignal.OneSignal;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -783,7 +782,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     }
 
                 })
-                .setNegativeButton(getString(R.string.exit_dialog_negavtive), null)
+                .setNegativeButton(getString(R.string.exit_dialog_negative), null)
                 .show();
     }
 

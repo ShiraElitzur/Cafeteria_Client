@@ -54,13 +54,14 @@
     <string name="hint_password">Password</string>
     <string name="signup_error">Some of the details aren\'t correct</string>
     <string name="facebook_app_id">1045054335615065</string>
+    <string name="email_in_use">This email is already taken!</string>
     <!--SignUp Activity End-->
 
     <!--Exit Alert Dialog-->
     <string name="exit_dialog_title">Exit Application</string>
     <string name="exit_dialog_message">Are you sure you want to exit ?</string>
     <string name="exit_dialog_postive">Yes</string>
-    <string name="exit_dialog_negavtive">No</string>
+    <string name="exit_dialog_negative">No</string>
     <!--Exit ALert Dialog End-->
 
     <!--Splash Screen-->
@@ -68,6 +69,7 @@
     <string name="progressBar_post_execute_error">Please check your internet connection</string>
     <string name="progressBar_post_execute_success">Loading Complete</string>
     <string name="progressBar_progress_update">Loading Components..</string>
+    <string name="server_off">Oops, We could not connect right now.\nPlease Try again later</string>
 
     <string-array name="titleAnimation">
         <item>Time2eaT</item>
