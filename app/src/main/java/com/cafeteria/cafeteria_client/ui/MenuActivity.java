@@ -40,6 +40,7 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
     private static boolean firstLaunch = true;
     private SharedPreferences sharedPreferences;
     private LinearLayout llMenu;
+    private TextView readyOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,18 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
 
         }
 
+        readyOrder = (TextView)findViewById(R.id.ivReadyOrder);
+        if( DataHolder.getInstance().getReadyOrderNumber() <= 0 ) {
+            readyOrder.setVisibility(View.GONE);
+        }
+        readyOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MenuActivity.this,OrderReadyActivity.class);
+                startActivity(intent);
+            }
+        });
+
         navigationView.setCheckedItem(R.id.navigation_item_cafeteria_menu);
     }
 
@@ -92,6 +105,16 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
                 })
                 .setNegativeButton(getString(R.string.exit_dialog_negative), null)
                 .show();
+    }
+
+    @Override
+    protected void onResume() {
+        if( DataHolder.getInstance().getReadyOrderNumber() <= 0 ) {
+            readyOrder.setVisibility(View.GONE);
+        } else {
+            readyOrder.setVisibility(View.VISIBLE);
+        }
+        super.onResume();
     }
 
     @Override

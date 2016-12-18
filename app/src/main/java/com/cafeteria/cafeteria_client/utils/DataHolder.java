@@ -31,6 +31,7 @@ public class DataHolder {
     private List<Drink> drinksList;
     private List<Meal> favoriteMeals;
     private List<Item> favoriteItems;
+    private int readyOrderNumber = 0;
 
 
     private static DataHolder ourInstance = new DataHolder();
@@ -143,5 +144,14 @@ public class DataHolder {
 
     public void setFavoriteItems( List<Item> favoriteItems ) {
         this.favoriteItems = favoriteItems;
+    }
+
+
+    public int getReadyOrderNumber() {
+        return readyOrderNumber;
+    }
+
+    public void setReadyOrderNumber(int readyOrderNumber) {
+        this.readyOrderNumber = readyOrderNumber;
     }
 }

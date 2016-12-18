@@ -175,5 +175,6 @@
     <string name="dialog_forgot_password_button">שלח דואר אלקטרוני</string>
     <string name="dialog_forgot_password_success">דואר אלקטרוני נשלח עם הסיסמה</string>
     <string name="dialog_forgot_password_fail">הדואר אלקטרוני שהוכנס לא קיים או לא חוקי</string>
+    <string name="order_delivered">אספתי את ההזמנה והכל סבבה :)</string>
 
 </resources>
