@@ -189,7 +189,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
                 details.append(getResources().getString(R.string.history_meals_title));
                 details.append("\n");
                 for(OrderedMeal meal: order.getMeals()) {
-                    details.append("* ");
+                    details.append(getString(R.string.star) + " ");
                     details.append(meal.getTitle() + " ");
                     bd = new BigDecimal(meal.getTotalPrice());
                     bd = bd.setScale(1, RoundingMode.HALF_DOWN);
@@ -208,7 +208,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
                 details.append(getResources().getString(R.string.history_items_title));
                 for(OrderedItem item: order.getItems()) {
                     details.append("\n");
-                    details.append("* "+item.getParentItem().getTitle());
+                    details.append(getString(R.string.star) + " " + item.getParentItem().getTitle());
                     details.append(" ");
                     bd = new BigDecimal(item.getParentItem().getPrice());
                     bd = bd.setScale(1, RoundingMode.HALF_DOWN);

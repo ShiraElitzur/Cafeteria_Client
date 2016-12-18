@@ -200,4 +200,6 @@
     <string name="date">Date</string>
     <string name="order_delivered">I took the order, and it\'s OK</string>
 
+    <string name="star">&#9733;</string>
+
 </resources>

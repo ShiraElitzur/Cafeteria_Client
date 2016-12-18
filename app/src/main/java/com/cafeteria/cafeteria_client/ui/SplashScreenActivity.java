@@ -286,6 +286,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         private class GetCategoriesTask extends AsyncTask<String, Void, String> {
+            private static final int CONNECT_TIMEOUT = 6000;
+            private static final int READ_TIMEOUT = 6000;
+
             @Override
             protected void onPostExecute(String response) {
                 if (response != null) {
@@ -328,8 +331,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                     URL url = new URL(ApplicationConstant.GET_CATEGORIES_URL);
                     response = new StringBuilder();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setConnectTimeout(5000);
-                    conn.setReadTimeout(5000);
+                    conn.setConnectTimeout(CONNECT_TIMEOUT);
+                    conn.setReadTimeout(READ_TIMEOUT);
                     if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                         Log.e("DEBUG", "getCategories " + conn.getResponseCode() + " : " + conn.getResponseMessage());
                         return null;
@@ -348,8 +351,10 @@ public class SplashScreenActivity extends AppCompatActivity {
                     conn.disconnect();
 
                 }catch (ConnectException ex){
+                    Log.e("connect-timeout","excption " + ex.getMessage());
                     return "-1";
                 } catch (SocketTimeoutException ste) {
+                    Log.e("socket-timeout","excption " + ste.getMessage());
                     return "-2";
                 } catch (Exception e) {
                     e.printStackTrace();
