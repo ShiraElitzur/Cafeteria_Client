@@ -15,7 +15,9 @@ import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
@@ -40,7 +42,8 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
     private static boolean firstLaunch = true;
     private SharedPreferences sharedPreferences;
     private LinearLayout llMenu;
-    private TextView readyOrder;
+    private LinearLayout rlNotification;
+    private TextView tvReadyOrderNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +77,24 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
             }
 
         }
-
-        readyOrder = (TextView)findViewById(R.id.ivReadyOrder);
-        if( DataHolder.getInstance().getReadyOrderNumber() <= 0 ) {
-            readyOrder.setVisibility(View.GONE);
+        rlNotification = (LinearLayout) findViewById(R.id.rlNotification);
+        tvReadyOrderNumber = (TextView)findViewById(R.id.tvReadyOrderNumber);
+        //ibReadyOrder = (ImageButton) findViewById(R.id.ibReadyOrder);
+        if( DataHolder.getInstance().getReadyOrders().size() <= 0 ) {
+            //ibReadyOrder.setVisibility(View.GONE);
+            //tvReadyOrderNumber.setVisibility(View.GONE);
+            rlNotification.setVisibility(View.GONE);
+        } else {
+            tvReadyOrderNumber.setText(DataHolder.getInstance().getReadyOrders().size()+"");
         }
-        readyOrder.setOnClickListener(new View.OnClickListener() {
+        rlNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MenuActivity.this,OrderReadyActivity.class);
                 startActivity(intent);
             }
         });
+
 
         navigationView.setCheckedItem(R.id.navigation_item_cafeteria_menu);
     }
@@ -109,10 +118,15 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
 
     @Override
     protected void onResume() {
-        if( DataHolder.getInstance().getReadyOrderNumber() <= 0 ) {
-            readyOrder.setVisibility(View.GONE);
+        if( DataHolder.getInstance().getReadyOrders().size() <= 0 ) {
+            //ibReadyOrder.setVisibility(View.GONE);
+            //tvReadyOrderNumber.setVisibility(View.GONE);
+            rlNotification.setVisibility(View.GONE);
         } else {
-            readyOrder.setVisibility(View.VISIBLE);
+//            ibReadyOrder.setVisibility(View.VISIBLE);
+//            tvReadyOrderNumber.setVisibility(View.VISIBLE);
+            rlNotification.setVisibility(View.VISIBLE);
+            tvReadyOrderNumber.setText(DataHolder.getInstance().getReadyOrders().size()+"");
         }
         super.onResume();
     }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,18 +30,31 @@ public class OrderReadyActivity extends AppCompatActivity {
 
     private TextView tvOrderNumber;
     private ImageView ivQrCode;
+    private ImageButton ibNextOrder;
+    private ImageButton ibPrevOrder;
+    private int index = 0;
+    private int orderNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_ready);
 
-        int orderNumber = getIntent().getIntExtra("order_number",0);
+        ibNextOrder = (ImageButton)findViewById(R.id.ibNextOrder);
+        ibPrevOrder = (ImageButton)findViewById(R.id.ibPrevOrder);
+
+        orderNumber = getIntent().getIntExtra("order_number",0);
         if( orderNumber > 0 ) {
-            DataHolder.getInstance().setReadyOrderNumber(orderNumber);
+            DataHolder.getInstance().addReadyOrder(orderNumber);
         } else {
-            orderNumber = DataHolder.getInstance().getReadyOrderNumber();
+            orderNumber = DataHolder.getInstance().getReadyOrders().get(index);
         }
+
+//        if( orderNumber > 0 ) {
+//            DataHolder.getInstance().setReadyOrderNumber(orderNumber);
+//        } else {
+//            orderNumber = DataHolder.getInstance().getReadyOrderNumber();
+//        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -51,7 +65,48 @@ public class OrderReadyActivity extends AppCompatActivity {
         tvOrderNumber.setText(orderNumber+"");
 
         ivQrCode = (ImageView)findViewById(R.id.ivQrCode);
+        generateQRCode();
 
+        findViewById(R.id.btnDelivered).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //DataHolder.getInstance().setReadyOrderNumber(0);
+                DataHolder.getInstance().removeReadyOrder(orderNumber);
+                OrderReadyActivity.this.finish();
+            }
+        });
+
+        showNextPrevButtons();
+
+        ibNextOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if( index == DataHolder.getInstance().getReadyOrders().size()-1 ) {
+//                    index = -1;
+//                }
+                orderNumber = DataHolder.getInstance().getReadyOrders().get(++index);
+                tvOrderNumber.setText(orderNumber+"");
+                generateQRCode();
+                showNextPrevButtons();
+            }
+        });
+
+        ibPrevOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if( index == DataHolder.getInstance().getReadyOrders().size()-1 ) {
+//                    index = -1;
+//                }
+                orderNumber = DataHolder.getInstance().getReadyOrders().get(--index);
+                tvOrderNumber.setText(orderNumber+"");
+                generateQRCode();
+                showNextPrevButtons();
+            }
+        });
+
+    }
+
+    public void generateQRCode() {
         try {
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             BitMatrix bitMatrix = multiFormatWriter.encode(orderNumber+"",BarcodeFormat.QR_CODE,200,200);
@@ -62,17 +117,28 @@ public class OrderReadyActivity extends AppCompatActivity {
         } catch (WriterException e) {
             e.printStackTrace();
         }
-
-        findViewById(R.id.btnDelivered).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DataHolder.getInstance().setReadyOrderNumber(0);
-                OrderReadyActivity.this.finish();
-            }
-        });
-
     }
 
+    public void showNextPrevButtons() {
+        index = DataHolder.getInstance().getReadyOrders().indexOf(Integer.valueOf(orderNumber));
+        if( index == 0 ) {
+            ibPrevOrder.setVisibility(View.GONE);
+        } else {
+            ibPrevOrder.setVisibility(View.VISIBLE);
+        }
+
+        if( index == DataHolder.getInstance().getReadyOrders().size()-1 ) {
+            ibNextOrder.setVisibility(View.GONE);
+        } else {
+            ibNextOrder.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.finish();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

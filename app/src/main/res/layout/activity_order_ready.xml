@@ -53,12 +53,31 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
                 android:layout_marginTop="40dp"
-                android:text="@string/order_delivered"/>
+                android:text="@string/order_delivered"
+                android:textColor="@color/colorHeadlines"/>
 
 
 
         </LinearLayout>
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ibNextOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_navigate_next"
+        android:background="@drawable/next_prev_oval_bg"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"/>
+
+    <ImageButton
+        android:id="@+id/ibPrevOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_navigate_before"
+        android:background="@drawable/next_prev_oval_bg"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"/>
 
 
 </RelativeLayout>
