@@ -94,6 +94,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         setContentView(R.layout.activity_order);
         layout = (View) findViewById(R.id.llOrderLayout);
         super.onCreateDrawer();
+        Log.e("DEBUG","On Create Order Activity");
 
         //nis symbol
         Locale israel = new Locale("iw", "IL");
@@ -103,7 +104,6 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         order = dataHolder.getTheOrder();
         lvOrderItems = (ListView) findViewById(R.id.lvOrderItems);
         lvOrderMeals = (ListView) findViewById(R.id.lvOrderMeals);
-
         List<QuantityItem> quantityItems = new ArrayList<>();
         for (OrderedItem it: order.getItems()){
             QuantityItem toBeAdded = new QuantityItem();
@@ -127,9 +127,17 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         }
 
 
-        if( quantityItems == null || quantityItems.size() < 1 ) {
-            findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
+        if( order.getItems() == null || order.getItems().size() < 1 ) {
+            Log.e("DEBUG","EMPTY ITEMS");
+            if( order.getMeals() == null || order.getMeals().size() < 1 ) {
+                findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
+                Log.e("DEBUG","EMPTY MEALS");
+            }
+
+        } else {
+            findViewById(R.id.tvEmptyList).setVisibility(View.GONE);
         }
+
         lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, quantityItems));
         lvOrderMeals.setAdapter(mealsAdapter = new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
 
@@ -370,6 +378,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                                     // Remove the item from the adapter
                                                     removeItemFromList(items.get(position));
                                                     OrderItemsAdapter.this.remove(items.get(position));
+                                                    if( items.size() == 0 && order.getMeals().size() == 0) {
+                                                        findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
+                                                    }
                                                     lvOrderItems.invalidateViews();
                                                 } else{
                                                     items.get(position).setQty((items.get(position).getQty())-1);
@@ -485,6 +496,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                                 order.setPayment(order.getPayment() - payChange);
                                                 // Remove the item from the adapter
                                                 OrderMealsAdapter.this.remove(meals.get(position));
+                                                if( meals.size() == 0 && order.getItems().size() == 0 ) {
+                                                    findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
+                                                }
                                                 // Refresh the UI
                                                 OrderActivity.this.findViewById(android.R.id.content).getRootView().invalidate();
                                                 itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
