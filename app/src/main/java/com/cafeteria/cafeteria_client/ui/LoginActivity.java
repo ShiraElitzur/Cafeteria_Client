@@ -765,7 +765,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         userPKId = customer.getId();
         new RefreshTokenTask().execute();
         finish();
-        Intent homeScreen = new Intent(LoginActivity.this, MenuActivity.class);
+        Intent homeScreen = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(homeScreen);
     }
 

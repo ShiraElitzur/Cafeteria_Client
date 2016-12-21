@@ -263,7 +263,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     @Override
     public void onBackPressed() {
         finish();
-        Intent menuIntent = new Intent(OrderActivity.this, MenuActivity.class);
+        Intent menuIntent = new Intent(OrderActivity.this, MainActivity.class);
         startActivity(menuIntent);
     }
 
@@ -562,7 +562,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         dataHolder.addMealToOrder(meal);
         updateOrderInSharedPreferences();
 
-        Intent menuActivityIntent = new Intent(OrderActivity.this, MenuActivity.class);
+        Intent menuActivityIntent = new Intent(OrderActivity.this, MainActivity.class);
         startActivity(menuActivityIntent);
         finish();
     }

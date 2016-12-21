@@ -284,7 +284,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
     @Override
     public void onBackPressed() {
         finish();
-        Intent menuIntent = new Intent(OrdersHistoryActivity.this, MenuActivity.class);
+        Intent menuIntent = new Intent(OrdersHistoryActivity.this, MainActivity.class);
         startActivity(menuIntent);
     }
 

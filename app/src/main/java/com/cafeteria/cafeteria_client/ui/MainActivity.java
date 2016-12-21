@@ -38,7 +38,7 @@ import java.util.List;
  * 1. Sorted by categories 2. 3.
  * This activity extends the DrawerActivity to support the application navigation drawer
  */
-public class MenuActivity extends DrawerActivity implements OnDialogResultListener {
+public class MainActivity extends DrawerActivity implements OnDialogResultListener {
     private static boolean firstLaunch = true;
     private SharedPreferences sharedPreferences;
     private LinearLayout llMenu;
@@ -62,7 +62,7 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
         tabLayout.setupWithViewPager(viewPager);
         //getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
-        // On MenuActivity's first launch we create a new Order for this session
+        // On MainActivity's first launch we create a new Order for this session
         if (firstLaunch) {
             firstLaunch = false;
             // get the logged customer from the shared preferences
@@ -90,7 +90,7 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
         rlNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MenuActivity.this,OrderReadyActivity.class);
+                Intent intent = new Intent(MainActivity.this,OrderReadyActivity.class);
                 startActivity(intent);
             }
         });
@@ -156,13 +156,13 @@ public class MenuActivity extends DrawerActivity implements OnDialogResultListen
                 .setAction(getString(R.string.snack_bar_action_text), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent orderActivityIntent = new Intent(MenuActivity.this, OrderActivity.class);
+                        Intent orderActivityIntent = new Intent(MainActivity.this, OrderActivity.class);
                         startActivity(orderActivityIntent);
                     }
                 });
         snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
         View sbView = snackbar.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(MenuActivity.this, android.R.color.white));
+        sbView.setBackgroundColor(ContextCompat.getColor(MainActivity.this, android.R.color.white));
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextColor(Color.BLACK);
         snackbar.show();

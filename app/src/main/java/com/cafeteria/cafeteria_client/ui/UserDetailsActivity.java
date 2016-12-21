@@ -1,13 +1,10 @@
 package com.cafeteria.cafeteria_client.ui;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,7 +16,6 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.ActionBar;
@@ -29,7 +25,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -50,7 +45,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -254,7 +248,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 finish();
-                Intent intent = new Intent(UserDetailsActivity.this, MenuActivity.class);
+                Intent intent = new Intent(UserDetailsActivity.this, MainActivity.class);
                 startActivity(intent);
                 return true;
         }
@@ -397,14 +391,18 @@ public class UserDetailsActivity extends AppCompatActivity {
                 protected Void doInBackground(Void... voids) {
 
                     try {
-                        bit = Picasso.with(UserDetailsActivity.this).
-                                load(file).get();
+                        bit = Picasso.with(UserDetailsActivity.this)
+                                .load(file)
+                                .noFade()
+                                .centerCrop()
+                                .resize(350,350)
+                                .get();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     byte[] byteArray = null;
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bit = Bitmap.createScaledBitmap(bit,350,350,false);
+//                    bit = Bitmap.createScaledBitmap(bit,350,350,false);
                     if( bit != null ) {
                         bit.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                         byteArray = stream.toByteArray();

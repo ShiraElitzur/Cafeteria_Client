@@ -12,7 +12,6 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -51,21 +50,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -151,7 +137,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         if (!customerJSON.equals("")) {
             logged = true;
             customer = new Gson().fromJson(customerJSON, Customer.class);
-            intent = new Intent(SplashScreenActivity.this, MenuActivity.class);
+            intent = new Intent(SplashScreenActivity.this, MainActivity.class);
         }
 
         new ProgressBarTask().execute();
@@ -292,7 +278,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String response) {
                 if (response != null) {
-                    if (response.equals("-1") || response.equals("-2")){
+                    if (response.equals("-1") || response.equals("-2") || response.equals("-3")){
                         Toast.makeText(SplashScreenActivity.this,getString(R.string.server_off),Toast.LENGTH_LONG).show();
                          SplashScreenActivity.this.finishAffinity();
                         return;
@@ -318,7 +304,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    Toast.makeText(SplashScreenActivity.this, "Server is down", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SplashScreenActivity.this, "Cafeteria is down", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -328,6 +314,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Log.e("SHIRA", "Second do in background");
                 StringBuilder response = null;
                 try {
+                    System.out.println(ApplicationConstant.GET_CATEGORIES_URL);
                     URL url = new URL(ApplicationConstant.GET_CATEGORIES_URL);
                     response = new StringBuilder();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -335,7 +322,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     conn.setReadTimeout(READ_TIMEOUT);
                     if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                         Log.e("DEBUG", "getCategories " + conn.getResponseCode() + " : " + conn.getResponseMessage());
-                        return null;
+                        return "-3";
                     }
 
                     BufferedReader input = new BufferedReader(

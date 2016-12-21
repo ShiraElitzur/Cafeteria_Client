@@ -23,13 +23,13 @@
             android:value="DISABLE" />
 
         <activity
-            android:name=".ui.MenuActivity"
+            android:name=".ui.MainActivity"
             android:launchMode="singleTop" />
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.SignUpActivity" />
         <activity
             android:name=".ui.CategoryItemsActivity"
-            android:parentActivityName=".ui.MenuActivity" />
+            android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.SplashScreenActivity" />
         <activity android:name=".ui.OrderActivity" />
         <activity android:name=".ui.PayPalActivity" />
@@ -39,32 +39,32 @@
         <activity
             android:name=".ui.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".ui.MenuActivity">
+            android:parentActivityName=".ui.MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MenuActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
             android:name=".ui.OrderReadyActivity"
             android:label="@string/title_activity_order_ready"
-            android:parentActivityName=".ui.MenuActivity">
+            android:parentActivityName=".ui.MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MenuActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
             android:name=".ui.UserDetailsActivity"
             android:label="@string/title_activity_user_details"
-            android:parentActivityName=".ui.MenuActivity">
+            android:parentActivityName=".ui.MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MenuActivity" />
+                android:value=".ui.MainActivity" />
         </activity>
         <activity
             android:name=".ui.ChooseCafeteriaActivity"

@@ -16,12 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
-import com.cafeteria.cafeteria_client.data.Category;
-import com.cafeteria.cafeteria_client.data.Customer;
-import com.cafeteria.cafeteria_client.data.Server;
+import com.cafeteria.cafeteria_client.data.Cafeteria;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.google.gson.Gson;
@@ -33,11 +30,10 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ChooseCafeteriaActivity extends AppCompatActivity {
-    private List<Server> servers = new ArrayList<>();
+    private List<Cafeteria> servers = new ArrayList<>();
     private List<String> serversNames = new ArrayList<>();
     private DataHolder dataHolder = DataHolder.getInstance();
     private AutoCompleteTextView autoCompleteTvCafeteria;
@@ -73,8 +69,8 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
             autoCompleteTvCafeteria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    dataHolder.setServerIp(servers.get(i).getAddress());
-                    Log.e("SERVERS", "server chosen: " + serversNames.get(i) + " in server ip " + servers.get(i).getAddress());
+                    dataHolder.setServerIp(servers.get(i).getServerIp());
+                    Log.e("SERVERS", "server chosen: " + serversNames.get(i) + " in server ip " + servers.get(i).getServerIp());
                 }
             });
 
@@ -145,10 +141,10 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             if (response!=null) {
-                Type listType = new TypeToken<ArrayList<Server>>() {
+                Type listType = new TypeToken<ArrayList<Cafeteria>>() {
                 }.getType();
                 servers = new Gson().fromJson(response, listType);
-                for (Server server: servers){
+                for (Cafeteria server: servers){
                     Log.e("SERVERS","servers name: " + server.getCafeteriaName());
                     serversNames.add(server.getCafeteriaName());
                 }

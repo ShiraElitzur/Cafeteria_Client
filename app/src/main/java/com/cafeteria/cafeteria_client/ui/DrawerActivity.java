@@ -28,8 +28,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 
-import java.io.ByteArrayOutputStream;
-
 import static com.cafeteria.cafeteria_client.ui.MyApplicationClass.language;
 
 /**
@@ -100,10 +98,10 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                 drawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_item_cafeteria_menu:
-                        if( DrawerActivity.this instanceof MenuActivity){
+                        if( DrawerActivity.this instanceof MainActivity){
                             return false;
                         }
-                        intent = new Intent(DrawerActivity.this,MenuActivity.class);
+                        intent = new Intent(DrawerActivity.this,MainActivity.class);
                         startActivity(intent);
                         DrawerActivity.this.finish();
                         break;

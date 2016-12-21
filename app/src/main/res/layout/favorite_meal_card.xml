@@ -31,8 +31,9 @@ card_view:cardUseCompatPadding="true">
 
     <TextView
         android:id="@+id/tvFavoriteTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textSize="@dimen/headLines4"
         android:textStyle="bold"
         android:text="Favorite"/>
