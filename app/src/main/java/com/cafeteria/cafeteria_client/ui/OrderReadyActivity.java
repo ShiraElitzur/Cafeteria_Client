@@ -47,7 +47,9 @@ public class OrderReadyActivity extends AppCompatActivity {
         if( orderNumber > 0 ) {
             DataHolder.getInstance().addReadyOrder(orderNumber);
         } else {
-            orderNumber = DataHolder.getInstance().getReadyOrders().get(index);
+            if( DataHolder.getInstance().getReadyOrders().size() > 0 ) {
+                orderNumber = DataHolder.getInstance().getReadyOrders().get(index);
+            }
         }
 
 //        if( orderNumber > 0 ) {
