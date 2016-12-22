@@ -31,7 +31,7 @@ public class DataHolder {
     private List<Drink> drinksList;
     private List<Meal> favoriteMeals;
     private List<Item> favoriteItems;
-    private List<Integer> readyOrders = new ArrayList<>();
+//    private List<Integer> readyOrders = new ArrayList<>();
 
 
     private static DataHolder ourInstance = new DataHolder();
@@ -146,17 +146,17 @@ public class DataHolder {
         this.favoriteItems = favoriteItems;
     }
 
-
-    public List<Integer> getReadyOrders() {
-        return this.readyOrders;
-    }
-
-    public void addReadyOrder( int readyOrderNumber ) {
-        this.readyOrders.add(readyOrderNumber);
-    }
-
-    public void removeReadyOrder ( int readyOrderNumber ) {
-        this.readyOrders.remove(Integer.valueOf(readyOrderNumber));
-    }
+//
+//    public List<Integer> getReadyOrders() {
+//        return this.readyOrders;
+//    }
+//
+//    public void addReadyOrder( int readyOrderNumber ) {
+//        this.readyOrders.add(readyOrderNumber);
+//    }
+//
+//    public void removeReadyOrder ( int readyOrderNumber ) {
+//        this.readyOrders.remove(Integer.valueOf(readyOrderNumber));
+//    }
 
 }

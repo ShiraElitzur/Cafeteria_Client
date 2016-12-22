@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -27,7 +28,9 @@ import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.google.gson.Gson;
 import com.cafeteria.cafeteria_client.interfaces.OnDialogResultListener;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,13 +83,7 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
         rlNotification = (LinearLayout) findViewById(R.id.rlNotification);
         tvReadyOrderNumber = (TextView)findViewById(R.id.tvReadyOrderNumber);
         //ibReadyOrder = (ImageButton) findViewById(R.id.ibReadyOrder);
-        if( DataHolder.getInstance().getReadyOrders().size() <= 0 ) {
-            //ibReadyOrder.setVisibility(View.GONE);
-            //tvReadyOrderNumber.setVisibility(View.GONE);
-            rlNotification.setVisibility(View.GONE);
-        } else {
-            tvReadyOrderNumber.setText(DataHolder.getInstance().getReadyOrders().size()+"");
-        }
+
         rlNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,15 +115,42 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
 
     @Override
     protected void onResume() {
-        if( DataHolder.getInstance().getReadyOrders().size() <= 0 ) {
-            //ibReadyOrder.setVisibility(View.GONE);
-            //tvReadyOrderNumber.setVisibility(View.GONE);
-            rlNotification.setVisibility(View.GONE);
+//        // get ready order list from shared preferences
+//        String readyOrdersString = sharedPreferences.getString("readyOrders", "");
+//        List<Integer> readyOrders;
+//        Type listType = new TypeToken<ArrayList<Integer>>() {
+//        }.getType();
+//        readyOrders = new Gson().fromJson(readyOrdersString,listType);
+//
+//        if( readyOrders.size() <= 0 ) {
+//            //ibReadyOrder.setVisibility(View.GONE);
+//            //tvReadyOrderNumber.setVisibility(View.GONE);
+//            rlNotification.setVisibility(View.GONE);
+//        } else {
+////            ibReadyOrder.setVisibility(View.VISIBLE);
+////            tvReadyOrderNumber.setVisibility(View.VISIBLE);
+//            rlNotification.setVisibility(View.VISIBLE);
+//            tvReadyOrderNumber.setText(readyOrders.size()+"");
+//        }
+        Log.e("DEBUG","Main OnResume!");
+        // get ready order list from shared preferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String readyOrdersString = sharedPreferences.getString("readyOrders", "");
+        List<Integer> readyOrders;
+        Type listType = new TypeToken<ArrayList<Integer>>() {
+        }.getType();
+        if (!readyOrdersString.isEmpty()){
+            readyOrders = new Gson().fromJson(readyOrdersString,listType);
+            if( readyOrders.size() <= 0 ) {
+                //ibReadyOrder.setVisibility(View.GONE);
+                //tvReadyOrderNumber.setVisibility(View.GONE);
+                rlNotification.setVisibility(View.GONE);
+            } else {
+                tvReadyOrderNumber.setText(readyOrders.size()+"");
+                rlNotification.setVisibility(View.VISIBLE);
+            }
         } else {
-//            ibReadyOrder.setVisibility(View.VISIBLE);
-//            tvReadyOrderNumber.setVisibility(View.VISIBLE);
-            rlNotification.setVisibility(View.VISIBLE);
-            tvReadyOrderNumber.setText(DataHolder.getInstance().getReadyOrders().size()+"");
+            rlNotification.setVisibility(View.GONE);
         }
         super.onResume();
     }

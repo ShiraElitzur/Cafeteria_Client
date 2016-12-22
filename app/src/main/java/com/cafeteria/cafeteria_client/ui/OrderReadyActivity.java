@@ -1,7 +1,9 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.nfc.NfcAdapter;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,12 +17,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafeteria.cafeteria_client.R;
+import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.R.attr.width;
 import static android.graphics.Color.BLACK;
@@ -34,6 +43,7 @@ public class OrderReadyActivity extends AppCompatActivity {
     private ImageButton ibPrevOrder;
     private int index = 0;
     private int orderNumber;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +54,32 @@ public class OrderReadyActivity extends AppCompatActivity {
         ibPrevOrder = (ImageButton)findViewById(R.id.ibPrevOrder);
 
         orderNumber = getIntent().getIntExtra("order_number",0);
+
+        // check if there are ready orders in the shared preferences storage
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String readyOrdersString = sharedPreferences.getString("readyOrders", "");
+        List<Integer> readyOrders;
+        if (readyOrdersString.isEmpty()){
+            readyOrders = new ArrayList<>();
+        } else{
+            Type listType = new TypeToken<ArrayList<Integer>>() {
+            }.getType();
+            readyOrders = new Gson().fromJson(readyOrdersString,listType);
+        }
+
         if( orderNumber > 0 ) {
-            DataHolder.getInstance().addReadyOrder(orderNumber);
+            readyOrders.add(orderNumber);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("readyOrders", new Gson().toJson(readyOrders));
+            editor.apply();
+            //DataHolder.getInstance().addReadyOrder(orderNumber);
         } else {
-            if( DataHolder.getInstance().getReadyOrders().size() > 0 ) {
-                orderNumber = DataHolder.getInstance().getReadyOrders().get(index);
+            if(readyOrders.size() > 0 ) {
+                orderNumber = readyOrders.get(index);
             }
+//            if( DataHolder.getInstance().getReadyOrders().size() > 0 ) {
+//                orderNumber = DataHolder.getInstance().getReadyOrders().get(index);
+//            }
         }
 
 //        if( orderNumber > 0 ) {
@@ -72,8 +102,21 @@ public class OrderReadyActivity extends AppCompatActivity {
         findViewById(R.id.btnDelivered).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // get ready order list from shared preferences
+                String readyOrdersString = sharedPreferences.getString("readyOrders", "");
+                List<Integer> readyOrders;
+                Type listType = new TypeToken<ArrayList<Integer>>() {
+                }.getType();
+                readyOrders = new Gson().fromJson(readyOrdersString,listType);
+                readyOrders.remove(Integer.valueOf(orderNumber));
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("readyOrders", new Gson().toJson(readyOrders));
+                editor.apply();
+
+
                 //DataHolder.getInstance().setReadyOrderNumber(0);
-                DataHolder.getInstance().removeReadyOrder(orderNumber);
+                //DataHolder.getInstance().removeReadyOrder(orderNumber);
                 OrderReadyActivity.this.finish();
             }
         });
@@ -86,7 +129,15 @@ public class OrderReadyActivity extends AppCompatActivity {
 //                if( index == DataHolder.getInstance().getReadyOrders().size()-1 ) {
 //                    index = -1;
 //                }
-                orderNumber = DataHolder.getInstance().getReadyOrders().get(++index);
+
+                // get ready order list from shared preferences
+                String readyOrdersString = sharedPreferences.getString("readyOrders", "");
+                List<Integer> readyOrders;
+                Type listType = new TypeToken<ArrayList<Integer>>() {
+                }.getType();
+                readyOrders = new Gson().fromJson(readyOrdersString,listType);
+
+                orderNumber = readyOrders.get(++index);
                 tvOrderNumber.setText(orderNumber+"");
                 generateQRCode();
                 showNextPrevButtons();
@@ -99,7 +150,15 @@ public class OrderReadyActivity extends AppCompatActivity {
 //                if( index == DataHolder.getInstance().getReadyOrders().size()-1 ) {
 //                    index = -1;
 //                }
-                orderNumber = DataHolder.getInstance().getReadyOrders().get(--index);
+
+                // get ready order list from shared preferences
+                String readyOrdersString = sharedPreferences.getString("readyOrders", "");
+                List<Integer> readyOrders;
+                Type listType = new TypeToken<ArrayList<Integer>>() {
+                }.getType();
+                readyOrders = new Gson().fromJson(readyOrdersString,listType);
+
+                orderNumber = readyOrders.get(--index);
                 tvOrderNumber.setText(orderNumber+"");
                 generateQRCode();
                 showNextPrevButtons();
@@ -122,14 +181,22 @@ public class OrderReadyActivity extends AppCompatActivity {
     }
 
     public void showNextPrevButtons() {
-        index = DataHolder.getInstance().getReadyOrders().indexOf(Integer.valueOf(orderNumber));
+
+        // get ready order list from shared preferences
+        String readyOrdersString = sharedPreferences.getString("readyOrders", "");
+        List<Integer> readyOrders;
+        Type listType = new TypeToken<ArrayList<Integer>>() {
+        }.getType();
+        readyOrders = new Gson().fromJson(readyOrdersString,listType);
+
+        index = readyOrders.indexOf(Integer.valueOf(orderNumber));
         if( index == 0 ) {
             ibPrevOrder.setVisibility(View.GONE);
         } else {
             ibPrevOrder.setVisibility(View.VISIBLE);
         }
 
-        if( index == DataHolder.getInstance().getReadyOrders().size()-1 ) {
+        if( index == readyOrders.size()-1 ) {
             ibNextOrder.setVisibility(View.GONE);
         } else {
             ibNextOrder.setVisibility(View.VISIBLE);
