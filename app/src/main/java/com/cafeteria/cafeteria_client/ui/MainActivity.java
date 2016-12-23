@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
+import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.cafeteria.cafeteria_client.data.Order;
@@ -32,6 +33,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -135,13 +137,18 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
         Log.e("DEBUG","Main OnResume!");
         // get ready order list from shared preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String readyOrdersString = sharedPreferences.getString("readyOrders", "");
-        List<Integer> readyOrders;
-        Type listType = new TypeToken<ArrayList<Integer>>() {
-        }.getType();
-        if (!readyOrdersString.isEmpty()){
-            readyOrders = new Gson().fromJson(readyOrdersString,listType);
-            if( readyOrders.size() <= 0 ) {
+
+        String customerJSON = sharedPreferences.getString("customer", "");
+        Customer c = new Gson().fromJson(customerJSON, Customer.class);
+
+        String readyOrdersForUserString = sharedPreferences.getString("readyOrdersForUsers", "");
+        HashMap<Integer,List<Integer>> readyOrdersForUsers;
+        if (!readyOrdersForUserString.isEmpty()){
+            Type listType = new TypeToken<HashMap<Integer,List<Integer>>>() {
+            }.getType();
+            readyOrdersForUsers = new Gson().fromJson(readyOrdersForUserString,listType);
+            List<Integer> readyOrders = readyOrdersForUsers.get(c.getId());
+            if( readyOrders == null || readyOrders.size() <= 0 ) {
                 //ibReadyOrder.setVisibility(View.GONE);
                 //tvReadyOrderNumber.setVisibility(View.GONE);
                 rlNotification.setVisibility(View.GONE);

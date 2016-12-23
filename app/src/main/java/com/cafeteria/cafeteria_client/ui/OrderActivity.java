@@ -36,11 +36,13 @@ import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
@@ -188,7 +190,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 MyApplicationClass app = (MyApplicationClass)getApplication();
                 LocalDBHandler db = app.getLocalDB();
                 db.insertOrder(order);
-
+                //saveOrderInLocalStorage();
                 new SendOrderToServer().execute();
 
                 DataHolder.getInstance().setTheOrder(new Order());
@@ -203,6 +205,26 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
             }
         }
     }
+
+//    public void saveOrderInLocalStorage() {
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        String payedOrdersString = sharedPreferences.getString("payedOrders", "");
+//        List<Order> payedOrders;
+//        if (payedOrdersString.isEmpty()){
+//            payedOrders = new ArrayList<>();
+//        } else{
+//            Type listType = new TypeToken<ArrayList<Order>>() {
+//            }.getType();
+//            payedOrders = new Gson().fromJson(payedOrdersString,listType);
+//        }
+//
+//        if( order != null ) {
+//            payedOrders.add(order);
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.putString("payedOrders", new Gson().toJson(payedOrders));
+//            editor.apply();
+//        }
+//    }
 
     private class SendOrderToServer extends AsyncTask<String, Void, Boolean> {
 
