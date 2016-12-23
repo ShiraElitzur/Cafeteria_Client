@@ -1,12 +1,16 @@
 package com.cafeteria.cafeteria_client.ui;
 
         import android.content.Context;
+        import android.content.Intent;
         import android.content.SharedPreferences;
+        import android.graphics.Color;
         import android.os.AsyncTask;
         import android.os.Bundle;
         import android.preference.PreferenceManager;
+        import android.support.design.widget.Snackbar;
         import android.support.v4.app.Fragment;
         import android.support.v4.app.FragmentManager;
+        import android.support.v4.content.ContextCompat;
         import android.support.v7.widget.LinearLayoutManager;
         import android.support.v7.widget.RecyclerView;
         import android.util.Log;
@@ -15,6 +19,7 @@ package com.cafeteria.cafeteria_client.ui;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
         import android.widget.ImageButton;
+        import android.widget.ImageView;
         import android.widget.LinearLayout;
         import android.widget.RelativeLayout;
         import android.widget.TextView;
@@ -23,6 +28,7 @@ package com.cafeteria.cafeteria_client.ui;
         import com.cafeteria.cafeteria_client.data.Customer;
         import com.cafeteria.cafeteria_client.data.Item;
         import com.cafeteria.cafeteria_client.data.Meal;
+        import com.cafeteria.cafeteria_client.data.OrderedItem;
         import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
         import com.cafeteria.cafeteria_client.utils.DataHolder;
         import com.google.gson.Gson;
@@ -35,8 +41,6 @@ package com.cafeteria.cafeteria_client.ui;
         import java.net.URL;
         import java.util.ArrayList;
         import java.util.List;
-
-        import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Shira Elitzur on 08/09/2016.
@@ -53,6 +57,7 @@ public class FavoritesFragment extends Fragment{
     private RelativeLayout rlEmptyView;
     //    private LinearLayout llSpecials;
     private int colorIndex = -1;
+    private View v;
 
     public FavoritesFragment () {
 
@@ -68,7 +73,7 @@ public class FavoritesFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.favorites_fragment, container, false);
+        v =  inflater.inflate(R.layout.favorites_fragment, container, false);
 
         favoriteMeals = DataHolder.getInstance().getFavoriteMeals();
         favoriteItems = DataHolder.getInstance().getFavoriteItems();
@@ -284,7 +289,19 @@ public class FavoritesFragment extends Fragment{
                     public void onClick(View view) {
                         int position = getAdapterPosition();
                         Item item = favoriteItems.get(position);
-                        Log.e("FAVORITES","Click on item " + item.getTitle());
+                        int qty = Integer.parseInt(tvQty.getText().toString());
+
+                        showSnackBar();
+
+                        DataHolder dataHolder = DataHolder.getInstance();
+                        for (int i=0; i < qty;i++){
+
+                            OrderedItem orderedItem = new OrderedItem();
+                            orderedItem.setParentItem(item);
+                            dataHolder.addItemToOrder(orderedItem);
+                            updateOrderInSharedPreferences();
+
+                        }
 
                     }
                 });
@@ -301,7 +318,7 @@ public class FavoritesFragment extends Fragment{
 
         @Override
         protected void onPreExecute() {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             String customerString = sharedPreferences.getString("customer", "");
             if (customerString != null && !customerString.equals("")) {
                 Gson gson = new Gson();
@@ -389,7 +406,7 @@ public class FavoritesFragment extends Fragment{
 
         @Override
         protected void onPreExecute() {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
             String customerString = sharedPreferences.getString("customer", "");
             if (customerString != null && !customerString.equals("")) {
                 Gson gson = new Gson();
@@ -516,9 +533,31 @@ public class FavoritesFragment extends Fragment{
         }
     }
 
+    private void showSnackBar(){
+        Snackbar snackbar = Snackbar
+                .make(v, getString(R.string.dialog_btn_keep_shopping_pressed), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.snack_bar_action_text), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent orderActivityIntent = new Intent(getActivity(),OrderActivity.class);
+                        startActivity(orderActivityIntent);
+                    }
+                });
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.BLACK);
+        snackbar.show();
+    }
 
 
-
+    private void updateOrderInSharedPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("order", new Gson().toJson(DataHolder.getInstance().getTheOrder()));
+        editor.apply();
+    }
 }
 
 

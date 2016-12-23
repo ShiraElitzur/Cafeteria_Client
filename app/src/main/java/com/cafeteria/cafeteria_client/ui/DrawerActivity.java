@@ -86,13 +86,21 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
         Customer c = gson.fromJson(customerJSON,Customer.class);;
         tvHeaderTitle.setText(c.getFirstName() + " " + c.getLastName());
 
+        ImageView imgviewHeaderImage = (ImageView) headerView.findViewById(R.id.imgviewHeaderImage);
         if (c.getImage() != null){
-            ImageView imgviewHeaderImage = (ImageView) headerView.findViewById(R.id.imgviewHeaderImage);
             Bitmap b = BitmapFactory.decodeByteArray(c.getImage(), 0, c.getImage().length);
             if (b != null) {
                 imgviewHeaderImage.setImageBitmap(b);
             }
         }
+        imgviewHeaderImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent userDetailsIntent = new Intent(DrawerActivity.this,UserDetailsActivity.class);
+                startActivity(userDetailsIntent);
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

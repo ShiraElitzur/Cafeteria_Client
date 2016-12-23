@@ -181,4 +181,17 @@ public class OrderedMeal implements Serializable {
         this.title = title;
     }
 
+    @Override
+    public String toString() {
+        return "OrderedMeal{" +
+                "id=" + id +
+                ", parentMeal=" + parentMeal +
+                ", chosenExtras=" + chosenExtras +
+                ", chosenDrink=" + chosenDrink +
+                ", comment='" + comment + '\'' +
+                ", order=" + order +
+                ", totalPrice=" + totalPrice +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

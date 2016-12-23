@@ -162,6 +162,8 @@
     <string name="history_meals_title">Meals:</string>
     <string name="history_items_title">Items:</string>
     <string name="history_extra_title">Extras-</string>
+    <string name="history_comment_title">Comment-</string>
+    <string name="history_drink_title">Drink-</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="history_pick_date">Pick date</string>

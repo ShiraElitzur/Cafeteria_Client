@@ -303,7 +303,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             String jsonUser = gson.toJson(customer, Customer.class);
             URL url = null;
             try {
-                url = new URL(ApplicationConstant.UPDATE_USER_URL);
+                url = new URL(ApplicationConstant.getAddress(ApplicationConstant.UPDATE_USER_URL));
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setDoOutput(true);
                 con.setDoInput(true);
@@ -359,7 +359,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                 editor.apply();
                 btnEditUser.setEnabled(true);
                 showSnackBar(getResources().getString(R.string.update_user_success));
-//                Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_success), Toast.LENGTH_LONG).show();
+                 //Toast.makeText(UserDetailsActivity.this, getResources().getString(R.string.update_user_success), Toast.LENGTH_LONG).show();
             } else {
                 btnEditUser.setEnabled(true);
                 showSnackBar(getResources().getString(R.string.update_user_failed));
@@ -435,12 +435,26 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     private void showSnackBar(String text){
         Snackbar snackbar = Snackbar
-                .make(view, text, Snackbar.LENGTH_LONG);
+                .make(view, text, Snackbar.LENGTH_SHORT);
         snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
         View sbView = snackbar.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(UserDetailsActivity.this, android.R.color.white));
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextColor(Color.BLACK);
         snackbar.show();
+
+        snackbar.setCallback(new Snackbar.Callback() {
+
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                finish();
+                Intent intent = new Intent(UserDetailsActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onShown(Snackbar snackbar) {
+            }
+        });
     }
 }

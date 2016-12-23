@@ -189,14 +189,27 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
                 details.append(getResources().getString(R.string.history_meals_title));
                 details.append("\n");
                 for(OrderedMeal meal: order.getMeals()) {
+                    Log.e("MEAL",meal.toString());
                     details.append(getString(R.string.star) + " ");
                     details.append(meal.getTitle() + " ");
                     bd = new BigDecimal(meal.getTotalPrice());
                     bd = bd.setScale(1, RoundingMode.HALF_DOWN);
                     details.append(bd + " " + nis.getSymbol());
                     details.append("\n");
+
+                    if (meal.getChosenDrink() != null){
+                        details.append("  "+getResources().getString(R.string.history_drink_title)+" ");
+                        details.append(meal.getChosenDrink().getTitle());
+                        if (!meal.getParentMeal().isIncludesDrink()){
+                            details.append(" " + meal.getChosenDrink().getPrice() + " " + nis.getSymbol());
+                        }
+                        details.append("\n");
+                    }
+                    if (meal.getChosenExtras() != null && meal.getChosenExtras().size() > 0){
+
+                    }
                     if(meal.getComment() != null && meal.getComment().length() > 0 ) {
-                        details.append("  "+getResources().getString(R.string.history_extra_title)+" ");
+                        details.append("  "+getResources().getString(R.string.history_comment_title)+" ");
                         details.append(meal.getComment());
                         details.append("\n");
                     }
