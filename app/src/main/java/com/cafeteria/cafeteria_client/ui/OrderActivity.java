@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.cafeteria.cafeteria_client.data.Cafeteria;
 import com.cafeteria.cafeteria_client.utils.LocalDBHandler;
 import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
@@ -74,6 +76,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     private List<OrderedMeal> orderedMeals;
     private List<Item> orderedItems;
     private ArrayAdapter mealsAdapter;
+    private Cafeteria cafeteria;
 
     /**
      * The ActionBar MenuItem that displays the amount to pay
@@ -173,6 +176,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
         //set checked item on drawer
         navigationView.setCheckedItem(R.id.navigation_item_cart);
+
+        Log.e("CAFETERIA", DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.HOUR_OF_DAY) + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.MINUTE));
+        Log.e("CAFETERIA", DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.HOUR_OF_DAY) + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.MINUTE));
 
     }
 
@@ -319,7 +325,24 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 timePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        if (selectedHour < hour || (selectedHour == hour && selectedMinute < minute)) {
+                        if (selectedHour < DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.HOUR_OF_DAY)
+                                || (selectedHour == DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.HOUR_OF_DAY)
+                                && selectedMinute < DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.MINUTE))){
+                            Toast.makeText(OrderActivity.this, DataHolder.getInstance().getCafeteria().getCafeteriaName() + " " +
+                                    getResources().getString(R.string.cafeteria_not_open) + " " +
+                                    DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.HOUR_OF_DAY)
+                                    + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
+                            order.setPickupTime("");
+                            itemTIme.setTitle(order.getPickupTime());
+                        } else if (selectedHour > DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.HOUR_OF_DAY)
+                                || (selectedHour == DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.HOUR_OF_DAY)
+                                && selectedMinute > DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.MINUTE))){
+                            Toast.makeText(OrderActivity.this, DataHolder.getInstance().getCafeteria().getCafeteriaName() + " " +
+                                    getResources().getString(R.string.cafeteria_closed), Toast.LENGTH_LONG).show();
+                            order.setPickupTime("");
+                            itemTIme.setTitle(order.getPickupTime());
+                        }
+                        else if (selectedHour < hour || (selectedHour == hour && selectedMinute < minute)) {
                             Toast.makeText(OrderActivity.this,
                                     getResources().getString(R.string.dialog_time_picker_time_passed), Toast.LENGTH_LONG).show();
                             order.setPickupTime("");

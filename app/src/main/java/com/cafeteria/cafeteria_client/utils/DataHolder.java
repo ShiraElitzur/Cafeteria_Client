@@ -2,6 +2,7 @@ package com.cafeteria.cafeteria_client.utils;
 
 import android.graphics.Bitmap;
 
+import com.cafeteria.cafeteria_client.data.Cafeteria;
 import com.cafeteria.cafeteria_client.data.Category;
 import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Extra;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 public class DataHolder {
 
-    private String serverIp = "";
+    private Cafeteria cafeteria;
     private Order theOrder;
     private List<Category> categories = new ArrayList<>();
     private Bitmap bitmap;
@@ -121,14 +122,6 @@ public class DataHolder {
         }
     }
 
-    public String getServerIp() {
-        return serverIp;
-    }
-
-    public void setServerIp(String serverIp) {
-        this.serverIp =  serverIp;
-    }
-
     public List<Meal> getFavoriteMeals() {
         return this.favoriteMeals;
     }
@@ -146,7 +139,15 @@ public class DataHolder {
         this.favoriteItems = favoriteItems;
     }
 
-//
+    public Cafeteria getCafeteria() {
+        return cafeteria;
+    }
+
+    public void setCafeteria(Cafeteria cafeteria) {
+        this.cafeteria = cafeteria;
+    }
+
+    //
 //    public List<Integer> getReadyOrders() {
 //        return this.readyOrders;
 //    }

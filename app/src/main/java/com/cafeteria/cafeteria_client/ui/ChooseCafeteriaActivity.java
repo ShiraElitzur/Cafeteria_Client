@@ -39,7 +39,6 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
     private AutoCompleteTextView autoCompleteTvCafeteria;
     private Button btnNext;
     private SharedPreferences sharedPreferences;
-    private String chosenServer = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +46,9 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_choose_cafeteria);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String serverIp = sharedPreferences.getString("serverIp", "");
-        if (!serverIp.equals("")){
-            dataHolder.setServerIp(serverIp);
+        Cafeteria cafeteria = new Gson().fromJson(sharedPreferences.getString("cafeteria", ""),Cafeteria.class);
+        if (cafeteria != null){
+            dataHolder.setCafeteria(cafeteria);
             goToHomeScreen();
         } else {
 
@@ -69,7 +68,7 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
             autoCompleteTvCafeteria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    dataHolder.setServerIp(servers.get(i).getServerIp());
+                    dataHolder.setCafeteria(servers.get(i));
                     Log.e("SERVERS", "server chosen: " + serversNames.get(i) + " in server ip " + servers.get(i).getServerIp());
                 }
             });
@@ -77,7 +76,7 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
             btnNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (dataHolder.getServerIp().equals("") || !serversNames.contains(autoCompleteTvCafeteria.getText().toString())) {
+                    if (dataHolder.getCafeteria() == null || !serversNames.contains(autoCompleteTvCafeteria.getText().toString())) {
                         Snackbar snackbar = Snackbar
                                 .make(view, getString(R.string.choose_cafeteria_toast), Snackbar.LENGTH_LONG);
                         View sbView = snackbar.getView();
@@ -87,7 +86,7 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
                         snackbar.show();
                     } else {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("serverIp", dataHolder.getServerIp());
+                        editor.putString("cafeteria", new Gson().toJson(dataHolder.getCafeteria()));
                         editor.apply();
 
                         goToHomeScreen();

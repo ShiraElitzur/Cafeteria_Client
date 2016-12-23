@@ -34,7 +34,7 @@ import static com.cafeteria.cafeteria_client.ui.MyApplicationClass.language;
  * An activity with Navigation Drawer
  * An activity that extends that class must have in it's layout xml file the following components, with the specified ids:
  * 1. DrawerLayout - drawer_layout
- * 2. ToolBar - activity_menu
+ * 2. ToolBar - activity_main
  * 3. NavigationView - navigation_view
  */
 public abstract class DrawerActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -51,7 +51,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
         editor = mySPrefs.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //activity_menu.setElevation(0);
+        //activity_main.setElevation(0);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -163,7 +163,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         break;
                     case R.id.navigation_item_change_cafeteria:
 //                        editor.remove("customer");
-                        editor.remove("serverIp");
+                        editor.remove("cafeteria");
                         editor.apply();
 
                         FacebookSdk.sdkInitialize(getApplicationContext());

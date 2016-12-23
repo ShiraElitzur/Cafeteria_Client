@@ -21,6 +21,12 @@
     <string name="nav_item_change_cafeteria">החלף קפיטריה</string>
     <!--Drawer and Navigation End-->
 
+    <!-- Selected Cafeteria -->
+    <string name="active_cafeteria">קפיטריה פעילה -</string>
+    <string name="cafeteria_closed">סגור כעת</string>
+    <string name="cafeteria_not_open">נפתח בשעה</string>
+    <!-- -->
+
     <!--Tabs Titles-->
     <string name="categories_tab_title">קטגוריות</string>
     <string name="specials_tab_title">מבצעים</string>

@@ -98,6 +98,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -129,6 +134,25 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"/>
 
+
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:id="@+id/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryLightOpacity"
+                >
+
+                <TextView
+                    android:layout_gravity="start"
+                    android:id="@+id/tvCafeteriaName"
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium.Inverse" />
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <android.support.design.widget.NavigationView
@@ -141,4 +165,5 @@
 
     </android.support.v4.widget.DrawerLayout>
 
+    </RelativeLayout>
 </LinearLayout>

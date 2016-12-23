@@ -21,6 +21,12 @@
     <string name="nav_item_change_cafeteria">Change Cafeteria</string>
     <!--Drawer and Navigation End-->
 
+    <!-- Selected Cafeteria -->
+    <string name="active_cafeteria">Active Cafeteria -</string>
+    <string name="cafeteria_closed">is closed</string>
+    <string name="cafeteria_not_open">open in</string>
+    <!-- -->
+
     <!--Tabs Titles-->
     <string name="categories_tab_title">Categories</string>
     <string name="specials_tab_title">Specials</string>

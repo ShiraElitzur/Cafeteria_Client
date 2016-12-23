@@ -109,31 +109,31 @@ public class ApplicationConstant {
     public static String getAddress(String name){
         switch(name){
             case GET_CATEGORIES_URL:
-                return "http://" + DataHolder.getInstance().getServerIp() + GET_CATEGORIES_URL;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + GET_CATEGORIES_URL;
             case GET_DRINKS_URL:
-                return "http://" + DataHolder.getInstance().getServerIp() + GET_DRINKS_URL;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + GET_DRINKS_URL;
             case USER_REGISTRATION_URL:
-                return "http://" + DataHolder.getInstance().getServerIp() + USER_REGISTRATION_URL;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + USER_REGISTRATION_URL;
             case USER_FACEBOOK_REGISTRATION_URL:
-                return "http://" + DataHolder.getInstance().getServerIp() + USER_FACEBOOK_REGISTRATION_URL;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + USER_FACEBOOK_REGISTRATION_URL;
             case UPDATE_USER_URL:
-                return "http://" + DataHolder.getInstance().getServerIp() + UPDATE_USER_URL;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + UPDATE_USER_URL;
             case USER_VALIDATION_URL:
-                return "http://" + DataHolder.getInstance().getServerIp() + USER_VALIDATION_URL;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + USER_VALIDATION_URL;
             case GET_TOKEN:
-                return "http://" + DataHolder.getInstance().getServerIp() + GET_TOKEN;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + GET_TOKEN;
             case SET_TOKEN:
-                return "http://" + DataHolder.getInstance().getServerIp() + SET_TOKEN;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + SET_TOKEN;
             case SEND_ORDER:
-                return "http://" + DataHolder.getInstance().getServerIp() + SEND_ORDER;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + SEND_ORDER;
             case GET_FAVORITE_MEALS:
-                return "http://" + DataHolder.getInstance().getServerIp() + GET_FAVORITE_MEALS;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + GET_FAVORITE_MEALS;
             case GET_FAVORITE_ITEMS:
-                return "http://" + DataHolder.getInstance().getServerIp() + GET_FAVORITE_ITEMS;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + GET_FAVORITE_ITEMS;
             case VALIDATE_OR_SIGN_UP:
-                return "http://" + DataHolder.getInstance().getServerIp() + VALIDATE_OR_SIGN_UP;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + VALIDATE_OR_SIGN_UP;
             case FORGOT_PASSWORD:
-                return "http://" + DataHolder.getInstance().getServerIp() + FORGOT_PASSWORD;
+                return "http://" + DataHolder.getInstance().getCafeteria().getServerIp() + FORGOT_PASSWORD;
             default:
                 return name;
         }

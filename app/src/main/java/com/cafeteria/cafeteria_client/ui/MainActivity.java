@@ -16,9 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
@@ -49,11 +47,12 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
     private LinearLayout llMenu;
     private LinearLayout rlNotification;
     private TextView tvReadyOrderNumber;
+    private TextView tvCafeteriaName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu); // The layout with the tabs
+        setContentView(R.layout.activity_main); // The layout with the tabs
         super.onCreateDrawer();
 
         llMenu = (LinearLayout) findViewById(R.id.llmenu);
@@ -94,6 +93,8 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
             }
         });
 
+        tvCafeteriaName = (TextView) findViewById(R.id.tvCafeteriaName);
+        tvCafeteriaName.setText(getString(R.string.active_cafeteria) + " " + DataHolder.getInstance().getCafeteria().getCafeteriaName());
 
         navigationView.setCheckedItem(R.id.navigation_item_cafeteria_menu);
     }
