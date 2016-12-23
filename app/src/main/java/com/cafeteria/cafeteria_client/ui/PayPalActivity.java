@@ -49,13 +49,13 @@ import java.util.Set;
  * Shira - you can check the payment is working by filling the following details:
  * email : yona@gmail.com
  * password : 1qaz@WSX
- *
+ * <p>
  * We need to create transaction table in the DB to save transaction,
  * I dont fully understand whats going in this class so for now it stays
  * a separate class (although it doesnt have to)
- *
+ * <p>
  * Basic sample using the SDK to make a payment or consent to future payments.
- *
+ * <p>
  * For sample mobile backend interactions, see
  * https://github.com/paypal/rest-api-sdk-python/tree/master/samples/mobile_backend
  */
@@ -65,10 +65,10 @@ public class PayPalActivity extends AppCompatActivity {
 
     /**
      * - Set to PayPalConfiguration.ENVIRONMENT_PRODUCTION to move real money.
-     *
+     * <p>
      * - Set to PayPalConfiguration.ENVIRONMENT_SANDBOX to use your test credentials
      * from https://developer.paypal.com
-     *
+     * <p>
      * - Set to PayPalConfiguration.ENVIRONMENT_NO_NETWORK to kick the tires
      * without communicating to PayPalActivity's servers.
      */
@@ -81,6 +81,7 @@ public class PayPalActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
 
     private static PayPalConfiguration config = new PayPalConfiguration()
+            .acceptCreditCards(false)
             .environment(CONFIG_ENVIRONMENT)
             .clientId(CONFIG_CLIENT_ID)
             // The following are only used in PayPalFuturePaymentActivity.
@@ -118,7 +119,7 @@ public class PayPalActivity extends AppCompatActivity {
         //PayPalPayment stuffToBuy = getStuffToBuy(PayPalPayment.PAYMENT_INTENT_SALE);
 
         //this is our real payment
-        PayPalPayment payment =  createPaymentDetails(PayPalPayment.PAYMENT_INTENT_SALE);
+        PayPalPayment payment = createPaymentDetails(PayPalPayment.PAYMENT_INTENT_SALE);
 
         /*
          * See getStuffToBuy(..) for examples of some available payment options.
@@ -143,13 +144,13 @@ public class PayPalActivity extends AppCompatActivity {
         // temporary store in this list
         List<PayPalItem> orderItems = new ArrayList<>();
         PayPalItem payPalItem;
-        for (OrderedItem item : order.getItems()){
-            payPalItem = new PayPalItem(item.getParentItem().getTitle(),1,new BigDecimal(item.getParentItem().getPrice()),currency,String.valueOf(item.getId()));
+        for (OrderedItem item : order.getItems()) {
+            payPalItem = new PayPalItem(item.getParentItem().getTitle(), 1, new BigDecimal(item.getParentItem().getPrice()), currency, String.valueOf(item.getId()));
             orderItems.add(payPalItem);
         }
-        for (OrderedMeal meal : order.getMeals()){
+        for (OrderedMeal meal : order.getMeals()) {
             Double total = meal.getTotalPrice();
-            payPalItem = new PayPalItem(meal.getParentMeal().getTitle(),1,new BigDecimal(total),currency,String.valueOf(meal.getId()));
+            payPalItem = new PayPalItem(meal.getParentMeal().getTitle(), 1, new BigDecimal(total), currency, String.valueOf(meal.getId()));
             orderItems.add(payPalItem);
         }
         // convert the list to array
@@ -217,7 +218,7 @@ public class PayPalActivity extends AppCompatActivity {
          * attributes you select for this app in the PayPalActivity developer portal and the scopes required here.
          */
         Set<String> scopes = new HashSet<String>(
-                Arrays.asList(PayPalOAuthScopes.PAYPAL_SCOPE_EMAIL, PayPalOAuthScopes.PAYPAL_SCOPE_ADDRESS) );
+                Arrays.asList(PayPalOAuthScopes.PAYPAL_SCOPE_EMAIL, PayPalOAuthScopes.PAYPAL_SCOPE_ADDRESS));
         return new PayPalOAuthScopes(scopes);
     }
 
@@ -242,10 +243,10 @@ public class PayPalActivity extends AppCompatActivity {
                          */
                         Toast.makeText(
                                 getApplicationContext(),
-                                "PaymentConfirmation info received from PayPalActivity", Toast.LENGTH_LONG)
+                                getString(R.string.paypal_payment_success), Toast.LENGTH_LONG)
                                 .show();
 
-                        setResult(Activity.RESULT_OK,resultIntent);
+                        setResult(Activity.RESULT_OK, resultIntent);
                     } catch (JSONException e) {
                         Log.e(TAG, "an extremely unlikely failure occurred: ", e);
                     }
@@ -253,48 +254,60 @@ public class PayPalActivity extends AppCompatActivity {
                 finish();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.i(TAG, "The user canceled.");
-                setResult(Activity.RESULT_CANCELED,resultIntent);
+                Toast.makeText(
+                        getApplicationContext(),
+                        getString(R.string.paypal_payment_canceled), Toast.LENGTH_LONG)
+                        .show();
+                setResult(Activity.RESULT_CANCELED, resultIntent);
                 finish();
             } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        getString(R.string.paypal_payment_failed), Toast.LENGTH_LONG)
+                        .show();
                 Log.i(
                         TAG,
                         "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
-            }
-        } else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
-            if (resultCode == Activity.RESULT_OK) {
-                PayPalAuthorization auth =
-                        data.getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
-                if (auth != null) {
-                    try {
-                        Log.i("FuturePaymentExample", auth.toJSONObject().toString(4));
-
-                        String authorization_code = auth.getAuthorizationCode();
-                        Log.i("FuturePaymentExample", authorization_code);
-
-                        sendAuthorizationToServer(auth);
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "Future Payment code received from PayPalActivity", Toast.LENGTH_LONG)
-                                .show();
-                        setResult(Activity.RESULT_OK,resultIntent);
-
-                    } catch (JSONException e) {
-                        Log.e("FuturePaymentExample", "an extremely unlikely failure occurred: ", e);
-                    }
-                }
+                setResult(-3, resultIntent);
                 finish();
-
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.i("FuturePaymentExample", "The user canceled.");
-                setResult(Activity.RESULT_CANCELED,resultIntent);
-                finish();
-            } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
-                Log.i(
-                        "FuturePaymentExample",
-                        "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
             }
         }
-    }
+// else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
+//            if (resultCode == Activity.RESULT_OK) {
+//                PayPalAuthorization auth =
+//                        data.getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
+//                if (auth != null) {
+//                    try {
+//                        Log.i("FuturePaymentExample", auth.toJSONObject().toString(4));
+//
+//                        String authorization_code = auth.getAuthorizationCode();
+//                        Log.i("FuturePaymentExample", authorization_code);
+//
+//                        sendAuthorizationToServer(auth);
+//                        Toast.makeText(
+//                                getApplicationContext(),
+//                                "Future Payment code received from PayPalActivity", Toast.LENGTH_LONG)
+//                                .show();
+//                        setResult(Activity.RESULT_OK,resultIntent);
+//
+//                    } catch (JSONException e) {
+//                        Log.e("FuturePaymentExample", "an extremely unlikely failure occurred: ", e);
+//                    }
+//                }
+//                finish();
+//
+//        } else if (resultCode == Activity.RESULT_CANCELED) {
+//            Log.i("FuturePaymentExample", "The user canceled.");
+//            setResult(Activity.RESULT_CANCELED, resultIntent);
+//            finish();
+//        } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
+//            Log.i(
+//                    "FuturePaymentExample",
+//                    "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+//        }
+//    }
+
+}
 
     private void sendAuthorizationToServer(PayPalAuthorization authorization) {
 
@@ -311,19 +324,19 @@ public class PayPalActivity extends AppCompatActivity {
          */
 
     }
-
-    public void onFuturePaymentPurchasePressed(View pressed) {
-        // Get the Client Metadata ID from the SDK
-        String metadataId = PayPalConfiguration.getClientMetadataId(this);
-
-        Log.i("FuturePaymentExample", "Client Metadata ID: " + metadataId);
-
-        // TODO: Send metadataId and transaction details to your server for processing with
-        // PayPalActivity...
-        Toast.makeText(
-                getApplicationContext(), "Client Metadata Id received from SDK", Toast.LENGTH_LONG)
-                .show();
-    }
+//
+//    public void onFuturePaymentPurchasePressed(View pressed) {
+//        // Get the Client Metadata ID from the SDK
+//        String metadataId = PayPalConfiguration.getClientMetadataId(this);
+//
+//        Log.i("FuturePaymentExample", "Client Metadata ID: " + metadataId);
+//
+//        // TODO: Send metadataId and transaction details to your server for processing with
+//        // PayPalActivity...
+//        Toast.makeText(
+//                getApplicationContext(), "Client Metadata Id received from SDK", Toast.LENGTH_LONG)
+//                .show();
+//    }
 
 
     @Override

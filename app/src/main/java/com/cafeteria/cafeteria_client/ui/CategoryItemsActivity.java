@@ -410,6 +410,14 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
             bd = bd.setScale(1, RoundingMode.HALF_DOWN);
             holder.tvTotal.setText(bd + " " + nis.getSymbol());
 
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Meal meal = (Meal) getChild(parentPosition,childPosition);
+                    initMealDetailsDialog(meal);
+                }
+            });
+
             return convertView;
         }
 
@@ -481,9 +489,6 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                         Item selectedItem = (Item) getItem(position);
                         int qty = Integer.parseInt(holder.tvQty.getText().toString());
 
-//                        Toast.makeText(CategoryItemsActivity.this
-//                                ,getString(R.string.dialog_btn_keep_shopping_pressed),Toast.LENGTH_SHORT).show();
-
                         showSnackBar();
 
                         DataHolder dataHolder = DataHolder.getInstance();
@@ -495,9 +500,28 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                             updateOrderInSharedPreferences();
 
                         }
-                        //dataHolder.addOrderdItem(selectedItem);
                     }
                 });
+                holder.tvMealName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Item selectedItem = (Item) getItem(position);
+                        int qty = Integer.parseInt(holder.tvQty.getText().toString());
+                        showSnackBar();
+
+                        DataHolder dataHolder = DataHolder.getInstance();
+                        for (int i=0; i < qty;i++){
+
+                            OrderedItem orderedItem = new OrderedItem();
+                            orderedItem.setParentItem(selectedItem);
+                            dataHolder.addItemToOrder(orderedItem);
+                            updateOrderInSharedPreferences();
+
+                        }
+                    }
+                });
+
+
                 holder.tvQty = (TextView) convertView.findViewById(R.id.tvQty);
                 holder.tvQty.setVisibility(View.VISIBLE);
 
@@ -526,6 +550,8 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                         }
                     }
                 });
+
+
 
                 convertView.setTag(holder);
 

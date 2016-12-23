@@ -1,5 +1,6 @@
 package com.cafeteria.cafeteria_client.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,12 +23,15 @@ import android.widget.TextView;
 
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.Customer;
+import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.utils.DataHolder;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalProfileSharingActivity;
 
 import static com.cafeteria.cafeteria_client.ui.MyApplicationClass.language;
 
@@ -43,12 +48,12 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
     private Intent intent;
     private TextView tvHeaderTitle;
     NavigationView navigationView;
-    private SharedPreferences mySPrefs;
+    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
     protected void onCreateDrawer() {
-        mySPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        editor = mySPrefs.edit();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        editor = sharedPreferences.edit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //activity_main.setElevation(0);
@@ -76,7 +81,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
         toggle.syncState();
 
         tvHeaderTitle = (TextView) headerView.findViewById((R.id.tvHeaderTitle));
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
         String customerJSON = sharedPreferences.getString("customer", "");
         Customer c = gson.fromJson(customerJSON,Customer.class);;
@@ -162,19 +166,13 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         DrawerActivity.this.finish();
                         break;
                     case R.id.navigation_item_change_cafeteria:
-//                        editor.remove("customer");
-                        editor.remove("cafeteria");
-                        editor.apply();
-
-                        FacebookSdk.sdkInitialize(getApplicationContext());
-                        if (LoginManager.getInstance() != null){
-                            LoginManager.getInstance().logOut();
+                        String orderJSON = sharedPreferences.getString("order", "");
+                        Order order = new Gson().fromJson(orderJSON,Order.class);
+                        if (order.getItems().size() > 0 || order.getMeals().size() > 0){
+                            emptyCartAlert();
+                        } else{
+                            changeCafeteria();
                         }
-
-                        LoginActivity.googleSignOut();
-                        intent = new Intent(DrawerActivity.this,ChooseCafeteriaActivity.class);
-                        startActivity(intent);
-                        DrawerActivity.this.finish();
                         break;
                     default:
                         break;
@@ -206,5 +204,43 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    private void emptyCartAlert() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(getString(R.string.empty_cart_dialog_title))
+                .setMessage(getString(R.string.empty_cart_message))
+                .setPositiveButton(getString(R.string.empty_cart_postive), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        changeCafeteria();
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.empty_cart_negative), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void changeCafeteria(){
+        editor.remove("cafeteria");
+        editor.remove("order");
+        editor.apply();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        if (LoginManager.getInstance() != null){
+            LoginManager.getInstance().logOut();
+        }
+
+        LoginActivity.googleSignOut();
+        intent = new Intent(DrawerActivity.this,ChooseCafeteriaActivity.class);
+        startActivity(intent);
+        DrawerActivity.this.finish();
     }
 }

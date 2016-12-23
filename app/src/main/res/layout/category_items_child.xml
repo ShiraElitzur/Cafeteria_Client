@@ -23,7 +23,7 @@
         android:layout_weight="1"
         android:src="@drawable/ic_add_circle_outline"
         android:background="@null"
-        android:layout_gravity="start"
+        android:layout_gravity="center"
         />
 
     <TextView
@@ -38,7 +38,7 @@
         android:layout_weight="5"
         android:text="*Meal in a plate*"
         android:textColor="@color/colorPrimary"
-
+        android:layout_gravity="center"
         />
 
     <ImageButton
@@ -65,6 +65,7 @@
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:visibility="gone"
+        android:layout_gravity="center"
         />
 
     <ImageButton
@@ -82,20 +83,21 @@
         />
 
 
-    <TextView
-        android:padding="10dp"
-        android:id="@+id/tvTotal"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:text="15.5"
-        android:paddingStart="?attr/listPreferredItemPaddingLeft"
-        android:paddingEnd="?attr/listPreferredItemPaddingRight"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:gravity="end"
-        />
+        <TextView
+            android:padding="10dp"
+            android:id="@+id/tvTotal"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="15.5"
+            android:paddingStart="?attr/listPreferredItemPaddingLeft"
+            android:paddingEnd="?attr/listPreferredItemPaddingRight"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="end"
+            android:layout_gravity="center"
+            />
 
     </LinearLayout>
 

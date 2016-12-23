@@ -226,7 +226,10 @@ public class UserDetailsActivity extends AppCompatActivity {
                     }
                 } else{ //api 23 and above
                     permission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    if (permission != PackageManager.PERMISSION_GRANTED) {
+                    int permission2 = checkSelfPermission(Manifest.permission.CAMERA);
+                    int permission3 = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+                    if (permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_DENIED
+                            || permission3 != PackageManager.PERMISSION_DENIED) {
                         // We don't have permission so prompt the user
                         requestPermissions(
                                 PERMISSIONS_STORAGE,

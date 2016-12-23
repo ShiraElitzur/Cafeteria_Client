@@ -150,7 +150,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         fabPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (order.getPayment() == 0) {
+                if (order.getItems().size() == 0 && order.getMeals().size() == 0) {
                     Toast.makeText(OrderActivity.this, getResources().getString(R.string.empty_cart), Toast.LENGTH_LONG).show();
                 } else {
 
@@ -207,7 +207,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 editor.remove("order");
                 editor.apply();
 
-                OrderActivity.this.recreate();
+                finish();
+                Intent homeActivity = new Intent(OrderActivity.this,MainActivity.class);
+                startActivity(homeActivity);
             }
         }
     }
@@ -423,6 +425,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                                     // Remove the item from the adapter
                                                     removeItemFromList(items.get(position));
                                                     OrderItemsAdapter.this.remove(items.get(position));
+                                                    updateOrderInSharedPreferences();
                                                     if( items.size() == 0 && order.getMeals().size() == 0) {
                                                         findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
                                                     }
@@ -541,6 +544,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                                 order.setPayment(order.getPayment() - payChange);
                                                 // Remove the item from the adapter
                                                 OrderMealsAdapter.this.remove(meals.get(position));
+                                                updateOrderInSharedPreferences();
                                                 if( meals.size() == 0 && order.getItems().size() == 0 ) {
                                                     findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
                                                 }
