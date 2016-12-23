@@ -53,6 +53,7 @@ import java.util.List;
 import java.io.OutputStream;
 import java.net.ProtocolException;
 
+
 public class SplashScreenActivity extends AppCompatActivity {
 
     String[] titlesAnimation;
@@ -314,8 +315,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Log.e("SHIRA", "Second do in background");
                 StringBuilder response = null;
                 try {
-                    System.out.println(ApplicationConstant.GET_CATEGORIES_URL);
-                    URL url = new URL(ApplicationConstant.GET_CATEGORIES_URL);
+                    URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_CATEGORIES_URL));
                     response = new StringBuilder();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setConnectTimeout(CONNECT_TIMEOUT);
@@ -363,7 +363,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             protected Void doInBackground(Void... voids) {
                 StringBuilder response;
                 try {
-                    URL url = new URL(ApplicationConstant.GET_DRINKS_URL);
+                    URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_DRINKS_URL));
                     response = new StringBuilder();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     Log.e("DEBUG", conn.getResponseCode() + "");
@@ -389,7 +389,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                     List<Drink> drinksList;
                     drinksList = new Gson().fromJson(response.toString(), listType);
                     DataHolder.getInstance().setDrinksList(drinksList);
-                    Log.e("DRINKS", drinksList.get(0).getTitle());
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
@@ -409,7 +408,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             protected Void doInBackground(Void... voids) {
                 try {
                     // http request to get the old token of the current user
-                    url = new URL(ApplicationConstant.GET_TOKEN + "?user=" + userPKId);
+                    url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_TOKEN) + "?user=" + userPKId);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                     Log.e("GET TOKEN", conn.getResponseCode() + "");
@@ -441,7 +440,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                             if (userOldToken == null || !userOldToken.equals(userId) || userOldToken.isEmpty()) {
                                 try {
                                     // request the server to attach the device token (userId) to the right user (with the id userPKId)
-                                    url = new URL(ApplicationConstant.SET_TOKEN + "?userId=" + userPKId + "&pushId=" + userId);
+                                    url = new URL(ApplicationConstant.getAddress(ApplicationConstant.SET_TOKEN) + "?userId=" + userPKId + "&pushId=" + userId);
                                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                                     Log.e("SET TOKEN", conn.getResponseCode() + "");
                                     if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -497,7 +496,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             protected String doInBackground(Void... voids) {
                 StringBuilder response;
                 try {
-                    URL url = new URL(ApplicationConstant.GET_FAVORITE_MEALS + "?userId=" + customer.getId());
+                    URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_FAVORITE_MEALS) + "?userId=" + customer.getId());
                     response = new StringBuilder();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -560,7 +559,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         protected String doInBackground(Void... voids) {
             StringBuilder response;
             try {
-                URL url = new URL(ApplicationConstant.GET_FAVORITE_ITEMS + "?userId=" + customer.getId());
+                URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_FAVORITE_ITEMS) + "?userId=" + customer.getId());
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -615,7 +614,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 String jsonUser = gson.toJson(customer, Customer.class);
                 URL url = null;
                 try {
-                    url = new URL(ApplicationConstant.VALIDATE_OR_SIGN_UP);
+                    url = new URL(ApplicationConstant.getAddress(ApplicationConstant.VALIDATE_OR_SIGN_UP));
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setDoOutput(true);
                     con.setDoInput(true);

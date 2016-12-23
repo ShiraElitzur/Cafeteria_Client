@@ -80,42 +80,62 @@ public class ApplicationConstant {
 //            ":8080/CafeteriaServer/rest/email/forgotPassword";
 
 
-    public final static String GET_CATEGORIES_URL = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/data/getCategories";
+    public final static String GET_CATEGORIES_URL = "/rest/data/getCategories";
 
-    public final static String GET_DRINKS_URL = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/data/getDrinks";
+    public final static String GET_DRINKS_URL = "/rest/data/getDrinks";
 
-    public final static String USER_REGISTRATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/users/insertUser";
+    public final static String USER_REGISTRATION_URL = "/rest/users/insertUser";
 
-    public final static String USER_FACEBOOK_REGISTRATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/users/insertFacebookUser";
+    public final static String USER_FACEBOOK_REGISTRATION_URL = "/rest/users/insertFacebookUser";
 
-    public final static String UPDATE_USER_URL = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/users/updateUser";
+    public final static String UPDATE_USER_URL = "/rest/users/updateUser";
 
-    public final static String USER_VALIDATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/users/isUserExist";
+    public final static String USER_VALIDATION_URL = "/rest/users/isUserExist";
 
-    public final static String GET_TOKEN = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/push/getToken";
+    public final static String GET_TOKEN = "/rest/push/getToken";
 
-    public final static String SET_TOKEN = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/push/attachPushIdToUser";
+    public final static String SET_TOKEN = "/rest/push/attachPushIdToUser";
 
-    public final static String SEND_ORDER = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/data/insertOrder";
+    public final static String SEND_ORDER = "/rest/data/insertOrder";
 
-    public final static String GET_FAVORITE_MEALS = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/data/getFavoriteMeals";
+    public final static String GET_FAVORITE_MEALS = "/rest/data/getFavoriteMeals";
 
-    public final static String GET_FAVORITE_ITEMS = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/data/getFavoriteItems";
+    public final static String GET_FAVORITE_ITEMS = "/rest/data/getFavoriteItems";
 
-    public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/users/validateOrSignUpUser";
+    public final static String VALIDATE_OR_SIGN_UP = "/rest/users/validateOrSignUpUser";
 
-    public final static String FORGOT_PASSWORD = "http://" + DataHolder.getInstance().getServerIp() +
-            "/rest/email/forgotPassword";
+    public final static String FORGOT_PASSWORD = "/rest/email/forgotPassword";
+
+    public static String getAddress(String name){
+        switch(name){
+            case GET_CATEGORIES_URL:
+                return "http://" + DataHolder.getInstance().getServerIp() + GET_CATEGORIES_URL;
+            case GET_DRINKS_URL:
+                return "http://" + DataHolder.getInstance().getServerIp() + GET_DRINKS_URL;
+            case USER_REGISTRATION_URL:
+                return "http://" + DataHolder.getInstance().getServerIp() + USER_REGISTRATION_URL;
+            case USER_FACEBOOK_REGISTRATION_URL:
+                return "http://" + DataHolder.getInstance().getServerIp() + USER_FACEBOOK_REGISTRATION_URL;
+            case UPDATE_USER_URL:
+                return "http://" + DataHolder.getInstance().getServerIp() + UPDATE_USER_URL;
+            case USER_VALIDATION_URL:
+                return "http://" + DataHolder.getInstance().getServerIp() + USER_VALIDATION_URL;
+            case GET_TOKEN:
+                return "http://" + DataHolder.getInstance().getServerIp() + GET_TOKEN;
+            case SET_TOKEN:
+                return "http://" + DataHolder.getInstance().getServerIp() + SET_TOKEN;
+            case SEND_ORDER:
+                return "http://" + DataHolder.getInstance().getServerIp() + SEND_ORDER;
+            case GET_FAVORITE_MEALS:
+                return "http://" + DataHolder.getInstance().getServerIp() + GET_FAVORITE_MEALS;
+            case GET_FAVORITE_ITEMS:
+                return "http://" + DataHolder.getInstance().getServerIp() + GET_FAVORITE_ITEMS;
+            case VALIDATE_OR_SIGN_UP:
+                return "http://" + DataHolder.getInstance().getServerIp() + VALIDATE_OR_SIGN_UP;
+            case FORGOT_PASSWORD:
+                return "http://" + DataHolder.getInstance().getServerIp() + FORGOT_PASSWORD;
+            default:
+                return name;
+        }
+    }
 }

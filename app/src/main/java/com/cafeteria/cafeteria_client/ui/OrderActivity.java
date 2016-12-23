@@ -238,7 +238,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
             String jsonOrder = gson.toJson(order, Order.class);
             URL url = null;
             try {
-                url = new URL(ApplicationConstant.SEND_ORDER);
+                url = new URL(ApplicationConstant.getAddress(ApplicationConstant.SEND_ORDER));
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setDoOutput(true);
                 con.setDoInput(true);

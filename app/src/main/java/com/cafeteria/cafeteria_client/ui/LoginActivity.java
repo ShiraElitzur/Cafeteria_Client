@@ -376,7 +376,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         protected String doInBackground(String... params) {
             StringBuilder response;
             try {
-                URL url = new URL(ApplicationConstant.USER_VALIDATION_URL + "?email=" + emailTxt + "&pass=" + passwordTxt);
+                URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.USER_VALIDATION_URL) + "?email=" + emailTxt + "&pass=" + passwordTxt);
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -436,7 +436,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             StringBuilder response;
             try {
-                URL url = new URL(ApplicationConstant.USER_VALIDATION_URL + "?email=" + emailTxt + "&pass=" + passwordTxt);
+                URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.USER_VALIDATION_URL) + "?email=" + emailTxt + "&pass=" + passwordTxt);
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -479,7 +479,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 String jsonUser = gson.toJson(customer, Customer.class);
                 URL url = null;
                 try {
-                    url = new URL(ApplicationConstant.USER_FACEBOOK_REGISTRATION_URL);
+                    url = new URL(ApplicationConstant.getAddress(ApplicationConstant.USER_FACEBOOK_REGISTRATION_URL));
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setDoOutput(true);
                     con.setDoInput(true);
@@ -559,7 +559,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             StringBuilder response;
             try {
-                URL url = new URL(ApplicationConstant.USER_VALIDATION_URL + "?email=" +
+                URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.USER_VALIDATION_URL) + "?email=" +
                         customer.getEmail() + "&pass=" + customer.getPassword());
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -603,7 +603,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 String jsonUser = gson.toJson(customer, Customer.class);
                 URL url = null;
                 try {
-                    url = new URL(ApplicationConstant.USER_FACEBOOK_REGISTRATION_URL);
+                    url = new URL(ApplicationConstant.getAddress(ApplicationConstant.USER_FACEBOOK_REGISTRATION_URL));
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     con.setDoOutput(true);
                     con.setDoInput(true);
@@ -681,7 +681,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         protected Void doInBackground(Void... voids) {
             try {
                 // http request to get the old token of the current user
-                url = new URL(ApplicationConstant.GET_TOKEN+"?user="+userPKId);
+                url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_TOKEN)+"?user="+userPKId);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
                 Log.e("GET TOKEN",conn.getResponseCode()+"");
@@ -713,7 +713,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         if(userOldToken == null || !userOldToken.equals(userId)) {
                             try {
                                 // request the server to attach the device token (userId) to the right user (with the id userPKId)
-                                url = new URL(ApplicationConstant.SET_TOKEN+"?userId="+userPKId+"&pushId="+userId);
+                                url = new URL(ApplicationConstant.getAddress(ApplicationConstant.SET_TOKEN)+"?userId="+userPKId+"&pushId="+userId);
                                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                                 Log.e("SET TOKEN", conn.getResponseCode() + "");
                                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -813,7 +813,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         protected Boolean doInBackground(Boolean... params) {
             StringBuilder response;
             try {
-                URL url = new URL(ApplicationConstant.FORGOT_PASSWORD + "?email=" + email);
+                URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.FORGOT_PASSWORD) + "?email=" + email);
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {

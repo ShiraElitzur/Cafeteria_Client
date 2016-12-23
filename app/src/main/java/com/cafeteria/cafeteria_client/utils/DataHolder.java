@@ -126,7 +126,7 @@ public class DataHolder {
     }
 
     public void setServerIp(String serverIp) {
-        this.serverIp = serverIp;
+        this.serverIp =  serverIp;
     }
 
     public List<Meal> getFavoriteMeals() {

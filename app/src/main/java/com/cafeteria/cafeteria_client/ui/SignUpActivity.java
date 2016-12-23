@@ -256,7 +256,7 @@ public class SignUpActivity extends AppCompatActivity {
             String jsonUser = gson.toJson(customer, Customer.class);
             URL url = null;
             try {
-                url = new URL(ApplicationConstant.USER_REGISTRATION_URL);
+                url = new URL(ApplicationConstant.getAddress(ApplicationConstant.USER_REGISTRATION_URL));
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setDoOutput(true);
                 con.setDoInput(true);

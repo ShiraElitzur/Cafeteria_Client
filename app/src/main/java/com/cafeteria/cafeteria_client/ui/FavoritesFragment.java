@@ -314,7 +314,7 @@ public class FavoritesFragment extends Fragment{
         protected String doInBackground(Void... voids) {
             StringBuilder response;
             try {
-                URL url = new URL(ApplicationConstant.GET_FAVORITE_MEALS + "?userId=" + customer.getId());
+                URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_FAVORITE_MEALS) + "?userId=" + customer.getId());
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -402,7 +402,7 @@ public class FavoritesFragment extends Fragment{
         protected String doInBackground(Void... voids) {
             StringBuilder response;
             try {
-                URL url = new URL(ApplicationConstant.GET_FAVORITE_ITEMS + "?userId=" + customer.getId());
+                URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_FAVORITE_ITEMS) + "?userId=" + customer.getId());
                 response = new StringBuilder();
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
