@@ -158,6 +158,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
                 .setAction(getString(R.string.snack_bar_action_text), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        finish();
                         Intent orderActivityIntent = new Intent(CategoryItemsActivity.this,OrderActivity.class);
                         startActivity(orderActivityIntent);
                     }
@@ -274,6 +275,7 @@ public class CategoryItemsActivity extends AppCompatActivity implements OnDialog
         DataHolder dataHolder = DataHolder.getInstance();
         dataHolder.addMealToOrder(orderedMeal);
         updateOrderInSharedPreferences();
+        finish();
         Intent orderActivityIntent = new Intent(CategoryItemsActivity.this,OrderActivity.class);
         startActivity(orderActivityIntent);
     }

@@ -99,6 +99,7 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
         tvCafeteriaName = (TextView) findViewById(R.id.tvCafeteriaName);
         tvCafeteriaName.setText(DataHolder.getInstance().getCafeteria().getCafeteriaName());
 
+
         navigationView.setCheckedItem(R.id.navigation_item_cafeteria_menu);
     }
 
@@ -171,6 +172,7 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
         DataHolder dataHolder = DataHolder.getInstance();
         dataHolder.addMealToOrder(meal);
         updateOrderInSharedPreferences();
+        finish();
         Intent orderActivityIntent = new Intent(this, OrderActivity.class);
         startActivity(orderActivityIntent);
     }
@@ -191,6 +193,7 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
                 .setAction(getString(R.string.snack_bar_action_text), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        finish();
                         Intent orderActivityIntent = new Intent(MainActivity.this, OrderActivity.class);
                         startActivity(orderActivityIntent);
                     }

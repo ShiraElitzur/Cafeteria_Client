@@ -145,6 +145,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                     case R.id.navigation_item_about:
                         intent = new Intent(DrawerActivity.this,AboutActivity.class);
                         startActivity(intent);
+                        DrawerActivity.this.finish();
                         break;
                     case R.id.navigation_item_langauge:
 

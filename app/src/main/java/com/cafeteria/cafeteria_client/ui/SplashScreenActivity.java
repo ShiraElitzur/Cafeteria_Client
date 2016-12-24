@@ -60,7 +60,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private int mCounter = 0;
 
-    private static final int SPLASH_TIME = 1500;
+    private static final int SPLASH_TIME = 1000;
     private ProgressBar progressBar;
     private TextView tvStatus;
     private AlertDialog alertDialog;
