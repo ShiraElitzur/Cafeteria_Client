@@ -175,12 +175,15 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         break;
                     case R.id.navigation_item_change_cafeteria:
                         String orderJSON = sharedPreferences.getString("order", "");
-                        Order order = new Gson().fromJson(orderJSON,Order.class);
-                        if (order.getItems().size() > 0 || order.getMeals().size() > 0){
-                            emptyCartAlert();
-                        } else{
+                        if (orderJSON.equals("")){
                             changeCafeteria();
+                        } else{
+                            Order order = new Gson().fromJson(orderJSON,Order.class);
+                            if (order.getItems().size() > 0 || order.getMeals().size() > 0){
+                                emptyCartAlert();
+                            }
                         }
+
                         break;
                     default:
                         break;
@@ -222,8 +225,8 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                 .setPositiveButton(getString(R.string.empty_cart_postive), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
                         changeCafeteria();
+                        dialog.dismiss();
                     }
 
                 })

@@ -312,6 +312,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         BigDecimal bd = new BigDecimal(order.getPayment());
         bd = bd.setScale(1, RoundingMode.HALF_DOWN);
         itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + bd + " " + nis.getSymbol());
+        itemTIme.setTitle(order.getPickupTime());
         return super.onCreateOptionsMenu(menu);
     }
 

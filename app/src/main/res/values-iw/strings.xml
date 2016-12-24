@@ -40,7 +40,7 @@
     <string name="or">או</string>
     <string name="com_facebook_loginview_log_out_button">התנתק</string>
     <string name="com_facebook_loginview_log_in_button">התחבר</string>
-    <string name="com_facebook_loginview_log_in_button_long">התחבר עם פייסבוק</string>
+    <string name="com_facebook_loginview_log_in_button_long">היכנס עם פייסבוק</string>
     <string name="forgot_password">שכחתי סיסמה</string>
     <!--Login Activity End-->
 

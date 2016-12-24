@@ -67,20 +67,23 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
         //getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
 
         // On MainActivity's first launch we create a new Order for this session
-        if (firstLaunch) {
-            firstLaunch = false;
+//        if (firstLaunch) {
+//            firstLaunch = false;
             // get the logged customer from the shared preferences
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String order = sharedPreferences.getString("order", "");
-            if (order.isEmpty()){
+            if (order.equals("")){
                 DataHolder.getInstance().setTheOrder(new Order());
                 DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
                 DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("order", new Gson().toJson(DataHolder.getInstance().getTheOrder()));
+                editor.apply();
             } else{
                 DataHolder.getInstance().setTheOrder(new Gson().fromJson(order,Order.class));
             }
 
-        }
+//        }
         rlNotification = (LinearLayout) findViewById(R.id.rlNotification);
         tvReadyOrderNumber = (TextView)findViewById(R.id.tvReadyOrderNumber);
         //ibReadyOrder = (ImageButton) findViewById(R.id.ibReadyOrder);
@@ -94,7 +97,7 @@ public class MainActivity extends DrawerActivity implements OnDialogResultListen
         });
 
         tvCafeteriaName = (TextView) findViewById(R.id.tvCafeteriaName);
-        tvCafeteriaName.setText(getString(R.string.active_cafeteria) + " " + DataHolder.getInstance().getCafeteria().getCafeteriaName());
+        tvCafeteriaName.setText(DataHolder.getInstance().getCafeteria().getCafeteriaName());
 
         navigationView.setCheckedItem(R.id.navigation_item_cafeteria_menu);
     }

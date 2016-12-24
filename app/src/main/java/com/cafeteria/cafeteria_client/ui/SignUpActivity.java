@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputLayout;
@@ -216,6 +217,10 @@ public class SignUpActivity extends AppCompatActivity {
                 SignUpActivity.this.finish();
             }
         });
+
+        TextView signUpAppTitle = (TextView) findViewById(R.id.signUpAppTitle);
+        Typeface type = Typeface.DEFAULT.createFromAsset(getAssets(),"fonts/PatuaOne-Regular.ttf");
+        signUpAppTitle.setTypeface(type);
     }
 
 
