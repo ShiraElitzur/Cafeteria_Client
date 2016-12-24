@@ -46,7 +46,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:text="@string/app_name"
                 android:gravity="center"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorHeadlines"
                 android:layout_marginLeft="10dp"
                 android:textSize="@dimen/headLines3"
                 android:layout_toStartOf="@id/imageView"/>
@@ -121,6 +121,7 @@
             </View>
 
             <android.support.design.widget.TabLayout
+                app:tabIndicatorColor="@color/colorHeadlines"
                 app:tabIndicatorHeight="3dp"
                 android:id="@+id/tablayout"
                 android:layout_width="match_parent"

@@ -25,8 +25,8 @@
     <color name="colorPrimaryDark">#851722</color>
     <color name="colorPrimaryLightOpacity">#d4d02333</color>
     <color name="colorPrimaryLight">#d18c77</color>
-    <!--<color name="colorAccent">#ff9e80</color>-->
-    <color name="colorAccent">#ffffff</color>
+    <color name="colorAccent">#ff9e80</color>
+    <!--<color name="colorAccent">#ffffff</color>-->
 
     <color name="colorIconBg0">#aa4992b1</color>
     <color name="colorIconBg1">#aae16098</color>

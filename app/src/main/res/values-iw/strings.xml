@@ -154,7 +154,7 @@
     <string name="history_comment_title">הערה-</string>
     <string name="history_drink_title">שתייה-</string>
     <string name="history_pick_date">בחר תאריך</string>
-    <string name="history_showing">מציג 30 הזמנות אחרונות</string>
+    <string name="history_showing">מציג עד 30 הזמנות אחרונות</string>
     <string name="history_show_date">מציג הזמנות מתאריכים </string>
     <string name="history_start_date">תאריך התחלה</string>
     <string name="history_end_date">תאריך סוף</string>

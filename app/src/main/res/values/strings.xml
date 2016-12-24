@@ -167,7 +167,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="history_pick_date">Pick date</string>
-    <string name="history_showing">Showing last 30 orders</string>
+    <string name="history_showing">Showing up to 30 last orders</string>
     <string name="history_show_date">Showing orders from </string>
     <string name="history_start_date">Start Date</string>
     <string name="history_end_date">End Date</string>
