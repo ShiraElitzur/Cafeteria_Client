@@ -32,6 +32,7 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
+import com.paypal.android.sdk.payments.PayPalAuthorization;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalProfileSharingActivity;
 
@@ -218,7 +219,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
         if (LoginManager.getInstance() != null){
             LoginManager.getInstance().logOut();
         }
-
 
         intent = new Intent(DrawerActivity.this,LoginActivity.class);
         startActivity(intent);

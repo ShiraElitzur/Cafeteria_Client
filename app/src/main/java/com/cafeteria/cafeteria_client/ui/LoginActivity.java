@@ -337,6 +337,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         } else {
             Log.d(TAG,"Couldn't sign in");
+            Log.d(TAG,"" + result.getStatus());
             // Signed out, show unauthenticated UI.
 
         }
@@ -794,7 +795,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         new ResultCallback<Status>() {
                             @Override
                             public void onResult(Status status) {
-                                Log.d("GOOGLE", "cliend signed out");
+                                Log.d(TAG, "cliend signed out");
+                                Log.d(TAG, "status " + status.getStatusMessage());
                             }
                         });
             }

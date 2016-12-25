@@ -75,6 +75,7 @@ public class PayPalActivity extends AppCompatActivity {
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
 
     // note that these credentials will differ between live & sandbox environments.
+//    private static final String CONFIG_CLIENT_ID = "AefDDZZI-nSbEGIRzmSE7bMSYdp1ka7IY6DbCQOcsrdHqylFyAeYLkEbvY0vdwVTCnLVmoHrlQOlmLfc";
     private static final String CONFIG_CLIENT_ID = "AefDDZZI-nSbEGIRzmSE7bMSYdp1ka7IY6DbCQOcsrdHqylFyAeYLkEbvY0vdwVTCnLVmoHrlQOlmLfc";
 
     private static final int REQUEST_CODE_PAYMENT = 1;
@@ -85,7 +86,7 @@ public class PayPalActivity extends AppCompatActivity {
             .environment(CONFIG_ENVIRONMENT)
             .clientId(CONFIG_CLIENT_ID)
             // The following are only used in PayPalFuturePaymentActivity.
-            .merchantName("Example Merchant")
+            .merchantName("Time2eaT")
             .merchantPrivacyPolicyUri(Uri.parse("https://www.example.com/privacy"))
             .merchantUserAgreementUri(Uri.parse("https://www.example.com/legal"));
 
@@ -324,6 +325,8 @@ public class PayPalActivity extends AppCompatActivity {
          */
 
     }
+
+
 //
 //    public void onFuturePaymentPurchasePressed(View pressed) {
 //        // Get the Client Metadata ID from the SDK

@@ -246,6 +246,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
+        db.close();
         return orderList;
     }
 
@@ -316,6 +317,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
+        db.close();
         return orderList;
     }
 
@@ -372,6 +374,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
+        db.close();
         return orderList;
     }
 
