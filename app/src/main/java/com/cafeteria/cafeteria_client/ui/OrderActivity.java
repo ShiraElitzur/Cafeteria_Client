@@ -196,7 +196,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 MyApplicationClass app = (MyApplicationClass)getApplication();
                 LocalDBHandler db = app.getLocalDB();
                 db.insertOrder(order);
-                //saveOrderInLocalStorage();
+                saveOrderInLocalStorage();
                 new SendOrderToServer().execute();
 
                 DataHolder.getInstance().setTheOrder(new Order());
@@ -214,8 +214,8 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         }
     }
 
-//    public void saveOrderInLocalStorage() {
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    public void saveOrderInLocalStorage() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //        String payedOrdersString = sharedPreferences.getString("payedOrders", "");
 //        List<Order> payedOrders;
 //        if (payedOrdersString.isEmpty()){
@@ -227,12 +227,24 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 //        }
 //
 //        if( order != null ) {
+//            Log.e("DEBUG","order ref - " + order);
 //            payedOrders.add(order);
 //            SharedPreferences.Editor editor = sharedPreferences.edit();
 //            editor.putString("payedOrders", new Gson().toJson(payedOrders));
 //            editor.apply();
 //        }
-//    }
+        String payedOrdersCounterString = sharedPreferences.getString("payedOrdersCounter","");
+        int counter;
+        if( payedOrdersCounterString.isEmpty()) {
+            counter = 1;
+        } else {
+            counter = Integer.parseInt(payedOrdersCounterString);
+            counter++;
+        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("payedOrdersCounter", counter+"");
+        editor.apply();
+    }
 
     private class SendOrderToServer extends AsyncTask<String, Void, Boolean> {
 

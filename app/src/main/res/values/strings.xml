@@ -217,6 +217,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout_dialog_alert">Pay Attention</string>
+    <string name="logout_dialog_message">If you will log out we wont be able to sent you a notification when your order is ready!</string>
+    <string name="logout_dialog_negative">Stay logged in</string>
+    <string name="logout_dialog_postive">Logout</string>
 
     <!--Change Cafeteria Dialog-->
     <string name="empty_cart_dialog_title">Change Cafeteria</string>

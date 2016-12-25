@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +50,7 @@ public class OrderReadyActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private Button btnDelivered;
     private Customer c;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +93,43 @@ public class OrderReadyActivity extends AppCompatActivity {
 
         if( orderNumber > 0 ) {
             readyOrders.add(orderNumber);
-            readyOrdersForUsers.put(c.getId(),readyOrders);
+
+            String payedOrdersCounterString = sharedPreferences.getString("payedOrdersCounter","");
+            int counter;
+            if( payedOrdersCounterString.isEmpty()) {
+                counter = 0;
+            } else {
+                counter = Integer.parseInt(payedOrdersCounterString);
+                counter--;
+            }
             SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("payedOrdersCounter", counter+"");
+            editor.apply();
+
+//            // get the payed orders from the shared preferences and delete the ready order from it
+//            String payedOrdersString = sharedPreferences.getString("payedOrders", "");
+//            List<Order> payedOrders;
+//            Type listType = new TypeToken<ArrayList<Order>>() {
+//            }.getType();
+//            payedOrders = new Gson().fromJson(payedOrdersString,listType);
+//            if( payedOrders!= null && payedOrders.size() > 0) {
+//                Order orderToDelete = null;
+//                for( Order order : payedOrders ) {
+//                    Log.e("DEBUG","order id = "+ order.getId());
+//                    if(order.getId() == orderNumber) {
+//                        orderToDelete = order;
+//                    }
+//                }
+//                if(orderToDelete != null) {
+//                    payedOrders.remove(orderToDelete);
+//                    editor = sharedPreferences.edit();
+//                    editor.putString("payedOrders", new Gson().toJson(payedOrders));
+//                    editor.apply();
+//                }
+//            }
+
+            readyOrdersForUsers.put(c.getId(),readyOrders);
+            editor = sharedPreferences.edit();
             editor.putString("readyOrdersForUsers", new Gson().toJson(readyOrdersForUsers));
             editor.apply();
             //DataHolder.getInstance().addReadyOrder(orderNumber);
@@ -121,7 +158,7 @@ public class OrderReadyActivity extends AppCompatActivity {
 
                 readyOrders.remove(Integer.valueOf(orderNumber));
                 readyOrdersForUsers.put(c.getId(),readyOrders);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor = sharedPreferences.edit();
                 editor.putString("readyOrdersForUsers", new Gson().toJson(readyOrdersForUsers));
                 editor.apply();
 

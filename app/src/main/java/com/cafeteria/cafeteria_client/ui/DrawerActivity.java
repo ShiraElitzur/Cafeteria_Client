@@ -3,6 +3,7 @@ package com.cafeteria.cafeteria_client.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -126,21 +128,30 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         DrawerActivity.this.finish();
                         break;
                     case R.id.navigation_item_log_out:
-
-                        editor.remove("customer");
-                        editor.apply();
-                        DataHolder.getInstance().setFavoriteMeals(null);
-                        DataHolder.getInstance().setFavoriteItems(null);
-
-                        LoginActivity.googleSignOut();
-
-                        FacebookSdk.sdkInitialize(getApplicationContext());
-                        if (LoginManager.getInstance() != null){
-                            LoginManager.getInstance().logOut();
+                        String payedOrdersCounterString = sharedPreferences.getString("payedOrdersCounter","");
+                        int counter;
+                        if( !payedOrdersCounterString.isEmpty()) {
+                            counter = Integer.parseInt(payedOrdersCounterString);
+                            if( counter > 0 ) {
+                                new AlertDialog.Builder(DrawerActivity.this)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle(getString(R.string.logout_dialog_alert))
+                                .setMessage(getString(R.string.logout_dialog_message))
+                                .setPositiveButton(getString(R.string.logout_dialog_postive),new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        editor.remove("payedOrdersCounter");
+                                        logout();
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.logout_dialog_negative), null)
+                                .show();
+                            } else {
+                                logout();
+                            }
+                        } else {
+                            logout();
                         }
-                        intent = new Intent(DrawerActivity.this,LoginActivity.class);
-                        startActivity(intent);
-                        DrawerActivity.this.finish();
                         break;
                     case R.id.navigation_item_about:
                         intent = new Intent(DrawerActivity.this,AboutActivity.class);
@@ -188,12 +199,30 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         break;
                     default:
                         break;
-
                 }
 
                 return true;
             }
         });
+    }
+
+    public void logout() {
+        editor.remove("customer");
+        editor.apply();
+        DataHolder.getInstance().setFavoriteMeals(null);
+        DataHolder.getInstance().setFavoriteItems(null);
+
+        LoginActivity.googleSignOut();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        if (LoginManager.getInstance() != null){
+            LoginManager.getInstance().logOut();
+        }
+
+
+        intent = new Intent(DrawerActivity.this,LoginActivity.class);
+        startActivity(intent);
+        DrawerActivity.this.finish();
     }
 
     @Override
