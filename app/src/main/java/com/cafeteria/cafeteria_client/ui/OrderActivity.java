@@ -18,9 +18,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -77,6 +82,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     private List<Item> orderedItems;
     private ArrayAdapter mealsAdapter;
     private Cafeteria cafeteria;
+    private LinearLayout llOrderInProgress;
+    private RelativeLayout rlPayList;
+    private boolean showMenu = true;
 
     /**
      * The ActionBar MenuItem that displays the amount to pay
@@ -180,6 +188,15 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         Log.e("CAFETERIA", DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.HOUR_OF_DAY) + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.MINUTE));
         Log.e("CAFETERIA", DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.HOUR_OF_DAY) + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.MINUTE));
 
+        rlPayList = (RelativeLayout)findViewById(R.id.rlPayList);
+        llOrderInProgress = (LinearLayout)findViewById(R.id.llOrderInProgress);
+        ImageView animationTarget = (ImageView) this.findViewById(R.id.ivFirstAnim);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_around_center_point);
+        animationTarget.startAnimation(animation);
+        animationTarget = (ImageView) this.findViewById(R.id.ivSecondAnim);
+        animation = AnimationUtils.loadAnimation(this, R.anim.rotate_around_center_point);
+        animationTarget.startAnimation(animation);
     }
 
     @Override
@@ -207,9 +224,14 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 editor.remove("order");
                 editor.apply();
 
-                finish();
-                Intent homeActivity = new Intent(OrderActivity.this,MainActivity.class);
-                startActivity(homeActivity);
+                llOrderInProgress.setVisibility(View.VISIBLE);
+                rlPayList.setVisibility(View.INVISIBLE);
+                showMenu = false;
+                invalidateOptionsMenu();
+//                finish();
+//                Intent homeActivity = new Intent(OrderActivity.this,MainActivity.class);
+//                startActivity(homeActivity);
+
             }
         }
     }
@@ -318,13 +340,15 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.order_items_menu, menu);
-        itemBill = (MenuItem) menu.findItem(R.id.itemBill);
-        itemTIme = (MenuItem) menu.findItem(R.id.itemTIme);
-        BigDecimal bd = new BigDecimal(order.getPayment());
-        bd = bd.setScale(1, RoundingMode.HALF_DOWN);
-        itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + bd + " " + nis.getSymbol());
-        itemTIme.setTitle(order.getPickupTime());
+        if( showMenu ) {
+            getMenuInflater().inflate(R.menu.order_items_menu, menu);
+            itemBill = (MenuItem) menu.findItem(R.id.itemBill);
+            itemTIme = (MenuItem) menu.findItem(R.id.itemTIme);
+            BigDecimal bd = new BigDecimal(order.getPayment());
+            bd = bd.setScale(1, RoundingMode.HALF_DOWN);
+            itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + bd + " " + nis.getSymbol());
+            itemTIme.setTitle(order.getPickupTime());
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
