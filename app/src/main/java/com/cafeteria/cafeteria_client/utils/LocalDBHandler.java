@@ -292,6 +292,38 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         return orderList;
     }
 
+    public double getPaymentForMonth( int month, int userId ) {
+        double payment = 0;
+        SQLiteDatabase db = getReadableDatabase();
+        Calendar first = Calendar.getInstance();
+        first.set(Calendar.MONTH, month);
+        first.set(Calendar.DAY_OF_MONTH,1);
+        Calendar last = Calendar.getInstance();
+        last.set(Calendar.MONTH, month);
+        last.set(Calendar.DAY_OF_MONTH,30);
+        //c.set(Calendar.DAY_OF_MONTH, 1);
+        month++;
+        String monthString = month+"";
+        Log.e("DEBUG","order for month - " + month);
+
+        SimpleDateFormat toDate = new SimpleDateFormat(ApplicationConstant.DATE_TIME_SQLITE_FORMAT);
+        String dateStartTxt = toDate.format(first.getTime());
+        String dateEndTxt = toDate.format(last.getTime());
+
+//        Log.e("DEBUG","orders from - " + dateStartTxt + " to - " +dateEndTxt);
+        String query = "SELECT SUM("+PRICE_COL+") FROM " + ORDERS_TABLE_NAME +" WHERE " + USER_ID_COL + " = "+userId +
+                " AND "+ CAFETERIA_ID_COL +" = " + DataHolder.getInstance().getCafeteria().getId()+
+                " AND "+ DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
+                + "'" + dateEndTxt + "'";
+        Cursor cursor = db.rawQuery(query,null);
+        if (cursor != null && cursor.moveToFirst()) {
+            payment = cursor.getDouble(0); //The 0 is the column index, we only have 1 column, so the index is 0
+        }
+        cursor.close();
+        Log.e("DEBUG","payment for month - " + payment);
+        return payment;
+    }
+
     public List<Order> selectOrdersByDate(int userId, Calendar dateStart, Calendar dateEnd) {
 
         dateStart.add(Calendar.DATE,-1);

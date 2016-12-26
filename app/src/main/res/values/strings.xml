@@ -234,6 +234,7 @@
     <string name="favorite_items">Favorite Items:</string>
 
     <string name="server_client_id">577951281609-kfltsqcajfqla2mbam01vhc36nmatuds.apps.googleusercontent.com</string>
+    <string name="graph_title">Graph of payment in the last 5 months</string>
 
 
 </resources>

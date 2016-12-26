@@ -199,6 +199,7 @@
     <string name="empty_cart_message">עגלת הקניות לא ריקה. בהחלפת קפיטריה לא יישמרו הפריטים.</string>
     <string name="empty_cart_postive">החלף קפיטריה</string>
     <string name="empty_cart_negative">ביטול</string>
+    <string name="graph_title">גרף תשלומים ב5 החודשים האחרונים</string>
     <!--Change Cafeteria Dialog End-->
 
     <string name="favorite_meals">ארוחות מועדפות:</string>
