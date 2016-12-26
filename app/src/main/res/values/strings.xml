@@ -230,6 +230,9 @@
     <string name="empty_cart_negative">Cancel</string>
     <!--Change Cafeteria Dialog End-->
 
+    <string name="favorite_meals">Favorite Meals:</string>
+    <string name="favorite_items">Favorite Items:</string>
+
     <string name="server_client_id">577951281609-kfltsqcajfqla2mbam01vhc36nmatuds.apps.googleusercontent.com</string>
 
 

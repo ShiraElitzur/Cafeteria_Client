@@ -45,7 +45,7 @@ package com.cafeteria.cafeteria_client.ui;
 /**
  * Created by Shira Elitzur on 08/09/2016.
  */
-public class FavoritesFragment extends Fragment{
+public class FavoritesFragment extends Fragment {
 
     private List<Meal> favoriteMeals;
     private List<Item> favoriteItems;
@@ -58,8 +58,10 @@ public class FavoritesFragment extends Fragment{
     //    private LinearLayout llSpecials;
     private int colorIndex = -1;
     private View v;
+    private TextView tvFavoriteItems;
+    private TextView tvFavoriteMeals;
 
-    public FavoritesFragment () {
+    public FavoritesFragment() {
 
     }
 
@@ -73,15 +75,17 @@ public class FavoritesFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v =  inflater.inflate(R.layout.favorites_fragment, container, false);
+        v = inflater.inflate(R.layout.favorites_fragment, container, false);
 
         favoriteMeals = DataHolder.getInstance().getFavoriteMeals();
         favoriteItems = DataHolder.getInstance().getFavoriteItems();
 
-        llFavorites = (LinearLayout)v.findViewById(R.id.llFavorites);
+        llFavorites = (LinearLayout) v.findViewById(R.id.llFavorites);
         rvMeals = (RecyclerView) v.findViewById(R.id.rvFavorites);
         rvItems = (RecyclerView) v.findViewById(R.id.rvItems);
         rlEmptyView = (RelativeLayout) v.findViewById(R.id.rlEmptyView);
+        tvFavoriteItems = (TextView) v.findViewById(R.id.tvFavoriteItems);
+        tvFavoriteMeals = (TextView) v.findViewById(R.id.tvFavoriteMeals);
 
         colors = new ArrayList<>();
         colors.add(R.color.colorIconBg0);
@@ -90,31 +94,34 @@ public class FavoritesFragment extends Fragment{
         colors.add(R.color.colorIconBg3);
         colors.add(R.color.colorIconBg4);
 
-        if(favoriteMeals == null && favoriteItems == null ) {
+        if (favoriteMeals == null && favoriteItems == null) {
             GetFavoriteItemsTask itemsTask = new GetFavoriteItemsTask(getActivity());
             itemsTask.execute();
             return v;
         }
 
-        if( favoriteMeals != null ) {
+        if (favoriteMeals != null) {
             rvMeals.setAdapter(new FavoritesRecyclerViewAdapter(getActivity(), favoriteMeals));
             rvMeals.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
-        if ( favoriteItems != null ) {
-            rvItems.setAdapter(new FavoriteItemsRecyclerViewAdapter(getActivity(),favoriteItems));
-            rvItems.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        if (favoriteItems != null) {
+            rvItems.setAdapter(new FavoriteItemsRecyclerViewAdapter(getActivity(), favoriteItems));
+            rvItems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         }
-
-
-        if( (favoriteMeals == null && favoriteItems == null) ||
-                (favoriteMeals.size() < 1 && favoriteItems.size() < 1) ) {
+        if ((favoriteMeals == null && favoriteItems == null) ||
+                (favoriteMeals.size() == 0 && favoriteItems.size() == 0)) {
             rlEmptyView.setVisibility(View.VISIBLE);
+        } else {
+            if (favoriteItems != null && favoriteItems.size() == 0) {
+                tvFavoriteItems.setVisibility(View.GONE);
+            }
+            if (favoriteMeals != null && favoriteMeals.size() == 0) {
+                tvFavoriteMeals.setVisibility(View.GONE);
+            }
         }
         return v;
     }
-
-
 
 
     public class FavoritesRecyclerViewAdapter extends RecyclerView.Adapter<FavoritesRecyclerViewAdapter.CustomViewHolder> {
@@ -162,7 +169,7 @@ public class FavoritesFragment extends Fragment{
                 this.title = (TextView) view.findViewById(R.id.tvFavoriteTitle);
                 this.llFavoriteCard = (LinearLayout) view.findViewById(R.id.llFavoriteCard);
 
-                if( colorIndex == 4 ) {
+                if (colorIndex == 4) {
                     colorIndex = -1;
                 }
 
@@ -180,7 +187,7 @@ public class FavoritesFragment extends Fragment{
                     public void onClick(View view) {
                         int position = getAdapterPosition();
                         Meal meal = favoriteMeals.get(position);
-                        Log.e("FAVORITES","Click on meal " + meal.getTitle());
+                        Log.e("FAVORITES", "Click on meal " + meal.getTitle());
                         FragmentManager fm = getFragmentManager();
                         MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
                         Bundle args = new Bundle();
@@ -197,7 +204,7 @@ public class FavoritesFragment extends Fragment{
             public void onClick(View view) {
                 int position = getAdapterPosition();
                 Meal meal = favoriteMeals.get(position);
-                Log.e("FAVORITES","Click on meal " + meal.getTitle());
+                Log.e("FAVORITES", "Click on meal " + meal.getTitle());
                 FragmentManager fm = getFragmentManager();
                 MealDetailsDialog mealDetailsDialog = new MealDetailsDialog();
                 Bundle args = new Bundle();
@@ -230,7 +237,7 @@ public class FavoritesFragment extends Fragment{
         public void onBindViewHolder(CustomViewHolder holder, int position) {
             Item favorite = favoriteItems.get(position);
             holder.title.setText(favorite.getTitle());
-            holder.tvItemPrice.setText(""+favorite.getPrice());
+            holder.tvItemPrice.setText("" + favorite.getPrice());
         }
 
 
@@ -254,7 +261,7 @@ public class FavoritesFragment extends Fragment{
                 this.rlFavoriteItem = (LinearLayout) view.findViewById(R.id.rlFavoriteItem);
                 this.tvItemPrice = (TextView) view.findViewById(R.id.tvItemPrice);
 
-                if( colorIndex == 4 ) {
+                if (colorIndex == 4) {
                     colorIndex = -1;
                 }
 
@@ -276,7 +283,7 @@ public class FavoritesFragment extends Fragment{
                     @Override
                     public void onClick(View v) {
                         int qty = Integer.parseInt(CustomViewHolder.this.tvQty.getText().toString());
-                        if (qty > 1){
+                        if (qty > 1) {
                             qty--;
                             CustomViewHolder.this.tvQty.setText(String.valueOf(qty));
                         }
@@ -294,7 +301,7 @@ public class FavoritesFragment extends Fragment{
                         showSnackBar();
 
                         DataHolder dataHolder = DataHolder.getInstance();
-                        for (int i=0; i < qty;i++){
+                        for (int i = 0; i < qty; i++) {
 
                             OrderedItem orderedItem = new OrderedItem();
                             orderedItem.setParentItem(item);
@@ -309,7 +316,6 @@ public class FavoritesFragment extends Fragment{
             }
         }
     }
-
 
 
     private class GetFavoriteMealsTask extends AsyncTask<Void, Void, String> {
@@ -375,189 +381,198 @@ public class FavoritesFragment extends Fragment{
 
                 favoriteItems = DataHolder.getInstance().getFavoriteItems();
 
-                if ( favoriteItems != null ) {
-                    rvItems.setAdapter(new FavoriteItemsRecyclerViewAdapter(getActivity(),favoriteItems));
-                    rvItems.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                if (favoriteItems != null) {
+                    rvItems.setAdapter(new FavoriteItemsRecyclerViewAdapter(getActivity(), favoriteItems));
+                    rvItems.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                 }
 
                 favoriteMeals = DataHolder.getInstance().getFavoriteMeals();
 
-                if( favoriteMeals != null ) {
+                if (favoriteMeals != null) {
                     rvMeals.setAdapter(new FavoritesRecyclerViewAdapter(getActivity(), favoriteMeals));
                     rvMeals.setLayoutManager(new LinearLayoutManager(getActivity()));
                 }
 
-                if( (favoriteMeals == null && favoriteItems == null) ||
-                        (favoriteMeals.size() < 1 && favoriteItems.size() < 1) ) {
+                if ((favoriteMeals == null && favoriteItems == null) ||
+                        (favoriteMeals != null && favoriteMeals.size() == 0
+                                && favoriteItems != null && favoriteItems.size() == 0)) {
                     rlEmptyView.setVisibility(View.VISIBLE);
+                } else {
+                    if (favoriteItems != null && favoriteItems.size() == 0) {
+                        tvFavoriteItems.setVisibility(View.GONE);
+                    }
+
+                    if (favoriteMeals != null && favoriteMeals.size() == 0) {
+                        tvFavoriteMeals.setVisibility(View.GONE);
+                    }
                 }
             }
         }
     }
 
-    private class GetFavoriteItemsTask extends AsyncTask<Void, Void, String> {
+        private class GetFavoriteItemsTask extends AsyncTask<Void, Void, String> {
 
-        Customer customer;
-        Context c;
+            Customer customer;
+            Context c;
 
-        public GetFavoriteItemsTask( Context c ) {
-            this.c = c;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-            String customerString = sharedPreferences.getString("customer", "");
-            if (customerString != null && !customerString.equals("")) {
-                Gson gson = new Gson();
-                customer = gson.fromJson(customerString, Customer.class);
-                Log.e("DEBUG", " in fragment! customer: " + customerString);
+            public GetFavoriteItemsTask(Context c) {
+                this.c = c;
             }
-        }
 
-        @Override
-        protected String doInBackground(Void... voids) {
-            StringBuilder response;
-            try {
-                URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_FAVORITE_ITEMS) + "?userId=" + customer.getId());
-                response = new StringBuilder();
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    Log.e("DEBUG", " in fragment! getFavoriteItems " + conn.getResponseCode() + " : " + conn.getResponseMessage());
+            @Override
+            protected void onPreExecute() {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                String customerString = sharedPreferences.getString("customer", "");
+                if (customerString != null && !customerString.equals("")) {
+                    Gson gson = new Gson();
+                    customer = gson.fromJson(customerString, Customer.class);
+                    Log.e("DEBUG", " in fragment! customer: " + customerString);
+                }
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                StringBuilder response;
+                try {
+                    URL url = new URL(ApplicationConstant.getAddress(ApplicationConstant.GET_FAVORITE_ITEMS) + "?userId=" + customer.getId());
+                    response = new StringBuilder();
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                        Log.e("DEBUG", " in fragment! getFavoriteItems " + conn.getResponseCode() + " : " + conn.getResponseMessage());
+                        return null;
+                    }
+
+                    Log.e("DEBUG", " in fragment! after connection");
+
+                    BufferedReader input = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream()));
+
+                    String line;
+                    while ((line = input.readLine()) != null) {
+                        response.append(line + "\n");
+                    }
+
+                    input.close();
+
+                    conn.disconnect();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                     return null;
                 }
+                Log.e("DEBUG", " in fragment! before return");
+                return response.toString();
+            }
 
-                Log.e("DEBUG", " in fragment! after connection");
+            @Override
+            protected void onPostExecute(String response) {
+                Log.e("DEBUG", " in fragment! on post before check if null");
+                if (response != null) {
+                    Log.e("DEBUG", " in fragment! on post after check if null");
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<ArrayList<Item>>() {
+                    }.getType();
+                    List<Item> favoriteItems = (ArrayList<Item>) gson.fromJson(response, listType);
+                    DataHolder.getInstance().setFavoriteItems(favoriteItems);
+                    Log.e("FAVORITES", " in fragment! items size: " + favoriteItems.size());
+                    for (Item item : favoriteItems) {
+                        Log.e("FAVORITES", " in fragment! item - " + item.getTitle());
+                    }
 
-                BufferedReader input = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream()));
 
-                String line;
-                while ((line = input.readLine()) != null) {
-                    response.append(line + "\n");
+                    GetFavoriteMealsTask mealsTask = new GetFavoriteMealsTask();
+                    mealsTask.execute();
+
                 }
+            }
+        }
 
-                input.close();
+        public class ItemsListAdapter extends BaseAdapter {
 
-                conn.disconnect();
+            List<Item> items;
+            Context context;
+            int layout;
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            public ItemsListAdapter(Context context, List<Item> items, int layout) {
+                this.context = context;
+                this.items = items;
+                this.layout = layout;
+            }
+
+            @Override
+            public int getCount() {
+                if (items != null) {
+                    return items.size();
+                } else {
+                    return 0;
+                }
+            }
+
+            @Override
+            public Object getItem(int i) {
                 return null;
             }
-            Log.e("DEBUG", " in fragment! before return");
-            return response.toString();
-        }
 
-        @Override
-        protected void onPostExecute(String response) {
-            Log.e("DEBUG", " in fragment! on post before check if null");
-            if (response != null) {
-                Log.e("DEBUG", " in fragment! on post after check if null");
-                Gson gson = new Gson();
-                Type listType = new TypeToken<ArrayList<Item>>() {
-                }.getType();
-                List<Item> favoriteItems = (ArrayList<Item>) gson.fromJson(response, listType);
-                DataHolder.getInstance().setFavoriteItems(favoriteItems);
-                Log.e("FAVORITES", " in fragment! items size: " + favoriteItems.size());
-                for (Item item : favoriteItems) {
-                    Log.e("FAVORITES", " in fragment! item - " + item.getTitle());
-                }
-
-
-                GetFavoriteMealsTask mealsTask = new GetFavoriteMealsTask();
-                mealsTask.execute();
-
-            }
-        }
-    }
-
-    public class ItemsListAdapter extends BaseAdapter {
-
-        List<Item> items;
-        Context context;
-        int layout;
-
-        public ItemsListAdapter(Context context, List<Item> items, int layout){
-            this.context = context;
-            this.items = items;
-            this.layout = layout;
-        }
-
-        @Override
-        public int getCount() {
-            if( items != null ){
-                return items.size();
-            } else {
+            @Override
+            public long getItemId(int i) {
                 return 0;
             }
-        }
 
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
+            @Override
+            public View getView(int position, View view, ViewGroup viewGroup) {
+                final ViewHolder holder;
+                final Item item;
 
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
+                if (view == null) {
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    view = inflater.inflate(layout, viewGroup, false);
 
-        @Override
-        public View getView(int position, View view, ViewGroup viewGroup) {
-            final ViewHolder holder;
-            final Item item;
+                    // find the UI components of the cell
+                    holder = new ViewHolder();
+                    holder.title = (TextView) view.findViewById(R.id.tvFavoriteItem);
 
-            if(view == null) {
-                LayoutInflater inflater = getActivity().getLayoutInflater();
-                view = inflater.inflate(layout, viewGroup, false);
+                    view.setTag(holder);
+                } else {
+                    holder = (ViewHolder) view.getTag();
 
-                // find the UI components of the cell
-                holder = new ViewHolder();
-                holder.title = (TextView) view.findViewById(R.id.tvFavoriteItem);
+                }
 
-                view.setTag(holder);
-            } else {
-                holder = (ViewHolder)view.getTag();
-
+                // change the components to fit the current item that the cell should display
+                item = items.get(position);
+                holder.title.setText(item.getTitle());
+                return view;
             }
 
-            // change the components to fit the current item that the cell should display
-            item = items.get(position);
-            holder.title.setText(item.getTitle());
-            return view;
+            private class ViewHolder {
+                TextView title;
+            }
         }
 
-        private class ViewHolder {
-            TextView title;
+        private void showSnackBar() {
+            Snackbar snackbar = Snackbar
+                    .make(v, getString(R.string.dialog_btn_keep_shopping_pressed), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.snack_bar_action_text), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent orderActivityIntent = new Intent(getActivity(), OrderActivity.class);
+                            startActivity(orderActivityIntent);
+                        }
+                    });
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
+            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(Color.BLACK);
+            snackbar.show();
         }
-    }
-
-    private void showSnackBar(){
-        Snackbar snackbar = Snackbar
-                .make(v, getString(R.string.dialog_btn_keep_shopping_pressed), Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.snack_bar_action_text), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent orderActivityIntent = new Intent(getActivity(),OrderActivity.class);
-                        startActivity(orderActivityIntent);
-                    }
-                });
-        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
-        View sbView = snackbar.getView();
-        sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), android.R.color.white));
-        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(Color.BLACK);
-        snackbar.show();
-    }
 
 
-    private void updateOrderInSharedPreferences(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("order", new Gson().toJson(DataHolder.getInstance().getTheOrder()));
-        editor.apply();
-    }
+        private void updateOrderInSharedPreferences() {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("order", new Gson().toJson(DataHolder.getInstance().getTheOrder()));
+            editor.apply();
+        }
 }
 
 

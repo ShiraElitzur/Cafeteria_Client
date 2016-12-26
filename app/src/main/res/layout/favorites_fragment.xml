@@ -34,11 +34,12 @@ android:id="@+id/llFavoritesMain">
         android:padding="20dp">
 
         <TextView
+            android:id="@+id/tvFavoriteItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:textSize="@dimen/headLines4"
-            android:text="פריטים שהזמנת:"/>
+            android:text="@string/favorite_items"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvItems"
@@ -58,11 +59,12 @@ android:id="@+id/llFavoritesMain">
         android:padding="20dp">
 
         <TextView
+            android:id="@+id/tvFavoriteMeals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:textSize="@dimen/headLines4"
-            android:text="ארוחות שהזמנת:"/>
+            android:text="@string/favorite_meals"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvFavorites"
