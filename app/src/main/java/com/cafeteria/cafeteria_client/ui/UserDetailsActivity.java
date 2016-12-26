@@ -212,11 +212,17 @@ public class UserDetailsActivity extends AppCompatActivity {
         imgViewUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int permission;
+                int writeExtrnalPermisson;
+                int readExtrnalPermission;
+                int cameraPermission;
 
                 if(Build.VERSION.SDK_INT < 23 ){
-                    permission = PermissionChecker.checkSelfPermission(UserDetailsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    if (permission == PermissionChecker.PERMISSION_GRANTED) {
+                    writeExtrnalPermisson = PermissionChecker.checkSelfPermission(UserDetailsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    readExtrnalPermission = PermissionChecker.checkSelfPermission(UserDetailsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                    cameraPermission = PermissionChecker.checkSelfPermission(UserDetailsActivity.this, Manifest.permission.CAMERA);
+
+                    if (writeExtrnalPermisson == PermissionChecker.PERMISSION_GRANTED && readExtrnalPermission == PermissionChecker.PERMISSION_GRANTED
+                            && cameraPermission == PermissionChecker.PERMISSION_GRANTED) {
                         takePicture();
                     } else{
                         ActivityCompat.requestPermissions(UserDetailsActivity.this,new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -225,11 +231,11 @@ public class UserDetailsActivity extends AppCompatActivity {
                         },REQUEST_EXTERNAL_STORAGE);
                     }
                 } else{ //api 23 and above
-                    permission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    int permission2 = checkSelfPermission(Manifest.permission.CAMERA);
-                    int permission3 = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-                    if (permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_DENIED
-                            || permission3 != PackageManager.PERMISSION_DENIED) {
+                    writeExtrnalPermisson = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    readExtrnalPermission = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+                    cameraPermission = checkSelfPermission(Manifest.permission.CAMERA);
+                    if (writeExtrnalPermisson != PackageManager.PERMISSION_GRANTED || readExtrnalPermission != PackageManager.PERMISSION_GRANTED
+                            || cameraPermission != PackageManager.PERMISSION_GRANTED) {
                         // We don't have permission so prompt the user
                         requestPermissions(
                                 PERMISSIONS_STORAGE,
