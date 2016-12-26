@@ -192,6 +192,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         Log.e("CAFETERIA", DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.HOUR_OF_DAY) + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.MINUTE));
         Log.e("CAFETERIA", DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.HOUR_OF_DAY) + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.MINUTE));
 
+        rlPayList = (RelativeLayout)findViewById(R.id.rlPayList);
         llOrderInProgress = (LinearLayout)findViewById(R.id.llOrderInProgress);
         ImageView animationTarget = (ImageView) this.findViewById(R.id.ivFirstAnim);
 
