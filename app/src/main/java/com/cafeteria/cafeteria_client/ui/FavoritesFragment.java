@@ -40,7 +40,9 @@ package com.cafeteria.cafeteria_client.ui;
         import java.net.HttpURLConnection;
         import java.net.URL;
         import java.util.ArrayList;
+        import java.util.Currency;
         import java.util.List;
+        import java.util.Locale;
 
 /**
  * Created by Shira Elitzur on 08/09/2016.
@@ -60,6 +62,7 @@ public class FavoritesFragment extends Fragment {
     private View v;
     private TextView tvFavoriteItems;
     private TextView tvFavoriteMeals;
+    private Currency nis;
 
     public FavoritesFragment() {
 
@@ -79,6 +82,7 @@ public class FavoritesFragment extends Fragment {
 
         favoriteMeals = DataHolder.getInstance().getFavoriteMeals();
         favoriteItems = DataHolder.getInstance().getFavoriteItems();
+        nis = Currency.getInstance(new Locale("iw", "IL"));
 
         llFavorites = (LinearLayout) v.findViewById(R.id.llFavorites);
         rvMeals = (RecyclerView) v.findViewById(R.id.rvFavorites);
@@ -237,7 +241,7 @@ public class FavoritesFragment extends Fragment {
         public void onBindViewHolder(CustomViewHolder holder, int position) {
             Item favorite = favoriteItems.get(position);
             holder.title.setText(favorite.getTitle());
-            holder.tvItemPrice.setText("" + favorite.getPrice());
+            holder.tvItemPrice.setText("" + favorite.getPrice() + " " + nis.getSymbol());
         }
 
 
@@ -307,9 +311,28 @@ public class FavoritesFragment extends Fragment {
                             orderedItem.setParentItem(item);
                             dataHolder.addItemToOrder(orderedItem);
                             updateOrderInSharedPreferences();
-
                         }
 
+                    }
+                });
+
+                this.title.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int position = getAdapterPosition();
+                        Item item = favoriteItems.get(position);
+                        int qty = Integer.parseInt(tvQty.getText().toString());
+
+                        showSnackBar();
+
+                        DataHolder dataHolder = DataHolder.getInstance();
+                        for (int i = 0; i < qty; i++) {
+
+                            OrderedItem orderedItem = new OrderedItem();
+                            orderedItem.setParentItem(item);
+                            dataHolder.addItemToOrder(orderedItem);
+                            updateOrderInSharedPreferences();
+                        }
                     }
                 });
                 view.setTag(this);
