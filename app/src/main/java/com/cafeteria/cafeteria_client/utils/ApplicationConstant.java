@@ -39,45 +39,34 @@ public class ApplicationConstant {
     public static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
     public static final String DATE_TIME_SQLITE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_FORMAT = "dd-MM-yyyy";
+    public static final int SQLITE_LIMIT = 100;
 
-//    public final static String GET_CATEGORIES_URL = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/data/getCategories";
+
+//    public final static String GET_CATEGORIES_URL = ":8080/CafeteriaServer/rest/data/getCategories";
 //
-//    public final static String GET_DRINKS_URL = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/data/getDrinks";
+//    public final static String GET_DRINKS_URL = ":8080/CafeteriaServer/rest/data/getDrinks";
 //
-//    public final static String USER_REGISTRATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/users/insertUser";
+//    public final static String USER_REGISTRATION_URL = ":8080/CafeteriaServer/rest/users/insertUser";
 //
-//    public final static String USER_FACEBOOK_REGISTRATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/users/insertFacebookUser";
+//    public final static String USER_FACEBOOK_REGISTRATION_URL = ":8080/CafeteriaServer/rest/users/insertFacebookUser";
 //
-//    public final static String UPDATE_USER_URL = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/users/updateUser";
+//    public final static String UPDATE_USER_URL = ":8080/CafeteriaServer/rest/users/updateUser";
 //
-//    public final static String USER_VALIDATION_URL = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/users/isUserExist";
+//    public final static String USER_VALIDATION_URL = ":8080/CafeteriaServer/rest/users/isUserExist";
 //
-//    public final static String GET_TOKEN = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/push/getToken";
+//    public final static String GET_TOKEN = ":8080/CafeteriaServer/rest/push/getToken";
 //
-//    public final static String SET_TOKEN = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/push/attachPushIdToUser";
+//    public final static String SET_TOKEN = ":8080/CafeteriaServer/rest/push/attachPushIdToUser";
 //
-//    public final static String SEND_ORDER = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/data/insertOrder";
+//    public final static String SEND_ORDER = ":8080/CafeteriaServer/rest/data/insertOrder";
 //
-//    public final static String GET_FAVORITE_MEALS = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/data/getFavoriteMeals";
+//    public final static String GET_FAVORITE_MEALS = ":8080/CafeteriaServer/rest/data/getFavoriteMeals";
 //
-//    public final static String GET_FAVORITE_ITEMS = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/data/getFavoriteItems";
+//    public final static String GET_FAVORITE_ITEMS = ":8080/CafeteriaServer/rest/data/getFavoriteItems";
 //
-//    public final static String VALIDATE_OR_SIGN_UP = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/users/validateOrSignUpUser";
+//    public final static String VALIDATE_OR_SIGN_UP = ":8080/CafeteriaServer/rest/users/validateOrSignUpUser";
 //
-//    public final static String FORGOT_PASSWORD = "http://" + DataHolder.getInstance().getServerIp() +
-//            ":8080/CafeteriaServer/rest/email/forgotPassword";
+//    public final static String FORGOT_PASSWORD = ":8080/CafeteriaServer/rest/email/forgotPassword";
 
 
     public final static String GET_CATEGORIES_URL = "/rest/data/getCategories";

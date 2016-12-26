@@ -88,6 +88,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     private RelativeLayout rlPayList;
     private boolean showMenu = true;
     private TextView tvPayment;
+    private Customer c;
 
     private MenuItem itemClear;
     /**
@@ -172,7 +173,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                     Gson gson=  new GsonBuilder().setDateFormat(ApplicationConstant.DATE_TIME_FORMAT).create();
 
                     String customerJSON = sharedPreferences.getString("customer", "");
-                    Customer c = gson.fromJson(customerJSON, Customer.class);
+                    c = gson.fromJson(customerJSON, Customer.class);
                     data.getTheOrder().setCustomer(c);
                     data.getTheOrder().setDate(Calendar.getInstance().getTime());
 
@@ -221,7 +222,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                 order.setDate(calendar.getTime());
                 MyApplicationClass app = (MyApplicationClass)getApplication();
                 LocalDBHandler db = app.getLocalDB();
-                db.insertOrder(order);
+                db.insertOrder(c.getId(),order);
                 saveOrderInLocalStorage();
                 new SendOrderToServer().execute();
 
@@ -681,7 +682,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         protected Void doInBackground(Void... voids) {
             MyApplicationClass app = (MyApplicationClass)getApplication();
             LocalDBHandler db = app.getLocalDB();
-            db.insertOrder(order);
+            db.insertOrder(c.getId(),order);
             return null;
         }
     }

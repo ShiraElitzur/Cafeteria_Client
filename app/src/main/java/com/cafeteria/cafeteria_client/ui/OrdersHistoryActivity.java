@@ -2,8 +2,10 @@ package com.cafeteria.cafeteria_client.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +18,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.utils.LocalDBHandler;
 import com.cafeteria.cafeteria_client.R;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
 import com.cafeteria.cafeteria_client.utils.ApplicationConstant;
 import com.cafeteria.cafeteria_client.data.Order;
+import com.google.gson.Gson;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -41,6 +45,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
     private Button btnPickDate;
     private LocalDBHandler db;
     private OrdersHistoryAdapter ordersHistoryAdapter;
+    private Customer customer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,14 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         super.onCreateDrawer();
         getSupportActionBar().setTitle(this.getTitle());
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        //Gson gson = new Gson();
+        Gson gson=  new Gson();
+
+        String customerJSON = sharedPreferences.getString("customer", "");
+        customer = gson.fromJson(customerJSON, Customer.class);
+
+
         lvOrdersHistory = (ListView)findViewById(R.id.lvordersHistory);
         //nis symbol
         Locale israel = new Locale("iw", "IL");
@@ -56,7 +69,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         // init Orders list
         MyApplicationClass app = (MyApplicationClass)getApplication();
         db = app.getLocalDB();
-        orders = db.selectLastOrders();
+        orders = db.selectLastOrders(customer.getId());
 
         if(orders == null) {
             orders = new ArrayList<>();
@@ -123,7 +136,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         dateEnd.set(Calendar.MILLISECOND,0);
 
         orders.clear();
-        orders.addAll(db.selectOrdersByDate(dateStart,dateEnd));
+        orders.addAll(db.selectOrdersByDate(customer.getId(),dateStart,dateEnd));
         if (orders!=null) {
             Log.e("ORDERS", "ORDERS SIZE: " + orders.size());
         }
@@ -198,7 +211,8 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
                     details.append(bd + " " + nis.getSymbol());
                     details.append("\n");
 
-                    if (meal.getChosenDrink() != null){
+                    if (meal.getChosenDrink().getTitle() != null ){
+                        Log.e("DEBUG","Drink? "+meal.getChosenDrink());
                         details.append("  "+getResources().getString(R.string.history_drink_title)+" ");
                         details.append(meal.getChosenDrink().getTitle());
                         if (!meal.getParentMeal().isIncludesDrink()){
@@ -287,7 +301,7 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         protected Void doInBackground(Void... voids) {
             MyApplicationClass app = (MyApplicationClass)getApplication();
             LocalDBHandler db = app.getLocalDB();
-            orders = db.selectOrders();
+            orders = db.selectOrders(customer.getId());
             if(orders == null) {
                 orders = new ArrayList<>();
             }

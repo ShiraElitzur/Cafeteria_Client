@@ -1,18 +1,24 @@
 package com.cafeteria.cafeteria_client.utils;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.cafeteria.cafeteria_client.data.Customer;
 import com.cafeteria.cafeteria_client.data.Drink;
 import com.cafeteria.cafeteria_client.data.Extra;
 import com.cafeteria.cafeteria_client.data.Meal;
 import com.cafeteria.cafeteria_client.data.Order;
 import com.cafeteria.cafeteria_client.data.OrderedItem;
 import com.cafeteria.cafeteria_client.data.OrderedMeal;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,6 +42,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     private static final String DRINK_COL = "Drink";
     private static final String PRICE_COL = "Price";
     private static final String ORDER_ID_COL = "OrderId";
+    private static final String USER_ID_COL = "UserId";
 
     // Orders table
     private static final String ORDERS_TABLE_NAME = "orders";
@@ -44,6 +51,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
             "CREATE TABLE " + ORDERS_TABLE_NAME + " (" +
                     ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     DATE_COL + " TEXT, " +
+                    USER_ID_COL + " INTEGER, " +
                     PRICE_COL + " REAL );";
 
     // Meals table create statement
@@ -89,7 +97,6 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 //                "FOREIGN KEY ("+ORDER_ID_COL+") REFERENCES "+ORDERS_TABLE_NAME+"("+ID_COL+")," +
 //                "FOREIGN KEY ("+ITEM_ID_COL+") REFERENCES "+ITEMS_TABLE_NAME+"("+ID_COL+") );";
 
-
     public LocalDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         getWritableDatabase();
@@ -116,15 +123,44 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertOrder(Order order) {
+    public int countOrders( int userId ) {
+        int count = 0;
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT COUNT(*) FROM " + ORDERS_TABLE_NAME +" WHERE " + USER_ID_COL + " = "+userId;
+        Cursor cursor = db.rawQuery(query,null);
+        if (cursor != null && cursor.moveToFirst()) {
+            count = cursor.getInt(0); //The 0 is the column index, we only have 1 column, so the index is 0
+        }
+        cursor.close();
+        return count;
+    }
+
+    public void deleteOldestOrder( int userId ) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        String delete = "DELETE FROM "+ ORDERS_TABLE_NAME + " WHERE " + USER_ID_COL + " = " + userId + " AND "+
+                ID_COL + " IN (SELECT ID FROM "+ ORDERS_TABLE_NAME + " ORDER BY " + DATE_COL + " ASC LIMIT 1)";
+        db.execSQL(delete);
+    }
+
+    public void insertOrder(int userId, Order order) {
         SQLiteDatabase db = getWritableDatabase();
         long orderId;
         long mealId;
         long itemId;
+        int ordersInDb = countOrders(userId);
+        Log.e("DEBUG","orders in db for user - " + ordersInDb);
+        if( ordersInDb >= ApplicationConstant.SQLITE_LIMIT ) {
+            deleteOldestOrder(userId);
+        }
+        Log.e("DEBUG","orders in db for user - " + ordersInDb);
+
         // insert new record to the orders table
         ContentValues values = new ContentValues();
         SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_SQLITE_FORMAT);
         values.put(DATE_COL, sdf.format(order.getDate()));
+        values.put(USER_ID_COL, userId);
         values.put(PRICE_COL, order.getPayment());
         db.insert(ORDERS_TABLE_NAME, null, values);
 
@@ -192,10 +228,10 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         return -1;
     }
 
-    public List<Order> selectOrders() {
+    public List<Order> selectOrders( int userId ) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Order> orderList = new ArrayList<Order>();
-        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + " ORDER BY " + DATE_COL + " DESC";
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + "WHERE "+USER_ID_COL +"="+userId+" ORDER BY " + DATE_COL + " DESC";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -250,7 +286,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         return orderList;
     }
 
-    public List<Order> selectOrdersByDate(Calendar dateStart, Calendar dateEnd) {
+    public List<Order> selectOrdersByDate(int userId, Calendar dateStart, Calendar dateEnd) {
 
         dateStart.add(Calendar.DATE,-1);
         dateEnd.add(Calendar.DATE,1);
@@ -264,7 +300,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 //        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " + DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
 //                + "'" + dateEndTxt + "'";
 
-        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " + DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " +USER_ID_COL+ " = "+userId+ " AND "+ DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
                  + "'" + dateEndTxt + "'";
         Log.d("Query","orders size: " + selectQuery);
 
@@ -321,10 +357,11 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         return orderList;
     }
 
-    public List<Order> selectLastOrders() {
+    public List<Order> selectLastOrders( int userId ) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Order> orderList = new ArrayList<Order>();
-        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + " ORDER BY " + DATE_COL + " DESC LIMIT 30";
+
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + " WHERE "+USER_ID_COL +"="+userId+" ORDER BY " + DATE_COL + " DESC LIMIT 30";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
