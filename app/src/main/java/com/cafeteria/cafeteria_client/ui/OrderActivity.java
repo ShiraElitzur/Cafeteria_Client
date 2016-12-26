@@ -722,6 +722,8 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         DataHolder.getInstance().setTheOrder(new Order());
         DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
         DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
+        order = DataHolder.getInstance().getTheOrder();
+        findViewById(R.id.tvEmptyList).setVisibility(View.VISIBLE);
         updateOrderInSharedPreferences();
         tvPayment.setText(getResources().getString(R.string.pay_amount) + " - " + "0.0" + " " + nis.getSymbol());
     }

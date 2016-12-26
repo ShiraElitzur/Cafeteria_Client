@@ -188,12 +188,14 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         break;
                     case R.id.navigation_item_change_cafeteria:
                         String orderJSON = sharedPreferences.getString("order", "");
-                        if (orderJSON.equals("")){
+                        if (orderJSON.equals("")){ //no order exist
                             changeCafeteria();
                         } else{
                             Order order = new Gson().fromJson(orderJSON,Order.class);
-                            if (order.getItems().size() > 0 || order.getMeals().size() > 0){
+                            if (order.getItems().size() > 0 || order.getMeals().size() > 0){ //if there's meals/items in order
                                 emptyCartAlert();
+                            } else{ //order is empty
+                                changeCafeteria();
                             }
                         }
 

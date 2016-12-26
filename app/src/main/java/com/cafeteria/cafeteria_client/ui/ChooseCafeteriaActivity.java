@@ -44,6 +44,7 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_cafeteria);
+        MyApplicationClass.changeLocale(this.getResources(), "iw");
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Cafeteria cafeteria = new Gson().fromJson(sharedPreferences.getString("cafeteria", ""),Cafeteria.class);
@@ -57,13 +58,6 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
             btnNext = (Button) findViewById(R.id.btnNext);
 
             new GetServers().execute();
-
-            autoCompleteTvCafeteria.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    autoCompleteTvCafeteria.showDropDown();
-                }
-            });
 
             autoCompleteTvCafeteria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -149,9 +143,15 @@ public class ChooseCafeteriaActivity extends AppCompatActivity {
                 }
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChooseCafeteriaActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, serversNames);
+                        android.R.layout.simple_spinner_dropdown_item, serversNames);
                 autoCompleteTvCafeteria.setAdapter(adapter);
                 autoCompleteTvCafeteria.setVisibility(View.VISIBLE);
+                autoCompleteTvCafeteria.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        autoCompleteTvCafeteria.showDropDown();
+                    }
+                });
             }
             Log.e("SERVERS","servers size: " + servers.size());
 
