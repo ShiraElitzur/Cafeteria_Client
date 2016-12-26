@@ -92,6 +92,7 @@
     <string name="dialog_time_picker_title">בחר שעה לאיסוף ההזמנה</string>
     <string name="dialog_time_picker_limit_time">נדרש מינמום של 15 דקות להכנת ההזמנה</string>
     <string name="dialog_time_picker_time_passed">שעה זו כבר חלפה!</string>
+    <string name="clear_order">נקה הזמנה</string>
     <!-- OrderActivity End-->
 
     <!-- Delete item alert dialog -->

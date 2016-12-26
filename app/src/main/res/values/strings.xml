@@ -100,6 +100,7 @@
     <string name="pay_amount">To pay</string>
     <string name="nav_item_cart">To your cart</string>
     <string name="empty_cart">Your cart is empty !</string>
+    <string name="clear_order">Clear Order</string>
 
     <!-- Delete item alert dialog -->
     <string name="alert_dialog_delete_item_title">Are you sure you want to delete this item?</string>
@@ -230,5 +231,6 @@
     <!--Change Cafeteria Dialog End-->
 
     <string name="server_client_id">577951281609-kfltsqcajfqla2mbam01vhc36nmatuds.apps.googleusercontent.com</string>
+
 
 </resources>

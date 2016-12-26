@@ -82,15 +82,18 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     private List<OrderedMeal> orderedMeals;
     private List<Item> orderedItems;
     private ArrayAdapter mealsAdapter;
+    private ArrayAdapter itemsAdapter;
     private Cafeteria cafeteria;
     private LinearLayout llOrderInProgress;
     private RelativeLayout rlPayList;
     private boolean showMenu = true;
+    private TextView tvPayment;
 
+    private MenuItem itemClear;
     /**
      * The ActionBar MenuItem that displays the amount to pay
      */
-    private MenuItem itemBill;
+//    private MenuItem itemBill;
     /**
      * If pickup time is chosen, this display the selected time
      */
@@ -152,7 +155,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
             findViewById(R.id.tvEmptyList).setVisibility(View.GONE);
         }
 
-        lvOrderItems.setAdapter(new OrderItemsAdapter(this, R.layout.single_order_item, quantityItems));
+        lvOrderItems.setAdapter(itemsAdapter = new OrderItemsAdapter(this, R.layout.single_order_item, quantityItems));
         lvOrderMeals.setAdapter(mealsAdapter = new OrderMealsAdapter(this, R.layout.single_order_item, order.getMeals()));
 
         fabPay = (FloatingActionButton) findViewById(R.id.fabPay);
@@ -189,7 +192,6 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         Log.e("CAFETERIA", DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.HOUR_OF_DAY) + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursStart().get(Calendar.MINUTE));
         Log.e("CAFETERIA", DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.HOUR_OF_DAY) + ":" + DataHolder.getInstance().getCafeteria().getOpeningHoursEnd().get(Calendar.MINUTE));
 
-        rlPayList = (RelativeLayout)findViewById(R.id.rlPayList);
         llOrderInProgress = (LinearLayout)findViewById(R.id.llOrderInProgress);
         ImageView animationTarget = (ImageView) this.findViewById(R.id.ivFirstAnim);
 
@@ -198,6 +200,11 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         animationTarget = (ImageView) this.findViewById(R.id.ivSecondAnim);
         animation = AnimationUtils.loadAnimation(this, R.anim.rotate_around_center_point);
         animationTarget.startAnimation(animation);
+
+        tvPayment = (TextView) findViewById(R.id.tvPayment);
+        BigDecimal bd = new BigDecimal(order.getPayment());
+        bd = bd.setScale(1, RoundingMode.HALF_DOWN);
+        tvPayment.setText(getResources().getString(R.string.pay_amount) + " - " + bd + " " + nis.getSymbol());
     }
 
     @Override
@@ -347,11 +354,12 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     public boolean onCreateOptionsMenu(Menu menu) {
         if( showMenu ) {
             getMenuInflater().inflate(R.menu.order_items_menu, menu);
-            itemBill = (MenuItem) menu.findItem(R.id.itemBill);
+//            itemBill = (MenuItem) menu.findItem(R.id.itemBill);
+            itemClear = (MenuItem) menu.findItem(R.id.itemClear);
             itemTIme = (MenuItem) menu.findItem(R.id.itemTIme);
-            BigDecimal bd = new BigDecimal(order.getPayment());
-            bd = bd.setScale(1, RoundingMode.HALF_DOWN);
-            itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + bd + " " + nis.getSymbol());
+//            BigDecimal bd = new BigDecimal(order.getPayment());
+//            bd = bd.setScale(1, RoundingMode.HALF_DOWN);
+//            itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + bd + " " + nis.getSymbol());
             itemTIme.setTitle(order.getPickupTime());
         }
         return super.onCreateOptionsMenu(menu);
@@ -360,6 +368,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.itemClear:
+                clearOrder();
+                return true;
             case R.id.itemTimeAction:
                 final Calendar currentTime = Calendar.getInstance();
                 final int hour = currentTime.get(Calendar.HOUR_OF_DAY);
@@ -478,7 +489,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                                     lvOrderItems.invalidateViews();
                                                 }
                                                 // Refresh the UI
-                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+                                                //itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+                                                tvPayment.setText(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+
                                             }
                                         })
                                 .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
@@ -592,7 +605,9 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                                                 }
                                                 // Refresh the UI
                                                 OrderActivity.this.findViewById(android.R.id.content).getRootView().invalidate();
-                                                itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+                                                //itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+                                                tvPayment.setText(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+
                                             }
                                         })
                                 .setNegativeButton(R.string.alert_dialog_delete_item_negative_button,
@@ -640,7 +655,8 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         updateOrderInSharedPreferences();
 
         mealsAdapter.notifyDataSetChanged();
-        itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+//        itemBill.setTitle(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
+        tvPayment.setText(getResources().getString(R.string.pay_amount) + " - " + order.getPayment() + " " + nis.getSymbol());
 
     }
 
@@ -695,6 +711,18 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         public int hashCode() {
             return getId();
         }
+    }
+
+    public void clearOrder() {
+        mealsAdapter.clear();
+        mealsAdapter.notifyDataSetChanged();
+        itemsAdapter.clear();
+        itemsAdapter.notifyDataSetChanged();
+        DataHolder.getInstance().setTheOrder(new Order());
+        DataHolder.getInstance().getTheOrder().setItems(new ArrayList<OrderedItem>());
+        DataHolder.getInstance().getTheOrder().setMeals(new ArrayList<OrderedMeal>());
+        updateOrderInSharedPreferences();
+        tvPayment.setText(getResources().getString(R.string.pay_amount) + " - " + "0.0" + " " + nis.getSymbol());
     }
 
     private void updateOrderInSharedPreferences(){

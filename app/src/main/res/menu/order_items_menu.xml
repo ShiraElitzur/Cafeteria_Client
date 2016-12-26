@@ -15,10 +15,16 @@
         android:title=""
         app:showAsAction="ifRoom"></item>
 
+    <!--<item-->
+        <!--android:id="@+id/itemBill"-->
+        <!--android:orderInCategory="3"-->
+        <!--android:title="0.0"-->
+        <!--app:showAsAction="always|withText"></item>-->
+
     <item
-        android:id="@+id/itemBill"
+        android:id="@+id/itemClear"
         android:orderInCategory="3"
-        android:title="0.0"
+        android:title="@string/clear_order"
         app:showAsAction="always|withText"></item>
 
 
