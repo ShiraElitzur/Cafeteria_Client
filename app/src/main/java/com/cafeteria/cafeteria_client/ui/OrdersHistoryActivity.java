@@ -173,7 +173,14 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             final ViewHolder holder;
+
             Order order = (Order) getItem(position);
+            java.util.Date date= order.getDate();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int month = cal.get(Calendar.MONTH);
+
+            Log.e("DEBUG","order's month : "+ month);
 
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

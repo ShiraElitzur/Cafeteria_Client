@@ -43,6 +43,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     private static final String PRICE_COL = "Price";
     private static final String ORDER_ID_COL = "OrderId";
     private static final String USER_ID_COL = "UserId";
+    private static final String CAFETERIA_ID_COL = "CafeteriaId";
 
     // Orders table
     private static final String ORDERS_TABLE_NAME = "orders";
@@ -52,6 +53,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
                     ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     DATE_COL + " TEXT, " +
                     USER_ID_COL + " INTEGER, " +
+                    CAFETERIA_ID_COL + " INTEGER, " +
                     PRICE_COL + " REAL );";
 
     // Meals table create statement
@@ -127,7 +129,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         int count = 0;
         SQLiteDatabase db = getReadableDatabase();
 
-        String query = "SELECT COUNT(*) FROM " + ORDERS_TABLE_NAME +" WHERE " + USER_ID_COL + " = "+userId;
+        String query = "SELECT COUNT(*) FROM " + ORDERS_TABLE_NAME +" WHERE " + USER_ID_COL + " = "+userId +
+                " AND "+ CAFETERIA_ID_COL +" = " + DataHolder.getInstance().getCafeteria().getId();
         Cursor cursor = db.rawQuery(query,null);
         if (cursor != null && cursor.moveToFirst()) {
             count = cursor.getInt(0); //The 0 is the column index, we only have 1 column, so the index is 0
@@ -139,7 +142,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     public void deleteOldestOrder( int userId ) {
 
         SQLiteDatabase db = getReadableDatabase();
-        String delete = "DELETE FROM "+ ORDERS_TABLE_NAME + " WHERE " + USER_ID_COL + " = " + userId + " AND "+
+        String delete = "DELETE FROM "+ ORDERS_TABLE_NAME + " WHERE " + USER_ID_COL + " = " + userId +
+                " AND "+ CAFETERIA_ID_COL +" = " + DataHolder.getInstance().getCafeteria().getId()+ " AND "+
                 ID_COL + " IN (SELECT ID FROM "+ ORDERS_TABLE_NAME + " ORDER BY " + DATE_COL + " ASC LIMIT 1)";
         db.execSQL(delete);
     }
@@ -161,6 +165,7 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         SimpleDateFormat sdf = new SimpleDateFormat(ApplicationConstant.DATE_TIME_SQLITE_FORMAT);
         values.put(DATE_COL, sdf.format(order.getDate()));
         values.put(USER_ID_COL, userId);
+        values.put(CAFETERIA_ID_COL, DataHolder.getInstance().getCafeteria().getId());
         values.put(PRICE_COL, order.getPayment());
         db.insert(ORDERS_TABLE_NAME, null, values);
 
@@ -231,7 +236,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
     public List<Order> selectOrders( int userId ) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Order> orderList = new ArrayList<Order>();
-        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + "WHERE "+USER_ID_COL +"="+userId+" ORDER BY " + DATE_COL + " DESC";
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + "WHERE "+USER_ID_COL +"="+userId+
+                " AND "+ CAFETERIA_ID_COL +" = " + DataHolder.getInstance().getCafeteria().getId()+ " ORDER BY " + DATE_COL + " DESC";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -300,7 +306,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
 //        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " + DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
 //                + "'" + dateEndTxt + "'";
 
-        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " +USER_ID_COL+ " = "+userId+ " AND "+ DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME  + " WHERE " +USER_ID_COL+ " = "+userId+
+                " AND "+ CAFETERIA_ID_COL +" = " + DataHolder.getInstance().getCafeteria().getId()+  " AND "+ DATE_COL + " BETWEEN " + "'" + dateStartTxt + "'" + " AND "
                  + "'" + dateEndTxt + "'";
         Log.d("Query","orders size: " + selectQuery);
 
@@ -361,7 +368,8 @@ public class LocalDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Order> orderList = new ArrayList<Order>();
 
-        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + " WHERE "+USER_ID_COL +"="+userId+" ORDER BY " + DATE_COL + " DESC LIMIT 30";
+        String selectQuery = "SELECT * FROM " + ORDERS_TABLE_NAME + " WHERE "+USER_ID_COL +"="+userId+
+                " AND "+ CAFETERIA_ID_COL +" = " + DataHolder.getInstance().getCafeteria().getId()+ " ORDER BY " + DATE_COL + " DESC LIMIT 30";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
