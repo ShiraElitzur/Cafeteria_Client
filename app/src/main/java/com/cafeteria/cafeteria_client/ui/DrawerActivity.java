@@ -47,7 +47,7 @@ import static com.cafeteria.cafeteria_client.ui.MyApplicationClass.language;
  */
 public abstract class DrawerActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    private DrawerLayout drawerLayout;
+    DrawerLayout drawerLayout;
     private Intent intent;
     private TextView tvHeaderTitle;
     NavigationView navigationView;

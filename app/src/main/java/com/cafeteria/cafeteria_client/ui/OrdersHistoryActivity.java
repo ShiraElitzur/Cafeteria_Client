@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -296,9 +297,13 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
 
     @Override
     public void onBackPressed() {
-        finish();
-        Intent menuIntent = new Intent(OrdersHistoryActivity.this, MainActivity.class);
-        startActivity(menuIntent);
-    }
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+        } else{
+            finish();
+            Intent menuIntent = new Intent(OrdersHistoryActivity.this, MainActivity.class);
+            startActivity(menuIntent);
+        }
 
+    }
 }

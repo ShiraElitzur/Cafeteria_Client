@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -326,9 +327,13 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
 
     @Override
     public void onBackPressed() {
-        finish();
-        Intent menuIntent = new Intent(OrderActivity.this, MainActivity.class);
-        startActivity(menuIntent);
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+        } else {
+            finish();
+            Intent menuIntent = new Intent(OrderActivity.this, MainActivity.class);
+            startActivity(menuIntent);
+        }
     }
 
     /**
