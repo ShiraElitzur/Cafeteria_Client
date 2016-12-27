@@ -136,97 +136,9 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
             }
         });
 
-
-        Calendar calendar = Calendar.getInstance();
-        List<Integer> mons = new ArrayList<>(5);
-        for( int i = 0; i < 5; i++ ) {
-            mons.add(calendar.getTime().getMonth());
-            calendar.add(Calendar.MONTH, -1);
-        }
-
         graph = (GraphView)findViewById(R.id.graph);
-        graph.setTitle(getResources().getString(R.string.graph_title));
-        DataPoint[] dataPoints = new DataPoint[5];
-        for( int i = 0,k=4; i < 5; i++,k-- ) {
-            double pay = db.getPaymentForMonth( mons.get(k),customer.getId());
-            dataPoints[i] = new DataPoint(i,pay);
+        new GetGraphDataFromSQLiteTask().execute();
 
-        }
-
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPoints);
-        String[] labels = new String[5];
-        for( int i = 0, k = 4; i < 5 ; i++, k--) {
-            labels[i] = months[mons.get(k)];
-        }
-
-//
-//        int m1 = calendar.get(Calendar.MONTH);
-//        calendar.add(Calendar.MONTH, 1);
-//        int m2 = calendar.get(Calendar.MONTH);
-//        calendar.add(Calendar.MONTH, 1);
-//        int m3 = calendar.get(Calendar.MONTH);
-
-//        Calendar calendar = Calendar.getInstance();
-//        Date d1 = calendar.getTime();
-//        calendar.add(Calendar.DATE, 1);
-//        Date d2 = calendar.getTime();
-//        calendar.add(Calendar.DATE, 1);
-//        Date d3 = calendar.getTime();
-        graph.addSeries(series);
-//        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
-        graph.getGridLabelRenderer().setNumVerticalLabels(5);
-
-// set manual x bounds to have nice steps
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(4);
-        graph.getViewport().setXAxisBoundsManual(true);
-
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(5000);
-        graph.getViewport().setYAxisBoundsManual(true);
-
-//        mons = new ArrayList<>();
-//        mons.add("נובמבר");
-//        mons.add("דצמבר");
-//        mons.add("ינואר");
-//
-//        index = -1;
-
-        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        //staticLabelsFormatter.setHorizontalLabels(new String[] {"נובמבר", "דצמבר", "ינואר"});
-        staticLabelsFormatter.setHorizontalLabels(labels);
-        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-
-//        graph.getGridLabelRenderer().setLabelFormatter( new DefaultLabelFormatter(){
-//            @Override
-//            public String formatLabel(double value, boolean isValueX) {
-//                if( isValueX ) {
-//                        return mons.get(++index);
-//
-//                } else {
-//                    return super.formatLabel(value,isValueX);
-//                }
-//            }
-//        });
-
-        // styling
-        series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
-            @Override
-            public int get(DataPoint data) {
-                return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
-            }
-        });
-
-        series.setSpacing(20);
-
-// draw values on top
-        series.setDrawValuesOnTop(true);
-        series.setValuesOnTopColor(Color.RED);
-
-// as we use dates as labels, the human rounding to nice readable numbers
-// is not necessary
-        graph.getGridLabelRenderer().setHumanRounding(false);
     }
 
     @Override
@@ -260,6 +172,88 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
         }
         ordersHistoryAdapter.notifyDataSetChanged();
 
+    }
+
+    private class GetGraphDataFromSQLiteTask extends AsyncTask<Void,Void,Void> {
+
+        List<Integer> mons;
+        DataPoint[] dataPoints;
+        BarGraphSeries<DataPoint> series;
+        String[] labels;
+
+        @Override
+        protected void onPreExecute() {
+            Calendar calendar = Calendar.getInstance();
+            mons = new ArrayList<>(5);
+            for( int i = 0; i < 5; i++ ) {
+                mons.add(calendar.getTime().getMonth());
+                calendar.add(Calendar.MONTH, -1);
+            }
+
+            graph.setTitle(getResources().getString(R.string.graph_title));
+
+            dataPoints = new DataPoint[5];
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for( int i = 0,k=4; i < 5; i++,k-- ) {
+                double pay = db.getPaymentForMonth( mons.get(k),customer.getId());
+                dataPoints[i] = new DataPoint(i,pay);
+            }
+
+            series = new BarGraphSeries<>(dataPoints);
+            labels = new String[5];
+            for( int i = 0, k = 4; i < 5 ; i++, k--) {
+                labels[i] = months[mons.get(k)];
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+
+            graph.addSeries(series);
+//        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+            graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
+            graph.getGridLabelRenderer().setNumVerticalLabels(5);
+
+// set manual x bounds to have nice steps
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(4);
+            graph.getViewport().setXAxisBoundsManual(true);
+
+            graph.getViewport().setMinY(0);
+            graph.getViewport().setMaxY(5000);
+            graph.getViewport().setYAxisBoundsManual(true);
+
+            StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+            //staticLabelsFormatter.setHorizontalLabels(new String[] {"נובמבר", "דצמבר", "ינואר"});
+            staticLabelsFormatter.setHorizontalLabels(labels);
+            graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+            // styling
+            series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+                @Override
+                public int get(DataPoint data) {
+                    return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
+                }
+            });
+
+            series.setSpacing(20);
+
+            // draw values on top
+            series.setDrawValuesOnTop(true);
+            series.setValuesOnTopColor(Color.RED);
+
+            graph.getGridLabelRenderer().setHumanRounding(false);
+
+            super.onPostExecute(aVoid);
+        }
     }
 
     public class OrdersHistoryAdapter extends BaseAdapter {
