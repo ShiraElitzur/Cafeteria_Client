@@ -80,6 +80,7 @@
                 android:layout_height="150dp"
                 android:id="@+id/imgviewUser"
                 android:src="@drawable/user_male"
+                android:layout_gravity="center"
                 />
 
 

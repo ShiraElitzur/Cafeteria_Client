@@ -115,6 +115,8 @@ public class FavoritesFragment extends Fragment {
         }
         if ((favoriteMeals == null && favoriteItems == null) ||
                 (favoriteMeals.size() == 0 && favoriteItems.size() == 0)) {
+            tvFavoriteItems.setVisibility(View.GONE);
+            tvFavoriteMeals.setVisibility(View.GONE);
             rlEmptyView.setVisibility(View.VISIBLE);
         } else {
             if (favoriteItems != null && favoriteItems.size() == 0) {
@@ -419,6 +421,8 @@ public class FavoritesFragment extends Fragment {
                 if ((favoriteMeals == null && favoriteItems == null) ||
                         (favoriteMeals != null && favoriteMeals.size() == 0
                                 && favoriteItems != null && favoriteItems.size() == 0)) {
+                    tvFavoriteItems.setVisibility(View.GONE);
+                    tvFavoriteMeals.setVisibility(View.GONE);
                     rlEmptyView.setVisibility(View.VISIBLE);
                 } else {
                     if (favoriteItems != null && favoriteItems.size() == 0) {
