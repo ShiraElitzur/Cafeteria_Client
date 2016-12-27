@@ -463,4 +463,11 @@ public class UserDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent menuIntent = new Intent(UserDetailsActivity.this, MainActivity.class);
+        startActivity(menuIntent);
+    }
 }
