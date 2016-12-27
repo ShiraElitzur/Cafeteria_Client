@@ -41,10 +41,10 @@
             android:icon="@drawable/ic_exit_to_app"
             android:title="@string/nav_item_log_out" />
 
-        <item
-            android:id="@+id/navigation_item_langauge"
-            android:icon="@drawable/ic_language"
-            android:title="@string/nav_item_language" />
+        <!--<item-->
+            <!--android:id="@+id/navigation_item_langauge"-->
+            <!--android:icon="@drawable/ic_language"-->
+            <!--android:title="@string/nav_item_language" />-->
 
         <item
             android:id="@+id/navigation_item_change_cafeteria"

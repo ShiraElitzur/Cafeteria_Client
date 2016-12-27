@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:weightSum="10"
     android:padding="10dp">
 
@@ -26,7 +26,7 @@
         android:background="@null"
         android:layout_marginEnd="5dp"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:layout_gravity="center"
         />
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="ItemTitle"
             android:gravity="start"
-            android:layout_gravity="end"/>
+            android:layout_gravity="center"/>
 
     <TextView
         android:id="@+id/tvQty"
@@ -46,7 +46,7 @@
         android:layout_weight="1"
         android:background="@drawable/grid_cell"
         android:text="1"
-        android:gravity="start"
+        android:gravity="center"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         />
@@ -56,7 +56,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="x"
-        android:gravity="end"
+        android:gravity="center"
         />
 
     <TextView
@@ -65,7 +65,7 @@
         android:layout_weight="1.5"
         android:layout_height="wrap_content"
         android:text="Price"
-        android:gravity="end"
+        android:gravity="center"
         />
 
 

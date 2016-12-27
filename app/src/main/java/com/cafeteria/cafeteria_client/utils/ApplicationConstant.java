@@ -39,6 +39,7 @@ public class ApplicationConstant {
     public static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
     public static final String DATE_TIME_SQLITE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_FORMAT = "dd-MM-yyyy";
+    public static final String TIME_FORMAT = "HH:mm";
     public static final int SQLITE_LIMIT = 100;
 
 

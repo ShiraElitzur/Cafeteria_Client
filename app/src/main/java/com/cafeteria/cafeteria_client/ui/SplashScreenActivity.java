@@ -661,7 +661,9 @@ public class SplashScreenActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     Gson gson = new Gson();
                     Customer toSave = gson.fromJson(response, Customer.class);
-                    userPKId = toSave.getId();
+                    if (toSave != null){
+                        userPKId = toSave.getId();
+                    }
 
                     String customerJSON = gson.toJson(toSave);
                     editor.putString("customer", customerJSON);

@@ -159,19 +159,19 @@ public abstract class DrawerActivity extends AppCompatActivity implements Google
                         startActivity(intent);
                         DrawerActivity.this.finish();
                         break;
-                    case R.id.navigation_item_langauge:
-
-                        if (language.equals("en")){
-                            MyApplicationClass.changeLocale(DrawerActivity.this.getResources(),"iw");
-                            DrawerActivity.this.recreate();
-
-                        } else if (language.equals("iw")){
-                            MyApplicationClass.changeLocale(DrawerActivity.this.getResources(),"en");
-                            DrawerActivity.this.recreate();
-
-                        }
-
-                        break;
+//                    case R.id.navigation_item_langauge:
+//
+//                        if (language.equals("en")){
+//                            MyApplicationClass.changeLocale(DrawerActivity.this.getResources(),"iw");
+//                            DrawerActivity.this.recreate();
+//
+//                        } else if (language.equals("iw")){
+//                            MyApplicationClass.changeLocale(DrawerActivity.this.getResources(),"en");
+//                            DrawerActivity.this.recreate();
+//
+//                        }
+//
+//                        break;
                     case R.id.navigation_item_history:
                         if( DrawerActivity.this instanceof OrdersHistoryActivity){
                             return false;

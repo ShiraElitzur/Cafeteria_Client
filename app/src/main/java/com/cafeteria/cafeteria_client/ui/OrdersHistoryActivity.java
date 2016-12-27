@@ -332,10 +332,9 @@ public class OrdersHistoryActivity extends DrawerActivity implements DatePickerD
 
                     if (meal.getChosenDrink().getTitle() != null ){
                         Log.e("DEBUG","Drink? "+meal.getChosenDrink());
-                        details.append("  "+getResources().getString(R.string.history_drink_title)+" ");
-                        details.append(meal.getChosenDrink().getTitle());
                         if (!meal.getParentMeal().isIncludesDrink()){
-                            details.append(" " + meal.getChosenDrink().getPrice() + " " + nis.getSymbol());
+                            details.append("  "+getResources().getString(R.string.history_drink_title)+" ");
+                            details.append(meal.getChosenDrink().getTitle());
                         }
                         details.append("\n");
                     }

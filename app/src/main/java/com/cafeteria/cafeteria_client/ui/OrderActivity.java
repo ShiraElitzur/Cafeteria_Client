@@ -56,6 +56,8 @@ import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
@@ -410,8 +412,19 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
                             order.setPickupTime("");
                             itemTIme.setTitle(order.getPickupTime());
                         } else {
-                            order.setPickupTime(selectedHour
-                                    + ":" + selectedMinute);
+                            String time = "";
+                            if (selectedHour < 10){
+                                time += '0' + String.valueOf(selectedHour);
+                            } else{
+                                time += String.valueOf(selectedHour);
+                            }
+                            time += ":";
+                            if (selectedMinute < 10){
+                                time += '0' + String.valueOf(selectedMinute);
+                            }else{
+                                time += String.valueOf(selectedMinute);
+                            }
+                            order.setPickupTime(time);
                             itemTIme.setTitle(order.getPickupTime());
                         }
 
