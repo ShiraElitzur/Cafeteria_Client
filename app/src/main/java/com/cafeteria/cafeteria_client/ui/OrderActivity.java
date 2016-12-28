@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -91,6 +94,7 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
     private boolean showMenu = true;
     private TextView tvPayment;
     private Customer c;
+    private View parentLayout;
 
     private MenuItem itemClear;
     /**
@@ -115,6 +119,8 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         layout = (View) findViewById(R.id.llOrderLayout);
         super.onCreateDrawer();
         Log.e("DEBUG","On Create Order Activity");
+
+        parentLayout = findViewById(R.id.layout);
 
         //nis symbol
         Locale israel = new Locale("iw", "IL");
@@ -219,6 +225,23 @@ public class OrderActivity extends DrawerActivity implements OnDialogResultListe
         {
             if(resultCode == RESULT_OK)
             {
+                Snackbar snackbar = Snackbar
+                        .make(parentLayout, getString(R.string.paypal_payment_success), Snackbar.LENGTH_LONG);
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(OrderActivity.this, android.R.color.white));
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextColor(Color.BLACK);
+                snackbar.show();
+                snackbar.setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        finish();
+                        Intent homeActivity = new Intent(OrderActivity.this,MainActivity.class);
+                        startActivity(homeActivity);
+                    }
+                });
+
+
                 Calendar calendar = Calendar.getInstance();
                 Log.e("DATE",calendar.getTime().toString());
                 order.setDate(calendar.getTime());

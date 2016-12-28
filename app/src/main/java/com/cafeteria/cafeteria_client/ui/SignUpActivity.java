@@ -306,6 +306,7 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             if (result != null && result.equals("0")) {
+                Toast.makeText(SignUpActivity.this, getResources().getString(R.string.sign_up_successfull), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
                 SignUpActivity.this.finish();

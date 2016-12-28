@@ -242,10 +242,10 @@ public class PayPalActivity extends AppCompatActivity {
                          * For sample mobile backend interactions, see
                          * https://github.com/paypal/rest-api-sdk-python/tree/master/samples/mobile_backend
                          */
-                        Toast.makeText(
-                                getApplicationContext(),
-                                getString(R.string.paypal_payment_success), Toast.LENGTH_LONG)
-                                .show();
+//                        Toast.makeText(
+//                                getApplicationContext(),
+//                                getString(R.string.paypal_payment_success), Toast.LENGTH_LONG)
+//                                .show();
 
                         setResult(Activity.RESULT_OK, resultIntent);
                     } catch (JSONException e) {

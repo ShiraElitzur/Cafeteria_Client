@@ -62,6 +62,7 @@
     <string name="signup_error">Some of the details aren\'t correct</string>
     <string name="facebook_app_id">1045054335615065</string>
     <string name="email_in_use">This email is already taken!</string>
+    <string name="sign_up_successfull">Account created successfully</string>
     <!--SignUp Activity End-->
 
     <!--Exit Alert Dialog-->

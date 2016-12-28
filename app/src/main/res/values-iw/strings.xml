@@ -90,6 +90,7 @@
     <string name="signup_error">חלק מהפרטים לא תקינים</string>
     <string name="login_text">משתמש רשום? התחבר</string>
     <string name="email_in_use">הדואר האלקטרוני שהוכנס כבר בשימוש</string>
+    <string name="sign_up_successfull">החשבון נוצר בהצלחה</string>
     <!--SignUp Activity End-->
 
     <!--Splash Screen-->
